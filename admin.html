@@ -862,8 +862,19 @@
             button.innerHTML = loadingSpinner;
             button.disabled = true;
 
-            const apiKey = "";
+            // QUAN TRỌNG: Dán API Key của bạn vào đây.
+            // Lấy key miễn phí tại: https://aistudio.google.com/app/apikey
+            const apiKey = "AIzaSyDGY_sja2mUqs4KlE7bCKmwOKoFz3sfMRg";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            if (apiKey === "DÁN_API_KEY_CỦA_BẠN_VÀO_ĐÂY") {
+                const errorMsg = "Lỗi: Vui lòng thêm API Key của bạn để sử dụng tính năng AI.";
+                alert(errorMsg);
+                console.error(errorMsg);
+                button.innerHTML = originalButtonHTML;
+                button.disabled = false;
+                return translations[currentLang].ai_connection_error;
+            }
 
             try {
                 const payload = { contents: [{ parts: [{ text: prompt }] }] };
@@ -1636,4 +1647,5 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
     </script>
 </body>
 </html>
+
 
