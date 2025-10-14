@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị - Canh Tiềm Dưỡng Sinh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .modal { display: none; }
+        .modal.active { display: flex; }
+        .tab-content, .modal {
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .lang-btn.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="px-8 py-6">
+                <h2 class="text-2xl font-semibold" data-lang="dashboard_title">Bảng Điều Khiển</h2>
+            </div>
+             <!-- Language Switcher -->
+            <div class="px-4 py-2">
+                <div class="flex bg-gray-700 rounded-lg p-1">
+                    <button class="lang-btn flex-1 text-sm py-1 px-2 rounded-md" data-lang-code="vi">Tiếng Việt</button>
+                    <button class="lang-btn flex-1 text-sm py-1 px-2 rounded-md" data-lang-code="zh">繁體中文</button>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 py-2 space-y-2">
+                <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="menu-management">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <span data-lang="menu_management">Quản Lý Thực Đơn</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="supplier-management">
+                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                     </svg>
+                     <span data-lang="supplier_management">Nhà Cung Cấp</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="purchase-management">
+                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                     <span data-lang="material_management">Nguyên Vật Liệu</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="spoilage-management">
+                    <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+                    <span data-lang="spoilage_management">Quản Lý Hư Hao</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="cost-management">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h6m-5 4h4m5 6H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2z"></path></svg>
+                    <span data-lang="other_costs">Chi Phí Khác</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="profit-report">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                    <span data-lang="profit_report">Báo Cáo Lợi Nhuận</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="inventory-report">
+                    <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-1.621-1.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h4.5M15 3.75a2.25 2.25 0 012.25 2.25V6a2.25 2.25 0 01-2.25 2.25H8.25A2.25 2.25 0 016 6V5.25a2.25 2.25 0 012.25-2.25h4.5M15 3.75h-4.5m0 0a2.25 2.25 0 012.25 2.25V6" />
+                    </svg>
+                    <span data-lang="inventory_report">Báo Cáo Tồn Kho</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="adjustment-logs">
+                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                    </svg>
+                    <span data-lang="adjustment_logs">Lịch Sử Điều Chỉnh</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            <!-- Tab: Quản Lý Thực Đơn -->
+            <div id="menu-management" class="tab-content active">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="menu_management_title">Quản Lý Thực Đơn &amp; Định Lượng (BOM)</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Form thêm món ăn -->
+                    <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-4" data-lang="add_new_dish">Thêm Món Mới</h2>
+                        <form id="add-dish-form" class="space-y-4">
+                            <!-- Basic Info -->
+                            <div>
+                                <div class="flex justify-between items-center">
+                                     <label for="dish-name" class="block text-sm font-medium text-gray-700" data-lang="dish_name">Tên món</label>
+                                     <button type="button" id="suggest-name-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center disabled:opacity-50">
+                                        <span data-lang="suggest_dish_name">✨ Gợi ý tên</span>
+                                    </button>
+                                </div>
+                                <input type="text" id="dish-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                                <div id="dish-name-suggestions" class="mt-2 text-sm"></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <label for="dish-description" class="block text-sm font-medium text-gray-700" data-lang="description">Mô tả</label>
+                                    <button type="button" id="suggest-description-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center disabled:opacity-50">
+                                        <span data-lang="suggest_description">✨ Gợi ý mô tả</span>
+                                    </button>
+                                </div>
+                                <textarea id="dish-description" rows="4" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"></textarea>
+                            </div>
+                            <div>
+                                <label for="dish-price" class="block text-sm font-medium text-gray-700" data-lang="selling_price">Giá Bán (VND)</label>
+                                <input type="number" id="dish-price" min="0" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                            </div>
+                             <div>
+                                <label for="dish-image-url" class="block text-sm font-medium text-gray-700" data-lang="image_url">URL Hình ảnh</label>
+                                <input type="text" id="dish-image-url" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                            </div>
+                            <!-- BOM Section -->
+                            <div class="pt-4 border-t">
+                                <h3 class="text-lg font-medium text-gray-800 mb-2" data-lang="bom_title">Định Lượng Nguyên Liệu (BOM)</h3>
+                                <div class="flex gap-2 items-center">
+                                    <select id="bom-material-select" class="flex-grow border border-gray-300 rounded-md shadow-sm py-2 px-3"></select>
+                                    <input type="number" id="bom-quantity" data-lang-placeholder="quantity_short" placeholder="SL" class="w-20 border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                                    <button type="button" id="add-bom-item-btn" class="bg-gray-600 text-white px-3 py-2 rounded-md hover:bg-gray-700">+</button>
+                                </div>
+                                <div id="bom-items-list" class="mt-2 space-y-1"></div>
+                                <div class="mt-2 font-semibold text-right"><span data-lang="estimated_cost">Giá vốn ước tính</span>: <span id="estimated-cost">0 VND</span></div>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700" data-lang="add_dish_btn">Thêm Món</button>
+                        </form>
+                    </div>
+                    <!-- Danh sách món ăn -->
+                    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-4" data-lang="current_dishes_list">Danh Sách Món Ăn Hiện Có</h2>
+                        <div id="dishes-list" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Quản Lý Nhà Cung Cấp -->
+            <div id="supplier-management" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="supplier_management_title">Quản Lý Nhà Cung Cấp</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-1">
+                             <h3 class="text-lg font-medium mb-2" data-lang="add_new_supplier">Thêm NCC Mới</h3>
+                             <form id="add-supplier-form" class="space-y-4">
+                                <input type="text" id="supplier-name" data-lang-placeholder="supplier_name" placeholder="Tên nhà cung cấp" required class="block w-full border-gray-300 rounded-md py-2 px-3">
+                                <input type="text" id="supplier-contact" data-lang-placeholder="contact_person" placeholder="Người liên hệ" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                                <input type="tel" id="supplier-phone" data-lang-placeholder="phone_number" placeholder="Số điện thoại" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                                <input type="text" id="supplier-address" data-lang-placeholder="address" placeholder="Địa chỉ" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                                <input type="text" id="supplier-taxcode" data-lang-placeholder="tax_code" placeholder="Mã số thuế (nếu có)" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" data-lang="add_supplier_btn">Thêm NCC</button>
+                            </form>
+                        </div>
+                        <div class="lg:col-span-2">
+                             <h3 class="text-lg font-medium mb-2" data-lang="suppliers_list_title">Danh Sách Nhà Cung Cấp</h3>
+                             <div id="suppliers-list" class="mt-4 space-y-3 max-h-96 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Nguyên Vật Liệu Mua Vào -->
+            <div id="purchase-management" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="purchase_management_title">Nguyên Vật Liệu Mua Vào</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Column 1: Define new materials & List -->
+                        <div class="space-y-6">
+                             <div>
+                                 <h3 class="text-lg font-medium mb-2" data-lang="define_material">Định Nghĩa Nguyên Vật Liệu</h3>
+                                 <form id="add-material-form" class="flex gap-2">
+                                     <input type="text" id="material-name" data-lang-placeholder="material_name" placeholder="Tên nguyên liệu" required class="flex-grow border border-gray-300 rounded-md py-2 px-3">
+                                     <input type="text" id="material-unit" data-lang-placeholder="unit_placeholder" placeholder="Đơn vị (kg, gr, cái)" required class="w-36 border border-gray-300 rounded-md py-2 px-3">
+                                     <button type="submit" class="bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700" data-lang="add_btn">Thêm</button>
+                                 </form>
+                             </div>
+                             <div>
+                                 <h3 class="text-lg font-medium mb-2" data-lang="materials_list_title">Danh Sách Nguyên Vật Liệu</h3>
+                                 <div id="materials-list" class="space-y-2 max-h-[450px] overflow-y-auto"></div>
+                             </div>
+                        </div>
+
+                        <!-- Column 2: Record Purchases -->
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-medium mb-2" data-lang="record_purchase">Nhập Kho</h3>
+                                <form id="add-purchase-form" class="space-y-4 p-4 border rounded-md">
+                                    <div>
+                                        <label class="block text-sm font-medium" data-lang="purchase_date">Ngày nhập hàng</label>
+                                        <input type="date" id="purchase-date" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium" data-lang="material">Nguyên liệu</label>
+                                        <select id="purchase-material-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium" data-lang="quantity">Số lượng</label>
+                                            <input type="number" id="purchase-quantity" min="0" step="any" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium" data-lang="unit">Đơn vị</label>
+                                            <input type="text" id="purchase-unit" readonly class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3">
+                                        </div>
+                                    </div>
+                                     <div>
+                                        <label class="block text-sm font-medium" data-lang="total_price">Tổng tiền (VND)</label>
+                                        <input type="number" id="purchase-total-price" min="0" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                    </div>
+                                     <div>
+                                        <label class="block text-sm font-medium" data-lang="supplier">Nhà cung cấp</label>
+                                        <select id="purchase-supplier-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                                    </div>
+                                    <p class="text-right"><span data-lang="new_unit_price_label">Đơn giá mới sẽ là</span>: <span id="new-unit-price" class="font-semibold">0 VND</span></p>
+                                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700" data-lang="confirm_purchase_btn">Xác Nhận Nhập Kho</button>
+                                </form>
+                            </div>
+                             <div>
+                                 <h3 class="text-lg font-semibold mb-2" data-lang="purchase_history_title">Lịch Sử Nhập Kho</h3>
+                                 <div id="purchases-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Tab: Quản Lý Hư Hao -->
+            <div id="spoilage-management" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="spoilage_management_title">Quản Lý Nguyên Vật Liệu Hư Hao</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form for adding spoilage -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-4" data-lang="record_spoilage">Ghi Nhận Hư Hao</h2>
+                        <form id="add-spoilage-form" class="space-y-4">
+                            <div>
+                                <label for="spoilage-date" class="block text-sm font-medium text-gray-700" data-lang="spoilage_date">Ngày thải bỏ</label>
+                                <input type="date" id="spoilage-date" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                            <div>
+                                <label for="spoilage-material-select" class="block text-sm font-medium text-gray-700" data-lang="material">Nguyên liệu</label>
+                                <select id="spoilage-material-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="spoilage-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
+                                    <input type="number" id="spoilage-quantity" min="0" step="any" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700" data-lang="unit">Đơn vị tính</label>
+                                    <input type="text" id="spoilage-unit" readonly class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                            </div>
+                             <div>
+                                <label for="spoilage-reason" class="block text-sm font-medium text-gray-700" data-lang="spoilage_reason">Nguyên nhân thải bỏ</label>
+                                <input type="text" id="spoilage-reason" required data-lang-placeholder="spoilage_reason_placeholder" placeholder="VD: Hết hạn, hỏng..." class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                            <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700" data-lang="record_btn">Ghi Nhận</button>
+                        </form>
+                    </div>
+                    <!-- List of spoilage records -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold" data-lang="spoilage_history_title">Lịch Sử Hư Hao</h2>
+                             <button id="analyze-spoilage-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm hover:bg-indigo-700 flex items-center disabled:opacity-50">
+                                <span data-lang="analyze_spoilage">✨ Phân tích & Đề xuất</span>
+                            </button>
+                        </div>
+                        <div id="spoilage-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
+                        <div id="spoilage-analysis-result" class="mt-4 hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Chi Phí Khác -->
+            <div id="cost-management" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="other_costs_title">Quản Lý Chi Phí Khác</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Add Cost Form -->
+                    <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-4" data-lang="add_new_cost">Thêm Chi Phí Mới</h2>
+                        <form id="add-other-cost-form" class="space-y-4">
+                            <div>
+                                <label for="other-cost-name" class="block text-sm font-medium text-gray-700" data-lang="cost_name">Tên chi phí</label>
+                                <input type="text" id="other-cost-name" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                            <div>
+                                <label for="other-cost-amount" class="block text-sm font-medium text-gray-700" data-lang="amount">Số tiền (VND)</label>
+                                <input type="number" id="other-cost-amount" min="0" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                            <div>
+                                <label for="other-cost-frequency" class="block text-sm font-medium text-gray-700" data-lang="cost_type">Loại chi phí</label>
+                                <select id="other-cost-frequency" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                    <option value="monthly" data-lang="monthly">Hàng tháng</option>
+                                    <option value="yearly" data-lang="yearly">Hàng năm</option>
+                                    <option value="onetime" data-lang="onetime">Một lần (Đầu tư)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700" data-lang="add_cost_btn">Thêm Chi Phí</button>
+                        </form>
+                    </div>
+                    <!-- Display Costs -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-3" data-lang="monthly_costs">Chi phí hàng tháng</h3>
+                            <div id="monthly-costs-list" class="space-y-2"></div>
+                            <div class="mt-4 pt-4 border-t font-bold flex justify-between">
+                                <span data-lang="total_monthly">Tổng cộng tháng:</span><span id="total-monthly-costs">0 VND</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-3" data-lang="yearly_costs">Chi phí hàng năm</h3>
+                            <div id="yearly-costs-list" class="space-y-2"></div>
+                             <div class="mt-4 pt-4 border-t font-bold flex justify-between">
+                                <span data-lang="total_yearly">Tổng cộng năm:</span><span id="total-yearly-costs">0 VND</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-lg font-semibold mb-3" data-lang="onetime_costs">Chi phí một lần (Đầu tư)</h3>
+                            <div id="onetime-costs-list" class="space-y-2"></div>
+                             <div class="mt-4 pt-4 border-t font-bold flex justify-between">
+                                <span data-lang="total">Tổng cộng:</span><span id="total-onetime-costs">0 VND</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Báo Cáo Lợi Nhuận -->
+            <div id="profit-report" class="tab-content">
+                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="profit_report_title">Báo Cáo Lợi Nhuận (Ước Tính)</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4" data-lang="enter_sales_volume">Nhập Số Lượng Bán Ra (Trong Tháng)</h2>
+                    <div id="sales-input-area" class="space-y-4 mb-6"></div>
+                    <button id="calculate-profit-btn" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 text-lg font-semibold" data-lang="calculate_profit_btn">Tính Lợi Nhuận</button>
+                    <div id="profit-results" class="mt-8 pt-6 border-t hidden">
+                        <h3 class="text-2xl font-semibold mb-4 text-center" data-lang="monthly_business_results">Kết Quả Kinh Doanh Tháng Này</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                            <div class="bg-blue-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_revenue">Tổng Doanh Thu:</p><p id="result-revenue" class="font-bold text-2xl text-blue-700">0 VND</p></div>
+                            <div class="bg-orange-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_cogs">Tổng Giá Vốn Hàng Bán:</p><p id="result-cogs" class="font-bold text-2xl text-orange-700">0 VND</p></div>
+                            <div class="bg-yellow-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_operating_expenses">Tổng Chi Phí Hoạt Động (Tháng):</p><p id="result-monthly-expense" class="font-bold text-2xl text-yellow-700">0 VND</p></div>
+                            <div class="bg-red-50 p-4 rounded-md"><p class="text-gray-600" data-lang="spoilage_cost">Chi Phí Hư Hao (Ước Tính):</p><p id="result-spoilage-cost" class="font-bold text-2xl text-red-700">0 VND</p></div>
+                            <div class="bg-green-100 p-4 rounded-md col-span-1 md:col-span-2"><p class="text-gray-600" data-lang="net_profit">Lợi Nhuận Ròng (Trước Thuế):</p><p id="result-net-profit" class="font-bold text-3xl text-green-800">0 VND</p></div>
+                        </div>
+                        <div class="mt-8 text-center">
+                            <button id="suggest-marketing-btn" class="bg-indigo-600 text-white py-2 px-5 rounded-md hover:bg-indigo-700 flex items-center justify-center mx-auto disabled:opacity-50">
+                                <span data-lang="suggest_marketing_plan">✨ Gợi ý kế hoạch marketing</span>
+                            </button>
+                            <div id="marketing-suggestions" class="mt-4 text-left hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab: Báo Cáo Tồn Kho -->
+            <div id="inventory-report" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="inventory_report_title">Báo Cáo Xuất Nhập Tồn Nguyên Liệu</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
+                        <div>
+                            <label for="report-preset-filter" class="block text-sm font-medium text-gray-700" data-lang="view_by">Xem theo</label>
+                            <select id="report-preset-filter" class="mt-1 block w-full md:w-auto border-gray-300 rounded-md shadow-sm">
+                                <option value="custom" data-lang="custom_option">Tùy chọn</option>
+                                <option value="this_month" data-lang="this_month">Tháng này</option>
+                                <option value="this_quarter" data-lang="this_quarter">Quí này</option>
+                                <option value="this_year" data-lang="this_year">Năm này</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="report-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
+                            <input type="date" id="report-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label for="report-end-date" class="block text-sm font-medium text-gray-700" data-lang="to_date">Đến ngày</label>
+                            <input type="date" id="report-end-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="self-end">
+                            <button id="view-inventory-report-btn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700" data-lang="view_report_btn">Xem Báo Cáo</button>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-yellow-700 bg-yellow-100 p-3 rounded-md mb-4">
+                        <strong data-lang="note">Lưu ý:</strong> <span data-lang="inventory_report_note">Báo cáo này chưa tính toán lượng nguyên liệu đã sử dụng (xuất kho) để bán hàng.</span>
+                    </p>
+    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="material_name_header">Tên Nguyên Liệu</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="unit_header">ĐVT</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="opening_stock">Tồn Đầu Kỳ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="purchased_in_period">Nhập Trong Kỳ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="spoiled_in_period">Hư Hao Trong Kỳ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="closing_stock">Tồn Cuối Kỳ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-report-body" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Lịch sử điều chỉnh -->
+            <div id="adjustment-logs" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="adjustment_logs_title">Lịch Sử Điều Chỉnh Dữ Liệu</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div id="adjustment-logs-list" class="space-y-4"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Edit Supplier Modal -->
+    <div id="edit-supplier-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 class="text-2xl font-bold mb-4" data-lang="edit_supplier_title">Điều Chỉnh Thông Tin Nhà Cung Cấp</h2>
+            <form id="edit-supplier-form" class="space-y-4">
+                <input type="hidden" id="edit-supplier-id">
+                <div>
+                    <label class="block text-sm font-medium" data-lang="supplier_name_label">Tên nhà cung cấp</label>
+                    <input type="text" id="edit-supplier-name" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="contact_person">Người liên hệ</label>
+                    <input type="text" id="edit-supplier-contact" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="phone_number">Số điện thoại</label>
+                    <input type="tel" id="edit-supplier-phone" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="address">Địa chỉ</label>
+                    <input type="text" id="edit-supplier-address" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="tax_code_label">Mã số thuế</label>
+                    <input type="text" id="edit-supplier-taxcode" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="adjustment_reason">Lý do điều chỉnh</label>
+                    <textarea id="edit-supplier-reason" required rows="2" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3"></textarea>
+                </div>
+                <div class="flex justify-end gap-4 mt-6">
+                    <button type="button" id="cancel-edit-supplier" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" data-lang="cancel_btn">Hủy</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md" data-lang="save_changes_btn">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Purchase Modal -->
+    <div id="edit-purchase-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 class="text-2xl font-bold mb-4" data-lang="edit_purchase_title">Điều Chỉnh Dữ Liệu Nhập Kho</h2>
+            <form id="edit-purchase-form" class="space-y-4">
+                <input type="hidden" id="edit-purchase-id">
+                 <div>
+                    <label class="block text-sm font-medium" data-lang="purchase_date">Ngày nhập</label>
+                    <input type="date" id="edit-purchase-date" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="material">Nguyên liệu</label>
+                    <p id="edit-purchase-material-name" class="font-semibold mt-1"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium" data-lang="quantity">Số lượng</label>
+                        <input type="number" step="any" id="edit-purchase-quantity" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                    </div>
+                    <div>
+                         <label class="block text-sm font-medium" data-lang="total_price">Tổng tiền (VND)</label>
+                        <input type="number" id="edit-purchase-total-price" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                    </div>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium" data-lang="supplier">Nhà cung cấp</label>
+                    <select id="edit-purchase-supplier-select" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="adjustment_reason">Lý do điều chỉnh</label>
+                    <textarea id="edit-purchase-reason" required rows="2" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3"></textarea>
+                </div>
+                <div class="flex justify-end gap-4 mt-6">
+                    <button type="button" id="cancel-edit-purchase" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" data-lang="cancel_btn">Hủy</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md" data-lang="save_changes_btn">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const translations = {
+            vi: {
+                dashboard_title: 'Bảng Điều Khiển',
+                menu_management: 'Quản Lý Thực Đơn',
+                supplier_management: 'Nhà Cung Cấp',
+                material_management: 'Nguyên Vật Liệu',
+                spoilage_management: 'Quản Lý Hư Hao',
+                other_costs: 'Chi Phí Khác',
+                profit_report: 'Báo Cáo Lợi Nhuận',
+                inventory_report: 'Báo Cáo Tồn Kho',
+                adjustment_logs: 'Lịch Sử Điều Chỉnh',
+                menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
+                add_new_dish: 'Thêm Món Mới',
+                dish_name: 'Tên món',
+                description: 'Mô tả',
+                suggest_description: '✨ Gợi ý mô tả',
+                selling_price: 'Giá Bán (VND)',
+                image_url: 'URL Hình ảnh',
+                bom_title: 'Định Lượng Nguyên Liệu (BOM)',
+                quantity_short: 'SL',
+                estimated_cost: 'Giá vốn ước tính',
+                add_dish_btn: 'Thêm Món',
+                current_dishes_list: 'Danh Sách Món Ăn Hiện Có',
+                supplier_management_title: 'Quản Lý Nhà Cung Cấp',
+                add_new_supplier: 'Thêm NCC Mới',
+                supplier_name: 'Tên nhà cung cấp',
+                contact_person: 'Người liên hệ',
+                phone_number: 'Số điện thoại',
+                address: 'Địa chỉ',
+                tax_code: 'Mã số thuế (nếu có)',
+                add_supplier_btn: 'Thêm NCC',
+                suppliers_list_title: 'Danh Sách Nhà Cung Cấp',
+                purchase_management_title: 'Nguyên Vật Liệu Mua Vào',
+                define_material: 'Định Nghĩa Nguyên Vật Liệu',
+                material_name: 'Tên nguyên liệu',
+                unit_placeholder: 'Đơn vị (kg, gr, cái)',
+                add_btn: 'Thêm',
+                materials_list_title: 'Danh Sách Nguyên Vật Liệu',
+                record_purchase: 'Nhập Kho',
+                purchase_date: 'Ngày nhập hàng',
+                material: 'Nguyên liệu',
+                quantity: 'Số lượng',
+                unit: 'Đơn vị',
+                total_price: 'Tổng tiền (VND)',
+                supplier: 'Nhà cung cấp',
+                new_unit_price_label: 'Đơn giá mới sẽ là',
+                confirm_purchase_btn: 'Xác Nhận Nhập Kho',
+                purchase_history_title: 'Lịch Sử Nhập Kho',
+                spoilage_management_title: 'Quản Lý Nguyên Vật Liệu Hư Hao',
+                record_spoilage: 'Ghi Nhận Hư Hao',
+                spoilage_date: 'Ngày thải bỏ',
+                spoilage_reason: 'Nguyên nhân thải bỏ',
+                spoilage_reason_placeholder: 'VD: Hết hạn, hỏng...',
+                record_btn: 'Ghi Nhận',
+                spoilage_history_title: 'Lịch Sử Hư Hao',
+                other_costs_title: 'Quản Lý Chi Phí Khác',
+                add_new_cost: 'Thêm Chi Phí Mới',
+                cost_name: 'Tên chi phí',
+                amount: 'Số tiền (VND)',
+                cost_type: 'Loại chi phí',
+                monthly: 'Hàng tháng',
+                yearly: 'Hàng năm',
+                onetime: 'Một lần (Đầu tư)',
+                add_cost_btn: 'Thêm Chi Phí',
+                monthly_costs: 'Chi phí hàng tháng',
+                total_monthly: 'Tổng cộng tháng:',
+                yearly_costs: 'Chi phí hàng năm',
+                total_yearly: 'Tổng cộng năm:',
+                onetime_costs: 'Chi phí một lần (Đầu tư)',
+                total: 'Tổng cộng:',
+                profit_report_title: 'Báo Cáo Lợi Nhuận (Ước Tính)',
+                enter_sales_volume: 'Nhập Số Lượng Bán Ra (Trong Tháng)',
+                calculate_profit_btn: 'Tính Lợi Nhuận',
+                monthly_business_results: 'Kết Quả Kinh Doanh Tháng Này',
+                total_revenue: 'Tổng Doanh Thu:',
+                total_cogs: 'Tổng Giá Vốn Hàng Bán:',
+                total_operating_expenses: 'Tổng Chi Phí Hoạt Động (Tháng):',
+                spoilage_cost: 'Chi Phí Hư Hao (Ước Tính):',
+                net_profit: 'Lợi Nhuận Ròng (Trước Thuế):',
+                suggest_marketing_plan: '✨ Gợi ý kế hoạch marketing',
+                inventory_report_title: 'Báo Cáo Xuất Nhập Tồn Nguyên Liệu',
+                view_by: 'Xem theo',
+                custom_option: 'Tùy chọn',
+                this_month: 'Tháng này',
+                this_quarter: 'Quí này',
+                this_year: 'Năm này',
+                from_date: 'Từ ngày',
+                to_date: 'Đến ngày',
+                view_report_btn: 'Xem Báo Cáo',
+                note: 'Lưu ý:',
+                inventory_report_note: 'Báo cáo này chưa tính toán lượng nguyên liệu đã sử dụng (xuất kho) để bán hàng.',
+                material_name_header: 'Tên Nguyên Liệu',
+                unit_header: 'ĐVT',
+                opening_stock: 'Tồn Đầu Kỳ',
+                purchased_in_period: 'Nhập Trong Kỳ',
+                spoiled_in_period: 'Hư Hao Trong Kỳ',
+                closing_stock: 'Tồn Cuối Kỳ',
+                adjustment_logs_title: 'Lịch Sử Điều Chỉnh Dữ Liệu',
+                edit_supplier_title: 'Điều Chỉnh Thông Tin Nhà Cung Cấp',
+                supplier_name_label: 'Tên nhà cung cấp',
+                adjustment_reason: 'Lý do điều chỉnh',
+                cancel_btn: 'Hủy',
+                save_changes_btn: 'Lưu Thay Đổi',
+                edit_purchase_title: 'Điều Chỉnh Dữ Liệu Nhập Kho',
+                delete: 'Xóa',
+                edit: 'Sửa',
+                empty_data: 'Chưa có dữ liệu.',
+                empty_adjustment_logs: 'Chưa có lịch sử điều chỉnh nào.',
+                thinking: 'Đang nghĩ...',
+                suggestion_error: 'Không thể nhận được gợi ý. Vui lòng thử lại.',
+                ai_connection_error: 'Đã xảy ra lỗi khi kết nối với AI.',
+                select_material: 'Chọn nguyên liệu',
+                select_supplier: 'Chọn NCC',
+                log_type_supplier: 'Nhà Cung Cấp',
+                log_type_purchase: 'Nhập kho',
+                sales_volume_placeholder: 'Số lượng bán',
+                suggest_dish_name: '✨ Gợi ý tên',
+                analyze_spoilage: '✨ Phân tích & Đề xuất',
+                spoilage_analysis_title: 'Phân Tích Hư Hao & Đề Xuất Giải Pháp',
+                dish_name_suggestions: 'Gợi Ý Tên Món Ăn',
+            },
+            zh: {
+                dashboard_title: '儀表板',
+                menu_management: '菜單管理',
+                supplier_management: '供應商管理',
+                material_management: '原材料管理',
+                spoilage_management: '損耗管理',
+                other_costs: '其他費用',
+                profit_report: '利潤報告',
+                inventory_report: '庫存報告',
+                adjustment_logs: '調整日誌',
+                menu_management_title: '菜單與物料清單(BOM)管理',
+                add_new_dish: '新增菜式',
+                dish_name: '菜式名稱',
+                description: '描述',
+                suggest_description: '✨ AI建議描述',
+                selling_price: '售價 (VND)',
+                image_url: '圖片URL',
+                bom_title: '原材料定量 (BOM)',
+                quantity_short: '數量',
+                estimated_cost: '估計成本',
+                add_dish_btn: '新增菜式',
+                current_dishes_list: '現有菜式列表',
+                supplier_management_title: '供應商管理',
+                add_new_supplier: '新增供應商',
+                supplier_name: '供應商名稱',
+                contact_person: '聯絡人',
+                phone_number: '電話號碼',
+                address: '地址',
+                tax_code: '稅號 (如有)',
+                add_supplier_btn: '新增供應商',
+                suppliers_list_title: '供應商列表',
+                purchase_management_title: '原材料採購',
+                define_material: '定義原材料',
+                material_name: '原材料名稱',
+                unit_placeholder: '單位 (公斤, 克, 個)',
+                add_btn: '新增',
+                materials_list_title: '原材料列表',
+                record_purchase: '入庫',
+                purchase_date: '入庫日期',
+                material: '原材料',
+                quantity: '數量',
+                unit: '單位',
+                total_price: '總金額 (VND)',
+                supplier: '供應商',
+                new_unit_price_label: '新單價為',
+                confirm_purchase_btn: '確認入庫',
+                purchase_history_title: '入庫歷史',
+                spoilage_management_title: '原材料損耗管理',
+                record_spoilage: '記錄損耗',
+                spoilage_date: '報廢日期',
+                spoilage_reason: '報廢原因',
+                spoilage_reason_placeholder: '例如: 過期, 損壞...',
+                record_btn: '記錄',
+                spoilage_history_title: '損耗歷史',
+                other_costs_title: '其他費用管理',
+                add_new_cost: '新增費用',
+                cost_name: '費用名稱',
+                amount: '金額 (VND)',
+                cost_type: '費用類型',
+                monthly: '每月',
+                yearly: '每年',
+                onetime: '一次性 (投資)',
+                add_cost_btn: '新增費用',
+                monthly_costs: '每月費用',
+                total_monthly: '每月總計:',
+                yearly_costs: '每年費用',
+                total_yearly: '每年總計:',
+                onetime_costs: '一次性費用 (投資)',
+                total: '總計:',
+                profit_report_title: '利潤報告 (估計)',
+                enter_sales_volume: '輸入本月銷售數量',
+                calculate_profit_btn: '計算利潤',
+                monthly_business_results: '本月經營業績',
+                total_revenue: '總收入:',
+                total_cogs: '總銷售成本:',
+                total_operating_expenses: '每月總營運費用:',
+                spoilage_cost: '損耗成本 (估計):',
+                net_profit: '淨利潤 (稅前):',
+                suggest_marketing_plan: '✨ AI建議營銷計劃',
+                inventory_report_title: '原材料出入庫存報告',
+                view_by: '查看方式',
+                custom_option: '自定義',
+                this_month: '本月',
+                this_quarter: '本季',
+                this_year: '本年',
+                from_date: '開始日期',
+                to_date: '結束日期',
+                view_report_btn: '查看報告',
+                note: '注意:',
+                inventory_report_note: '此報告未計算已用於銷售的原材料數量（出庫）。',
+                material_name_header: '原材料名稱',
+                unit_header: '單位',
+                opening_stock: '期初庫存',
+                purchased_in_period: '本期入庫',
+                spoiled_in_period: '本期損耗',
+                closing_stock: '期末庫存',
+                adjustment_logs_title: '數據調整日誌',
+                edit_supplier_title: '編輯供應商資訊',
+                supplier_name_label: '供應商名稱',
+                adjustment_reason: '調整原因',
+                cancel_btn: '取消',
+                save_changes_btn: '保存更改',
+                edit_purchase_title: '編輯入庫數據',
+                delete: '刪除',
+                edit: '編輯',
+                empty_data: '暫無數據。',
+                empty_adjustment_logs: '暫無調整日誌。',
+                thinking: '思考中...',
+                suggestion_error: '無法獲取建議。請重試。',
+                ai_connection_error: '連接AI時發生錯誤。',
+                select_material: '選擇原材料',
+                select_supplier: '選擇供應商',
+                log_type_supplier: '供應商',
+                log_type_purchase: '入庫',
+                sales_volume_placeholder: '銷售數量',
+                suggest_dish_name: '✨ 建議菜名',
+                analyze_spoilage: '✨ 分析與建議',
+                spoilage_analysis_title: '損耗分析與解決方案建議',
+                dish_name_suggestions: '菜名建議',
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'vi';
+
+        const setLanguage = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'vi';
+
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                const key = el.dataset.langPlaceholder;
+                 if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.langCode === lang);
+            });
+
+            // Re-render dynamic content that needs translation
+            renderApp();
+        };
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.dataset.langCode);
+            });
+        });
+
+        // --- Helper Functions ---
+        const formatCurrency = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+        const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
+        const todayISO = () => new Date().toISOString().split('T')[0];
+
+        // --- Data Initialization from localStorage ---
+        let dishes = JSON.parse(localStorage.getItem('dishes')) || [];
+        let rawMaterials = JSON.parse(localStorage.getItem('rawMaterials')) || [];
+        let suppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
+        let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+        let spoilageRecords = JSON.parse(localStorage.getItem('spoilageRecords')) || [];
+        let adjustmentLogs = JSON.parse(localStorage.getItem('adjustmentLogs')) || [];
+        let currentBomItems = [];
+        let otherCosts = [];
+
+        // Set default dates
+        document.getElementById('purchase-date').value = todayISO();
+        document.getElementById('spoilage-date').value = todayISO();
+
+        // --- DOM Elements ---
+        const elements = {
+            addDishForm: document.getElementById('add-dish-form'),
+            dishesList: document.getElementById('dishes-list'),
+            bomMaterialSelect: document.getElementById('bom-material-select'),
+            bomQuantityInput: document.getElementById('bom-quantity'),
+            addBomItemBtn: document.getElementById('add-bom-item-btn'),
+            bomItemsList: document.getElementById('bom-items-list'),
+            estimatedCostSpan: document.getElementById('estimated-cost'),
+            addMaterialForm: document.getElementById('add-material-form'),
+            materialsList: document.getElementById('materials-list'),
+            addSupplierForm: document.getElementById('add-supplier-form'),
+            suppliersList: document.getElementById('suppliers-list'),
+            addPurchaseForm: document.getElementById('add-purchase-form'),
+            purchaseMaterialSelect: document.getElementById('purchase-material-select'),
+            purchaseSupplierSelect: document.getElementById('purchase-supplier-select'),
+            purchaseQuantityInput: document.getElementById('purchase-quantity'),
+            purchaseTotalPriceInput: document.getElementById('purchase-total-price'),
+            purchaseUnitInput: document.getElementById('purchase-unit'),
+            newUnitPriceSpan: document.getElementById('new-unit-price'),
+            purchasesList: document.getElementById('purchases-list'),
+            salesInputArea: document.getElementById('sales-input-area'),
+            calculateProfitBtn: document.getElementById('calculate-profit-btn'),
+            spoilageMaterialSelect: document.getElementById('spoilage-material-select'),
+            spoilageUnitInput: document.getElementById('spoilage-unit'),
+            spoilageList: document.getElementById('spoilage-list'),
+            viewInventoryReportBtn: document.getElementById('view-inventory-report-btn'),
+            reportPresetFilter: document.getElementById('report-preset-filter'),
+            reportStartDate: document.getElementById('report-start-date'),
+            reportEndDate: document.getElementById('report-end-date'),
+            inventoryReportBody: document.getElementById('inventory-report-body'),
+            adjustmentLogsList: document.getElementById('adjustment-logs-list'),
+            // Modals
+            editSupplierModal: document.getElementById('edit-supplier-modal'),
+            editSupplierForm: document.getElementById('edit-supplier-form'),
+            cancelEditSupplierBtn: document.getElementById('cancel-edit-supplier'),
+            editPurchaseModal: document.getElementById('edit-purchase-modal'),
+            editPurchaseForm: document.getElementById('edit-purchase-form'),
+            cancelEditPurchaseBtn: document.getElementById('cancel-edit-purchase'),
+            // AI Features
+            suggestNameBtn: document.getElementById('suggest-name-btn'),
+            dishNameSuggestions: document.getElementById('dish-name-suggestions'),
+            analyzeSpoilageBtn: document.getElementById('analyze-spoilage-btn'),
+            spoilageAnalysisResult: document.getElementById('spoilage-analysis-result'),
+        };
+
+        // --- Tab Switching Logic ---
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                tabLinks.forEach(l => l.classList.remove('active:bg-gray-700', 'bg-gray-700'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                link.classList.add('active:bg-gray-700', 'bg-gray-700');
+                document.getElementById(link.dataset.tab).classList.add('active');
+            });
+        });
+
+        // --- Gemini API Integration ---
+        const callGeminiAPI = async (prompt, button) => {
+            const originalButtonHTML = button.innerHTML;
+            const loadingSpinner = `<svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>${translations[currentLang].thinking}</span>`;
+            button.innerHTML = loadingSpinner;
+            button.disabled = true;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const payload = { contents: [{ parts: [{ text: prompt }] }] };
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`API call failed: ${response.status}`);
+                
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                return text || translations[currentLang].suggestion_error;
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return translations[currentLang].ai_connection_error;
+            } finally {
+                button.innerHTML = originalButtonHTML;
+                button.disabled = false;
+            }
+        };
+
+        // --- Generic Render Functions ---
+        function renderList(container, items, renderItemFn, emptyTextKey = "empty_data") {
+            const emptyText = translations[currentLang][emptyTextKey];
+            container.innerHTML = items.length ? items.map(renderItemFn).join('') : `<p class="text-gray-500 text-sm">${emptyText}</p>`;
+        }
+        
+        // --- Material & Supplier Logic ---
+        const renderMaterial = (m) => `<div class="flex justify-between items-center p-2 bg-gray-50 rounded-md"><span>${m.name} (${m.unit})</span><span class="font-mono text-sm">${formatCurrency(m.price)}</span></div>`;
+        
+        const renderSupplier = (s) => `
+            <div class="p-3 bg-gray-50 rounded-md border text-sm relative">
+                <p class="font-semibold text-base">${s.name}</p>
+                <p class="text-gray-600"><strong>${translations[currentLang].contact_person}:</strong> ${s.contact || 'N/A'} - <strong>SĐT:</strong> ${s.phone || 'N/A'}</p>
+                <p class="text-gray-600"><strong>${translations[currentLang].address}:</strong> ${s.address || 'N/A'}</p>
+                ${s.taxCode ? `<p class="text-gray-500 text-xs"><strong>MST:</strong> ${s.taxCode}</p>` : ''}
+                <button class="edit-supplier-btn absolute top-2 right-2 text-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-1 px-2 rounded" data-id="${s.id}">${translations[currentLang].edit}</button>
+            </div>
+        `;
+        
+        const renderPurchase = (p) => {
+            const material = findById(rawMaterials, p.materialId);
+            return `<div class="text-sm p-2 bg-gray-50 rounded-md flex justify-between items-center">
+                <div>
+                    <strong>${material?.name || 'N/A'}</strong> - ${p.quantity} ${material?.unit || ''} @ ${formatCurrency(p.unitPrice)}
+                    <span class="text-xs text-gray-500 block">${new Date(p.date).toLocaleDateString('vi-VN')}</span>
+                </div>
+                <button class="edit-purchase-btn text-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-1 px-2 rounded" data-id="${p.id}">${translations[currentLang].edit}</button>
+            </div>`;
+        };
+        
+        function populateSelect(select, items, placeholderKey, selectedId) {
+            const placeholder = translations[currentLang][placeholderKey];
+            select.innerHTML = `<option value="">-- ${placeholder} --</option>`;
+            items.forEach(item => {
+                const selected = item.id === selectedId ? 'selected' : '';
+                select.innerHTML += `<option value="${item.id}" ${selected}>${item.name}</option>`;
+            });
+        }
+        
+        function updateAllSelects() {
+            populateSelect(elements.bomMaterialSelect, rawMaterials, 'select_material');
+            populateSelect(elements.purchaseMaterialSelect, rawMaterials, 'select_material');
+            populateSelect(elements.purchaseSupplierSelect, suppliers, 'select_supplier');
+            populateSelect(elements.spoilageMaterialSelect, rawMaterials, 'select_material');
+        }
+
+        elements.addMaterialForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('material-name').value;
+            const unit = document.getElementById('material-unit').value;
+            rawMaterials.push({ id: Date.now(), name, unit, price: 0 });
+            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+            renderApp();
+            e.target.reset();
+        });
+
+        elements.addSupplierForm.addEventListener('submit', e => {
+            e.preventDefault();
+            suppliers.push({ 
+                id: Date.now(), 
+                name: document.getElementById('supplier-name').value,
+                contact: document.getElementById('supplier-contact').value,
+                phone: document.getElementById('supplier-phone').value,
+                address: document.getElementById('supplier-address').value,
+                taxCode: document.getElementById('supplier-taxcode').value,
+            });
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            renderApp();
+            e.target.reset();
+        });
+
+        elements.purchaseMaterialSelect.addEventListener('change', (e) => {
+            const materialId = parseInt(e.target.value);
+            const material = findById(rawMaterials, materialId);
+            elements.purchaseUnitInput.value = material ? material.unit : '';
+        });
+
+        function updateNewUnitPrice() {
+            const quantity = parseFloat(elements.purchaseQuantityInput.value) || 0;
+            const totalPrice = parseFloat(elements.purchaseTotalPriceInput.value) || 0;
+            const unitPrice = quantity > 0 ? totalPrice / quantity : 0;
+            elements.newUnitPriceSpan.textContent = formatCurrency(unitPrice);
+        }
+        elements.purchaseQuantityInput.addEventListener('input', updateNewUnitPrice);
+        elements.purchaseTotalPriceInput.addEventListener('input', updateNewUnitPrice);
+
+        elements.addPurchaseForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const purchaseData = {
+                id: Date.now(),
+                date: document.getElementById('purchase-date').value,
+                materialId: parseInt(elements.purchaseMaterialSelect.value),
+                supplierId: parseInt(elements.purchaseSupplierSelect.value),
+                quantity: parseFloat(elements.purchaseQuantityInput.value),
+                totalPrice: parseFloat(elements.purchaseTotalPriceInput.value),
+            };
+
+            if (!purchaseData.date || !purchaseData.materialId || !purchaseData.supplierId || isNaN(purchaseData.quantity) || isNaN(purchaseData.totalPrice)) {
+                alert('Vui lòng điền đủ thông tin.'); return;
+            }
+            
+            purchaseData.unitPrice = purchaseData.totalPrice / purchaseData.quantity;
+            purchases.unshift(purchaseData);
+            localStorage.setItem('purchases', JSON.stringify(purchases));
+
+            updateAllMaterialPrices();
+            recalculateAllDishCosts();
+            renderApp();
+            e.target.reset();
+            document.getElementById('purchase-date').value = todayISO();
+            updateNewUnitPrice();
+        });
+
+        function logAdjustment(typeKey, recordId, reason, changes) {
+            adjustmentLogs.unshift({
+                id: Date.now(),
+                typeKey: typeKey,
+                recordId: recordId,
+                reason: reason,
+                date: new Date().toISOString(),
+                changes: changes
+            });
+            localStorage.setItem('adjustmentLogs', JSON.stringify(adjustmentLogs));
+        }
+
+        elements.suppliersList.addEventListener('click', e => {
+            if (e.target.matches('.edit-supplier-btn')) {
+                const supplierId = parseInt(e.target.dataset.id);
+                const supplier = findById(suppliers, supplierId);
+                if (supplier) {
+                    document.getElementById('edit-supplier-id').value = supplier.id;
+                    document.getElementById('edit-supplier-name').value = supplier.name;
+                    document.getElementById('edit-supplier-contact').value = supplier.contact || '';
+                    document.getElementById('edit-supplier-phone').value = supplier.phone || '';
+                    document.getElementById('edit-supplier-address').value = supplier.address || '';
+                    document.getElementById('edit-supplier-taxcode').value = supplier.taxCode || '';
+                    elements.editSupplierModal.classList.add('active');
+                }
+            }
+        });
+
+        elements.editSupplierForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const supplierId = parseInt(document.getElementById('edit-supplier-id').value);
+            const reason = document.getElementById('edit-supplier-reason').value;
+            const originalSupplier = findById(suppliers, supplierId);
+            const updatedSupplier = {
+                ...originalSupplier,
+                name: document.getElementById('edit-supplier-name').value,
+                contact: document.getElementById('edit-supplier-contact').value,
+                phone: document.getElementById('edit-supplier-phone').value,
+                address: document.getElementById('edit-supplier-address').value,
+                taxCode: document.getElementById('edit-supplier-taxcode').value,
+            };
+
+            const changes = {};
+            for (const key in updatedSupplier) {
+                if (updatedSupplier[key] !== originalSupplier[key]) {
+                    changes[key] = { from: originalSupplier[key], to: updatedSupplier[key] };
+                }
+            }
+
+            suppliers = suppliers.map(s => s.id === supplierId ? updatedSupplier : s);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            
+            logAdjustment('log_type_supplier', supplierId, reason, changes);
+            
+            elements.editSupplierModal.classList.remove('active');
+            e.target.reset();
+            renderApp();
+        });
+
+        elements.cancelEditSupplierBtn.addEventListener('click', () => {
+            elements.editSupplierModal.classList.remove('active');
+            elements.editSupplierForm.reset();
+        });
+
+        elements.purchasesList.addEventListener('click', e => {
+            if (e.target.matches('.edit-purchase-btn')) {
+                const purchaseId = parseInt(e.target.dataset.id);
+                const purchase = findById(purchases, purchaseId);
+                const material = findById(rawMaterials, purchase.materialId);
+                if (purchase) {
+                    document.getElementById('edit-purchase-id').value = purchase.id;
+                    document.getElementById('edit-purchase-date').value = purchase.date;
+                    document.getElementById('edit-purchase-material-name').textContent = `${material.name} (${material.unit})`;
+                    document.getElementById('edit-purchase-quantity').value = purchase.quantity;
+                    document.getElementById('edit-purchase-total-price').value = purchase.totalPrice;
+                    populateSelect(document.getElementById('edit-purchase-supplier-select'), suppliers, 'select_supplier', purchase.supplierId);
+                    elements.editPurchaseModal.classList.add('active');
+                }
+            }
+        });
+
+        elements.editPurchaseForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const purchaseId = parseInt(document.getElementById('edit-purchase-id').value);
+            const reason = document.getElementById('edit-purchase-reason').value;
+            const originalPurchase = findById(purchases, purchaseId);
+            const updatedPurchase = {
+                ...originalPurchase,
+                date: document.getElementById('edit-purchase-date').value,
+                quantity: parseFloat(document.getElementById('edit-purchase-quantity').value),
+                totalPrice: parseFloat(document.getElementById('edit-purchase-total-price').value),
+                supplierId: parseInt(document.getElementById('edit-purchase-supplier-select').value),
+            };
+            updatedPurchase.unitPrice = updatedPurchase.totalPrice / updatedPurchase.quantity;
+
+            const changes = {};
+             for (const key in updatedPurchase) {
+                if (key !== 'unitPrice' && updatedPurchase[key] !== originalPurchase[key]) {
+                    changes[key] = { from: originalPurchase[key], to: updatedPurchase[key] };
+                }
+            }
+            if (updatedPurchase.unitPrice !== originalPurchase.unitPrice) {
+                 changes['unitPrice'] = { from: formatCurrency(originalPurchase.unitPrice), to: formatCurrency(updatedPurchase.unitPrice) };
+            }
+
+            purchases = purchases.map(p => p.id === purchaseId ? updatedPurchase : p);
+            localStorage.setItem('purchases', JSON.stringify(purchases));
+
+            const material = findById(rawMaterials, originalPurchase.materialId);
+            const logType = `${translations[currentLang].log_type_purchase}: ${material.name}`;
+            logAdjustment(logType, purchaseId, reason, changes);
+            
+            updateAllMaterialPrices();
+            recalculateAllDishCosts();
+
+            elements.editPurchaseModal.classList.remove('active');
+            e.target.reset();
+            renderApp();
+        });
+
+        elements.cancelEditPurchaseBtn.addEventListener('click', () => {
+            elements.editPurchaseModal.classList.remove('active');
+            elements.editPurchaseForm.reset();
+        });
+
+        function updateAllMaterialPrices() {
+            const latestPurchases = {};
+            const sortedPurchases = [...purchases].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            for (const p of sortedPurchases) {
+                if (!latestPurchases[p.materialId]) {
+                    latestPurchases[p.materialId] = p.unitPrice;
+                }
+            }
+
+            rawMaterials.forEach(material => {
+                material.price = latestPurchases[material.id] || material.price || 0;
+            });
+
+            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+        }
+
+        function renderAdjustmentLogs() {
+            renderList(elements.adjustmentLogsList, adjustmentLogs, log => {
+                const changesHtml = Object.entries(log.changes).map(([key, value]) => 
+                    `<li class="text-xs text-gray-600 ml-4">${key}: "${value.from}" -> "${value.to}"</li>`
+                ).join('');
+
+                const logType = translations[currentLang][log.typeKey] || log.typeKey;
+
+                return `
+                    <div class="p-3 bg-gray-50 border rounded-md">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-gray-800">${logType}</span>
+                            <span class="text-xs text-gray-500">${new Date(log.date).toLocaleString('vi-VN')}</span>
+                        </div>
+                        <p class="text-sm text-gray-700 mt-1"><strong>${translations[currentLang].adjustment_reason}:</strong> ${log.reason}</p>
+                        <ul class="list-disc list-inside mt-1">${changesHtml}</ul>
+                    </div>
+                `;
+            }, "empty_adjustment_logs");
+        }
+
+        const suggestDescBtn = document.getElementById('suggest-description-btn');
+        suggestDescBtn.addEventListener('click', async () => {
+            const dishNameInput = document.getElementById('dish-name');
+            const dishDescTextarea = document.getElementById('dish-description');
+            if (!dishNameInput.value) {
+                alert("Vui lòng nhập tên món ăn trước.");
+                return;
+            }
+            const prompt = `Viết một đoạn mô tả ngắn (dưới 40 từ) thật hấp dẫn cho món ăn Việt Nam có tên là "${dishNameInput.value}". Đây là một món canh tiềm dưỡng sinh, nhấn mạnh yếu tố bổ dưỡng, hương vị đậm đà, và nguyên liệu tự nhiên.`;
+            const suggestion = await callGeminiAPI(prompt, suggestDescBtn);
+            dishDescTextarea.value = suggestion.replace(/"/g, '');
+        });
+        
+        elements.suggestNameBtn.addEventListener('click', async () => {
+            if (currentBomItems.length === 0) {
+                alert('Vui lòng thêm ít nhất một nguyên liệu vào BOM để nhận gợi ý tên.');
+                return;
+            }
+
+            const ingredientNames = currentBomItems.map(item => {
+                const material = findById(rawMaterials, item.materialId);
+                return material ? material.name : '';
+            }).filter(name => name).join(', ');
+
+            const prompt = `Gợi ý 3 tên món ăn tiếng Việt thật hấp dẫn và mang tính dưỡng sinh cho một món canh tiềm có các nguyên liệu chính là: ${ingredientNames}. Chỉ trả về 3 tên, mỗi tên trên một dòng, không có giải thích hay ký tự gạch đầu dòng.`;
+
+            const dishNameSuggestionsDiv = elements.dishNameSuggestions;
+            dishNameSuggestionsDiv.innerHTML = `<p class="text-gray-500">${translations[currentLang].thinking}</p>`;
+
+            const suggestionsText = await callGeminiAPI(prompt, elements.suggestNameBtn);
+
+            if (suggestionsText.includes('lỗi') || suggestionsText.includes('error')) {
+                dishNameSuggestionsDiv.innerHTML = `<p class="text-red-500">${suggestionsText}</p>`;
+            } else {
+                const suggestions = suggestionsText.split('\n').filter(s => s.trim() !== '');
+                dishNameSuggestionsDiv.innerHTML = `<h4 class="font-semibold mb-1" data-lang="dish_name_suggestions">${translations[currentLang].dish_name_suggestions}</h4>`;
+                suggestions.forEach(name => {
+                    const suggestionEl = document.createElement('button');
+                    suggestionEl.type = 'button';
+                    suggestionEl.className = 'block w-full text-left p-2 bg-gray-100 hover:bg-gray-200 rounded mb-1';
+                    suggestionEl.textContent = name;
+                    suggestionEl.onclick = () => {
+                        document.getElementById('dish-name').value = name;
+                        dishNameSuggestionsDiv.innerHTML = '';
+                    };
+                    dishNameSuggestionsDiv.appendChild(suggestionEl);
+                });
+            }
+        });
+
+        const suggestMarketingBtn = document.getElementById('suggest-marketing-btn');
+        suggestMarketingBtn.addEventListener('click', async () => {
+            const revenue = document.getElementById('result-revenue').textContent;
+            const profit = document.getElementById('result-net-profit').textContent;
+            const marketingSuggestionsDiv = document.getElementById('marketing-suggestions');
+            
+            const prompt = `Tôi là chủ một quán ăn nhỏ bán canh tiềm dưỡng sinh tại Việt Nam. Tháng này, tổng doanh thu là ${revenue} và lợi nhuận ròng là ${profit}. Hãy đề xuất 3 ý tưởng marketing ngắn gọn, sáng tạo và dễ thực hiện trên Zalo và Facebook cho tháng tới để thu hút thêm khách hàng. Trình bày dưới dạng danh sách gạch đầu dòng.`;
+            
+            const suggestions = await callGeminiAPI(prompt, suggestMarketingBtn);
+            const formattedSuggestions = suggestions
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0)
+                .map(line => `<p class="mb-2">${line.replace(/(\*|-)\s*/, '<span class="text-green-600 font-bold mr-2">•</span>')}</p>`)
+                .join('');
+            
+            marketingSuggestionsDiv.innerHTML = `<div class="mt-4 p-4 bg-green-50 rounded-lg">${formattedSuggestions}</div>`;
+            marketingSuggestionsDiv.classList.remove('hidden');
+        });
+
+        elements.analyzeSpoilageBtn.addEventListener('click', async () => {
+            if (spoilageRecords.length === 0) {
+                alert('Chưa có dữ liệu hư hao để phân tích.');
+                return;
+            }
+
+            const spoilageData = spoilageRecords.map(r => {
+                const material = findById(rawMaterials, r.materialId);
+                return `- ${material?.name || 'Không rõ'}: ${r.quantity} ${material?.unit || ''} (Lý do: ${r.reason})`;
+            }).join('\n');
+
+            const prompt = `Tôi là chủ một quán canh dưỡng sinh nhỏ. Dưới đây là danh sách nguyên vật liệu bị hư hao trong tháng qua:\n${spoilageData}\n\nDựa vào dữ liệu này, hãy:
+1.  Đưa ra 1-2 nhận xét chung về tình hình hư hao.
+2.  Đề xuất 2-3 giải pháp cụ thể, thực tế để giảm thiểu lãng phí trong môi trường bếp nhỏ.
+Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
+            
+            const analysisResultDiv = elements.spoilageAnalysisResult;
+            analysisResultDiv.classList.remove('hidden');
+            analysisResultDiv.innerHTML = `<p class="text-gray-500">${translations[currentLang].thinking}</p>`;
+            
+            const analysisText = await callGeminiAPI(prompt, elements.analyzeSpoilageBtn);
+
+            const formattedText = analysisText
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/(\*|-)\s*/g, '<br><span class="text-indigo-600 font-bold mr-2">•</span>');
+
+            analysisResultDiv.innerHTML = `
+                <h3 class="text-lg font-semibold mb-2 text-indigo-800" data-lang="spoilage_analysis_title">${translations[currentLang].spoilage_analysis_title}</h3>
+                <div class="p-4 bg-indigo-50 rounded-lg text-sm">${formattedText}</div>
+            `;
+        });
+
+        function calculateBomCost(bomItems) {
+            return bomItems.reduce((total, item) => {
+                const material = findById(rawMaterials, item.materialId);
+                return total + (material ? material.price * item.quantity : 0);
+            }, 0);
+        }
+
+        function renderCurrentBomItems() {
+            renderList(elements.bomItemsList, currentBomItems, item => {
+                const material = findById(rawMaterials, item.materialId);
+                return `<div class="flex justify-between items-center text-sm p-1 bg-blue-50 rounded"><span>${material?.name || 'N/A'}</span><span>${item.quantity} ${material?.unit || ''}</span></div>`;
+            }, "");
+            elements.estimatedCostSpan.textContent = formatCurrency(calculateBomCost(currentBomItems));
+        }
+
+        elements.addBomItemBtn.addEventListener('click', () => {
+            const materialId = parseInt(elements.bomMaterialSelect.value);
+            const quantity = parseFloat(elements.bomQuantityInput.value);
+            if (materialId && quantity > 0 && !currentBomItems.some(item => item.materialId === materialId)) {
+                currentBomItems.push({ materialId, quantity });
+                renderCurrentBomItems();
+                elements.bomQuantityInput.value = '';
+            }
+        });
+        
+        elements.addDishForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newDish = {
+                id: Date.now(),
+                name: document.getElementById('dish-name').value,
+                description: document.getElementById('dish-description').value,
+                price: parseFloat(document.getElementById('dish-price').value),
+                imageUrl: document.getElementById('dish-image-url').value,
+                bom: [...currentBomItems],
+                cost: calculateBomCost(currentBomItems)
+            };
+            dishes.push(newDish);
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+            
+            currentBomItems = [];
+            renderCurrentBomItems();
+            elements.dishNameSuggestions.innerHTML = ''; // Clear suggestions
+            renderApp();
+            e.target.reset();
+        });
+
+        elements.dishesList.addEventListener('click', e => {
+            if (e.target.classList.contains('delete-dish-btn')) {
+                const dishId = parseInt(e.target.dataset.id);
+                dishes = dishes.filter(d => d.id !== dishId);
+                localStorage.setItem('dishes', JSON.stringify(dishes));
+                renderApp();
+            }
+        });
+
+        function recalculateAllDishCosts() {
+             dishes.forEach(dish => {
+                dish.cost = calculateBomCost(dish.bom);
+            });
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+        }
+
+        const renderDish = (d) => `
+            <div class="flex justify-between items-start p-3 bg-gray-50 rounded-md border">
+                <div>
+                    <p class="font-semibold">${d.name} - ${formatCurrency(d.price)}</p>
+                    <p class="text-sm text-gray-500">${translations[currentLang].estimated_cost}: ${formatCurrency(d.cost)}</p>
+                </div>
+                <button class="delete-dish-btn text-red-500 hover:text-red-700" data-id="${d.id}">${translations[currentLang].delete}</button>
+            </div>
+        `;
+
+        function migrateCosts() {
+            const oldOnetime = JSON.parse(localStorage.getItem('initial-investment-s'));
+            const oldMonthly = JSON.parse(localStorage.getItem('monthly-expenses-s'));
+            let migrated = false;
+
+            if(oldOnetime && oldOnetime.length > 0) {
+                const mapped = oldOnetime.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'onetime'}));
+                otherCosts.push(...mapped);
+                localStorage.removeItem('initial-investment-s');
+                migrated = true;
+            }
+            if(oldMonthly && oldMonthly.length > 0) {
+                const mapped = oldMonthly.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'monthly'}));
+                otherCosts.push(...mapped);
+                localStorage.removeItem('monthly-expenses-s');
+                migrated = true;
+            }
+
+            if (migrated) {
+                localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+            } else {
+                otherCosts = JSON.parse(localStorage.getItem('otherCosts')) || [];
+            }
+        }
+
+        function renderOtherCosts() {
+            const lists = {
+                onetime: document.getElementById('onetime-costs-list'),
+                monthly: document.getElementById('monthly-costs-list'),
+                yearly: document.getElementById('yearly-costs-list'),
+            };
+            const totals = { onetime: 0, monthly: 0, yearly: 0 };
+            Object.values(lists).forEach(list => list.innerHTML = '');
+
+            otherCosts.forEach(cost => {
+                if (lists[cost.frequency]) {
+                    totals[cost.frequency] += cost.amount;
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'flex justify-between items-center p-2 bg-gray-50 rounded-md text-sm';
+                    itemEl.innerHTML = `
+                        <span>${cost.name}</span>
+                        <div class="flex items-center gap-4">
+                        <span>${formatCurrency(cost.amount)}</span>
+                        <button class="delete-other-cost-btn text-red-500 hover:text-red-700" data-id="${cost.id}">${translations[currentLang].delete}</button>
+                        </div>
+                    `;
+                    lists[cost.frequency].appendChild(itemEl);
+                }
+            });
+
+            document.getElementById('total-onetime-costs').textContent = formatCurrency(totals.onetime);
+            document.getElementById('total-monthly-costs').textContent = formatCurrency(totals.monthly);
+            document.getElementById('total-yearly-costs').textContent = formatCurrency(totals.yearly);
+        }
+
+        document.getElementById('add-other-cost-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('other-cost-name').value;
+            const amount = parseFloat(document.getElementById('other-cost-amount').value);
+            const frequency = document.getElementById('other-cost-frequency').value;
+            if (name && amount >= 0) {
+                otherCosts.push({ id: Date.now(), name, amount, frequency });
+                localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+                renderOtherCosts();
+                e.target.reset();
+            }
+        });
+
+        document.getElementById('cost-management').addEventListener('click', e => {
+            if (e.target.classList.contains('delete-other-cost-btn')) {
+                const costId = parseFloat(e.target.dataset.id);
+                otherCosts = otherCosts.filter(cost => cost.id !== costId);
+                localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+                renderOtherCosts();
+            }
+        });
+        
+        function renderSalesInput() {
+            renderList(elements.salesInputArea, dishes, d => `
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <label for="sales-${d.id}" class="col-span-2">${d.name}</label>
+                    <input type="number" id="sales-${d.id}" data-dish-id="${d.id}" min="0" placeholder="${translations[currentLang].sales_volume_placeholder}" class="col-span-1 border border-gray-300 rounded-md py-2 px-3">
+                </div>
+            `);
+        }
+        
+        const renderSpoilageRecord = (r) => {
+            const material = findById(rawMaterials, r.materialId);
+            const cost = material ? material.price * r.quantity : 0;
+            return `
+            <div class="text-sm p-2 bg-gray-50 rounded-md border">
+                <div class="flex justify-between">
+                    <span><strong>${material?.name || 'N/A'}</strong> - ${r.quantity} ${material?.unit || ''}</span>
+                    <span class="font-semibold text-red-600">${formatCurrency(cost)}</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                     <span>${translations[currentLang].spoilage_reason}: ${r.reason}</span>
+                     <span>${new Date(r.date).toLocaleDateString('vi-VN')}</span>
+                </div>
+            </div>`;
+        };
+        
+        function renderSpoilageList() {
+             renderList(elements.spoilageList, spoilageRecords, renderSpoilageRecord);
+        }
+
+         document.getElementById('add-spoilage-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const date = document.getElementById('spoilage-date').value;
+            const materialId = parseInt(elements.spoilageMaterialSelect.value);
+            const quantity = parseFloat(document.getElementById('spoilage-quantity').value);
+            const reason = document.getElementById('spoilage-reason').value;
+
+            if (!date || !materialId || isNaN(quantity) || !reason) {
+                alert('Vui lòng điền đủ thông tin.'); return;
+            }
+            
+            spoilageRecords.unshift({ id: Date.now(), date, materialId, quantity, reason });
+            localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
+            renderSpoilageList();
+            e.target.reset();
+            document.getElementById('spoilage-date').value = todayISO();
+        });
+        
+        elements.spoilageMaterialSelect.addEventListener('change', (e) => {
+            const materialId = parseInt(e.target.value);
+            const material = findById(rawMaterials, materialId);
+            elements.spoilageUnitInput.value = material ? material.unit : '';
+        });
+
+        function setReportDatesFromPreset() {
+            const preset = elements.reportPresetFilter.value;
+            const now = new Date();
+            let startDate, endDate = new Date(now);
+
+            now.setHours(0, 0, 0, 0);
+            endDate.setHours(23, 59, 59, 999);
+
+            if (preset === 'this_month') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            } else if (preset === 'this_quarter') {
+                const quarter = Math.floor(now.getMonth() / 3);
+                startDate = new Date(now.getFullYear(), quarter * 3, 1);
+            } else if (preset === 'this_year') {
+                startDate = new Date(now.getFullYear(), 0, 1);
+            } else {
+                return; // Custom, do nothing
+            }
+
+            elements.reportStartDate.value = startDate.toISOString().split('T')[0];
+            elements.reportEndDate.value = endDate.toISOString().split('T')[0];
+        }
+        elements.reportPresetFilter.addEventListener('change', setReportDatesFromPreset);
+
+
+        function generateInventoryReport(startDateStr, endDateStr) {
+            const startDate = new Date(startDateStr);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(endDateStr);
+            endDate.setHours(23, 59, 59, 999);
+
+            const reportData = rawMaterials.map(material => {
+                let openingStock = 0;
+                let purchasedInPeriod = 0;
+                let spoiledInPeriod = 0;
+                
+                purchases.forEach(p => {
+                    const pDate = new Date(p.date);
+                    if (p.materialId === material.id && pDate < startDate) {
+                        openingStock += p.quantity;
+                    }
+                });
+                spoilageRecords.forEach(s => {
+                    const sDate = new Date(s.date);
+                    if (s.materialId === material.id && sDate < startDate) {
+                        openingStock -= s.quantity;
+                    }
+                });
+                purchases.forEach(p => {
+                    const pDate = new Date(p.date);
+                    if (p.materialId === material.id && pDate >= startDate && pDate <= endDate) {
+                        purchasedInPeriod += p.quantity;
+                    }
+                });
+                spoilageRecords.forEach(s => {
+                    const sDate = new Date(s.date);
+                    if (s.materialId === material.id && sDate >= startDate && sDate <= endDate) {
+                        spoiledInPeriod += s.quantity;
+                    }
+                });
+
+                const closingStock = openingStock + purchasedInPeriod - spoiledInPeriod;
+
+                return {
+                    name: material.name,
+                    unit: material.unit,
+                    openingStock: openingStock > 0 ? openingStock : 0,
+                    purchasedInPeriod,
+                    spoiledInPeriod,
+                    closingStock: closingStock > 0 ? closingStock : 0,
+                };
+            });
+            renderInventoryReport(reportData);
+        }
+
+        function renderInventoryReport(reportData) {
+            const formatNumber = (num) => parseFloat(num.toFixed(2));
+            elements.inventoryReportBody.innerHTML = reportData.map(item => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.unit}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatNumber(item.openingStock)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">${formatNumber(item.purchasedInPeriod)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">${formatNumber(item.spoiledInPeriod)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">${formatNumber(item.closingStock)}</td>
+                </tr>
+            `).join('');
+            
+            if (reportData.length === 0) {
+                elements.inventoryReportBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">${translations[currentLang].empty_data}</td></tr>`;
+            }
+        }
+
+        elements.viewInventoryReportBtn.addEventListener('click', () => {
+            const startDate = elements.reportStartDate.value;
+            const endDate = elements.reportEndDate.value;
+            if (!startDate || !endDate) {
+                alert('Vui lòng chọn khoảng thời gian để xem báo cáo.'); return;
+            }
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc.'); return;
+            }
+            generateInventoryReport(startDate, endDate);
+        });
+
+        elements.calculateProfitBtn.addEventListener('click', () => {
+            let totalRevenue = 0, totalCogs = 0;
+            dishes.forEach(dish => {
+                const input = document.getElementById(`sales-${dish.id}`);
+                const quantity = parseInt(input.value) || 0;
+                if (quantity > 0) {
+                    totalRevenue += dish.price * quantity;
+                    totalCogs += dish.cost * quantity;
+                }
+            });
+            
+            const totalMonthlyCost = otherCosts.filter(c => c.frequency === 'monthly').reduce((s, c) => s + c.amount, 0);
+            const totalYearlyCost = otherCosts.filter(c => c.frequency === 'yearly').reduce((s, c) => s + c.amount, 0);
+            const totalMonthlyOperationalExpense = totalMonthlyCost + (totalYearlyCost / 12);
+            const totalSpoilageCost = spoilageRecords.reduce((total, record) => {
+                const material = findById(rawMaterials, record.materialId);
+                return total + (material ? material.price * record.quantity : 0);
+            }, 0);
+            const netProfit = totalRevenue - totalCogs - totalMonthlyOperationalExpense - totalSpoilageCost;
+
+            document.getElementById('result-revenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('result-cogs').textContent = formatCurrency(totalCogs);
+            document.getElementById('result-monthly-expense').textContent = formatCurrency(totalMonthlyOperationalExpense);
+            document.getElementById('result-spoilage-cost').textContent = formatCurrency(totalSpoilageCost);
+            document.getElementById('result-net-profit').textContent = formatCurrency(netProfit);
+            document.getElementById('profit-results').classList.remove('hidden');
+        });
+        
+        function renderApp() {
+            migrateCosts();
+            renderList(elements.materialsList, rawMaterials, renderMaterial);
+            renderList(elements.suppliersList, suppliers, renderSupplier);
+            renderList(elements.purchasesList, purchases, renderPurchase);
+            renderList(elements.dishesList, dishes, renderDish);
+            renderSalesInput();
+            updateAllSelects();
+            renderOtherCosts();
+            renderSpoilageList();
+            renderAdjustmentLogs();
+        }
+
+        function migrateCosts() {
+            const oldOnetime = JSON.parse(localStorage.getItem('initial-investment-s'));
+            const oldMonthly = JSON.parse(localStorage.getItem('monthly-expenses-s'));
+            if ((oldOnetime && oldOnetime.length > 0) || (oldMonthly && oldMonthly.length > 0)) {
+                const mappedOnetime = oldOnetime ? oldOnetime.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'onetime'})) : [];
+                const mappedMonthly = oldMonthly ? oldMonthly.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'monthly'})) : [];
+                otherCosts.push(...mappedOnetime, ...mappedMonthly);
+                localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+                localStorage.removeItem('initial-investment-s');
+                localStorage.removeItem('monthly-expenses-s');
+            } else {
+                otherCosts = JSON.parse(localStorage.getItem('otherCosts')) || [];
+            }
+        }
+        
+        setLanguage(currentLang);
+        renderApp();
+    });
+    </script>
+</body>
+</html>
+
