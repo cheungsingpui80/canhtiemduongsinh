@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canh Tiềm Dưỡng Sinh - Tinh Hoa Ẩm Thực Việt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-green-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-green-800">Canh Tiềm Dưỡng Sinh</a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#menu" class="text-gray-600 hover:text-green-700">Thực Đơn</a>
+                <a href="#about" class="text-gray-600 hover:text-green-700">Câu Chuyện</a>
+                <a href="#contact" class="text-gray-600 hover:text-green-700">Liên Hệ</a>
+            </nav>
+            <a href="#contact" class="bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-800 transition duration-300">Đặt Hàng Ngay</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/a7c957/464f41?text=Canh+Tiem+Duong+Sinh');">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div class="container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-white relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Tinh túy từ đất trời, <br>trọn vị trong từng món canh</h1>
+            <p class="text-lg md:text-xl max-w-2xl mb-8">Mỗi bát canh là một bài thuốc quý, bồi bổ sức khỏe, an lành tâm hồn.</p>
+            <a href="#menu" class="bg-white text-green-800 font-bold px-8 py-3 rounded-full hover:bg-green-100 transition duration-300">Khám Phá Thực Đơn</a>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 md:py-24">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-green-800">Thực Đơn Dưỡng Sinh</h2>
+                <p class="text-gray-600 mt-2">Các món canh được hầm trong nhiều giờ với nguyên liệu thảo mộc tự nhiên.</p>
+            </div>
+            <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Các món canh sẽ được tự động thêm vào đây bằng JavaScript -->
+            </div>
+             <div id="no-dishes-message" class="text-center text-gray-500 py-12 hidden">
+                <p>Thực đơn đang được chuẩn bị. Vui lòng quay lại sau!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-white py-16 md:py-24">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2">
+                <img src="https://placehold.co/600x400/c7dfa7/464f41?text=Goc+Bep" alt="Bếp của chúng tôi" class="rounded-lg shadow-xl">
+            </div>
+            <div class="md:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-4">Câu Chuyện Của Chúng Tôi</h2>
+                <p class="text-gray-600 mb-4 leading-relaxed">
+                    Bắt nguồn từ tình yêu với ẩm thực truyền thống và mong muốn mang đến những bữa ăn không chỉ ngon miệng mà còn tốt cho sức khỏe, Canh Tiềm Dưỡng Sinh ra đời. Chúng tôi tin rằng, một cơ thể khỏe mạnh bắt nguồn từ những gì chúng ta ăn uống hàng ngày.
+                </p>
+                <p class="text-gray-600 leading-relaxed">
+                    Tất cả nguyên liệu, từ thảo mộc quý hiếm đến thực phẩm tươi sạch, đều được chúng tôi lựa chọn kỹ lưỡng, đảm bảo mang đến cho bạn những món canh tiềm chất lượng và bổ dưỡng nhất.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AI Soup Recommender Section -->
+    <section id="ai-recommender" class="bg-green-100 py-16 md:py-24">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-4">✨ Tìm Món Canh Dành Riêng Cho Bạn</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-8">Hãy cho chúng tôi biết bạn đang cảm thấy thế nào, AI sẽ gợi ý món canh phù hợp nhất để bồi bổ sức khoẻ cho bạn.</p>
+            
+            <div class="max-w-xl mx-auto">
+                <textarea id="user-need-input" rows="3" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" placeholder="Ví dụ: 'Tôi cần một món canh giúp ngủ ngon' hoặc 'Tôi muốn bồi bổ sau khi ốm dậy'..."></textarea>
+                <button id="get-recommendation-btn" class="mt-4 bg-green-700 text-white font-bold px-8 py-3 rounded-full hover:bg-green-800 transition duration-300 disabled:opacity-50">
+                    Nhận Gợi Ý Từ AI
+                </button>
+            </div>
+            
+            <div id="recommendation-result" class="mt-8 max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg text-left hidden">
+                <!-- AI Recommendation will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Ordering Section -->
+    <section id="contact" class="py-16 md:py-24">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-8">Đặt Hàng Dễ Dàng</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Ordering Platforms -->
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-green-700">Đặt qua ứng dụng</h3>
+                    <div class="flex justify-center space-x-6">
+                        <a href="#" class="opacity-80 hover:opacity-100 transition"><img src="https://placehold.co/100x100/fca5a5/450a0a?text=GrabFood" alt="GrabFood" class="rounded-lg"></a>
+                        <a href="#" class="opacity-80 hover:opacity-100 transition"><img src="https://placehold.co/100x100/fdba74/7c2d12?text=ShopeeFood" alt="ShopeeFood" class="rounded-lg"></a>
+                    </div>
+                </div>
+                <!-- Direct Contact -->
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                     <h3 class="text-2xl font-semibold mb-4 text-green-700">Liên hệ trực tiếp</h3>
+                    <p class="text-lg"><strong>Hotline/Zalo:</strong> 09XX.XXX.XXX</p>
+                    <p class="text-lg"><strong>Facebook:</strong> fb.com/canhtiemduongsinh</p>
+                    <p class="text-lg mt-2"><strong>Địa chỉ:</strong> [Số nhà, đường], Phường [Tên phường], Quận Tân Phú, TP. HCM</p>
+                </div>
+            </div>
+             <div class="mt-12">
+                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62709.11880415391!2d106.60252199516603!3d10.79093046714002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175294a530f288b%3A0x256e6d195e0c528!2zVMOibiBQaMO6LCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBNZW4!5e0!3m2!1svi!2s!4v1678886543210!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-lg"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-green-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Canh Tiềm Dưỡng Sinh. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuList = document.getElementById('menu-list');
+            const noDishesMessage = document.getElementById('no-dishes-message');
+            
+            // Lấy dữ liệu món ăn từ localStorage
+            const dishes = JSON.parse(localStorage.getItem('dishes')) || [];
+
+            if (dishes.length === 0) {
+                noDishesMessage.classList.remove('hidden');
+            } else {
+                menuList.innerHTML = '';
+                dishes.forEach(dish => {
+                    const dishCard = `
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                            <img src="${dish.imageUrl || 'https://placehold.co/600x400/d4e4b7/464f41?text=Mon+Canh'}" alt="${dish.name}" class="w-full h-56 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-2xl font-bold text-green-800 mb-2">${dish.name}</h3>
+                                <p class="text-gray-600 mb-4">${dish.description}</p>
+                                <div class="text-2xl font-semibold text-green-700">
+                                    ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dish.price)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    menuList.innerHTML += dishCard;
+                });
+            }
+
+            // --- AI Soup Recommender ---
+            const getRecommendationBtn = document.getElementById('get-recommendation-btn');
+            const userNeedInput = document.getElementById('user-need-input');
+            const recommendationResultDiv = document.getElementById('recommendation-result');
+
+            getRecommendationBtn.addEventListener('click', async () => {
+                const userNeed = userNeedInput.value.trim();
+                if (!userNeed) {
+                    alert('Vui lòng cho chúng tôi biết nhu cầu của bạn!');
+                    return;
+                }
+
+                if (dishes.length === 0) {
+                    recommendationResultDiv.innerHTML = '<p>Thực đơn hiện chưa sẵn sàng để đưa ra gợi ý. Vui lòng thử lại sau.</p>';
+                    recommendationResultDiv.classList.remove('hidden');
+                    return;
+                }
+
+                const availableDishes = dishes.map(d => `- ${d.name}: ${d.description}`).join('\n');
+                const prompt = `Bạn là một chuyên gia về ẩm thực dưỡng sinh. Dựa vào nhu cầu của khách hàng: "${userNeed}", hãy gợi ý một món canh phù hợp nhất từ danh sách sau đây. Giải thích ngắn gọn tại sao món đó lại phù hợp trong khoảng 2-3 câu. \n\nDanh sách món canh:\n${availableDishes}\n\nHãy trả lời một cách thân thiện, chuyên gia và trực tiếp vào vấn đề. Bắt đầu bằng việc đề xuất tên món ăn được in đậm.`;
+
+                const originalButtonText = getRecommendationBtn.textContent;
+                getRecommendationBtn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang tìm kiếm...`;
+                getRecommendationBtn.disabled = true;
+                recommendationResultDiv.classList.add('hidden');
+
+                try {
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    
+                    const payload = {
+                        contents: [{ parts: [{ text: prompt }] }]
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const recommendationText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (recommendationText) {
+                        const formattedText = recommendationText
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\n/g, '<br>');
+                        recommendationResultDiv.innerHTML = `<h4 class="text-xl font-bold text-green-800 mb-2">Gợi ý cho bạn:</h4><p>${formattedText}</p>`;
+                    } else {
+                        recommendationResultDiv.innerHTML = '<p>Rất tiếc, AI không thể đưa ra gợi ý lúc này. Vui lòng thử lại sau.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    recommendationResultDiv.innerHTML = '<p>Đã có lỗi xảy ra. Vui lòng kiểm tra kết nối và thử lại.</p>';
+                } finally {
+                    getRecommendationBtn.textContent = originalButtonText;
+                    getRecommendationBtn.disabled = false;
+                    recommendationResultDiv.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
