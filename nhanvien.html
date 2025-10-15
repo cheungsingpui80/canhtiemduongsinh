@@ -57,64 +57,69 @@
             <!-- New Order Form (for Order Takers only) -->
             <div id="new-order-form-container" class="hidden bg-white p-6 rounded-lg shadow-md mb-8">
                 <h2 class="text-xl font-semibold mb-4" data-lang="receive_new_order">Nhận Đơn Hàng Mới</h2>
-                <form id="add-order-form" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <form id="add-order-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
+                    <!-- Column 1 -->
+                    <div class="md:col-span-2 space-y-4">
                          <div>
                             <label for="order-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
                             <select id="order-dish-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
                         </div>
-                        <div>
-                            <label for="order-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
-                            <input type="number" id="order-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                        </div>
-                        <div class="lg:col-span-2">
-                            <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
-                            <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
-                        </div>
-                    </div>
-                     <div class="p-4 bg-gray-50 rounded-lg border">
-                        <h3 class="font-semibold text-gray-800 mb-3" data-lang="customer_info">Thông tin khách hàng</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <div>
-                                <label for="order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã đơn hàng</label>
-                                <input type="text" id="order-id" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="order-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
+                                <input type="number" id="order-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
                             </div>
                              <div>
-                                <label for="order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên khách hàng</label>
+                                <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
+                                <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div class="md:col-span-2 space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã Đơn Hàng</label>
+                                <input type="text" id="order-id" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3 bg-gray-100" readonly>
+                            </div>
+                            <div>
+                                <label for="order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên Khách Hàng</label>
                                 <input type="text" id="order-customer-name" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
                             </div>
-                             <div>
-                                <label for="order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="customer_phone">Số điện thoại</label>
-                                <input type="tel" id="order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                            </div>
-                            <div class="md:col-span-2">
-                                <label for="order-customer-address" class="block text-sm font-medium text-gray-700" data-lang="customer_address">Địa chỉ giao hàng</label>
-                                <textarea id="order-customer-address" rows="2" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></textarea>
-                            </div>
+                        </div>
+                         <div>
+                            <label for="order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="phone_number">Số Điện Thoại</label>
+                            <input type="tel" id="order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                        </div>
+                         <div>
+                            <label for="order-customer-address" class="block text-sm font-medium text-gray-700" data-lang="delivery_address">Địa chỉ giao hàng</label>
+                            <input type="text" id="order-customer-address" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="add_order_btn">Thêm Đơn Hàng</button>
+                    <button type="submit" class="md:col-span-4 w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="add_order_btn">Thêm Đơn Hàng</button>
                 </form>
             </div>
 
             <!-- Kanban Board -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div id="col-new-container" class="bg-gray-200 rounded-lg p-4 hidden">
                     <h3 class="font-semibold text-lg mb-4 text-center" data-lang="new_orders">Đơn Hàng Mới</h3>
                     <div id="new-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
                 </div>
                 <div id="col-preparing-container" class="bg-gray-200 rounded-lg p-4 hidden">
-                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="preparing">Bếp Đang Làm</h3>
+                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="preparing">Đang Chuẩn Bị</h3>
                     <div id="preparing-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
-                </div>
-                 <div id="col-ready-container" class="bg-gray-200 rounded-lg p-4 hidden">
-                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="ready_for_delivery">Chờ Giao Hàng</h3>
-                    <div id="ready-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
                 </div>
                 <div id="col-delivering-container" class="bg-gray-200 rounded-lg p-4 hidden">
                     <h3 class="font-semibold text-lg mb-4 text-center" data-lang="delivering">Đang Giao Hàng</h3>
                     <div id="delivering-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
                 </div>
+            </div>
+
+             <!-- Completed Orders List (for Takers only) -->
+            <div id="completed-orders-container" class="hidden bg-white p-6 rounded-lg shadow-md mt-8">
+                <h2 class="text-xl font-semibold mb-4" data-lang="completed_orders">Đơn Hàng Đã Hoàn Tất</h2>
+                <div id="completed-orders-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
             </div>
         </main>
     </div>
@@ -139,25 +144,28 @@
                 dish: 'Món ăn',
                 quantity: 'Số lượng',
                 sales_channel: 'Kênh bán',
-                customer_info: 'Thông tin khách hàng',
-                order_id: 'Mã đơn hàng',
-                customer_name: 'Tên khách hàng',
-                customer_phone: 'Số điện thoại',
-                customer_address: 'Địa chỉ giao hàng',
+                customer_info: 'Thông tin KH (SĐT/Mã ĐH)',
                 add_order_btn: 'Thêm Đơn Hàng',
                 new_orders: 'Đơn Hàng Mới',
-                preparing: 'Bếp Đang Làm',
-                ready_for_delivery: 'Chờ Giao Hàng',
+                preparing: 'Đang Chuẩn Bị',
                 delivering: 'Đang Giao Hàng',
-                confirm_prepare: 'Bếp xác nhận',
-                kitchen_complete: 'Bếp đã xong',
-                confirm_deliver: 'Giao cho shipper',
-                complete_order: 'Hoàn tất',
+                confirm_prepare: 'Bếp đã xong',
+                confirm_deliver: 'Giao cho Shipper',
+                complete_order: 'Hoàn tất giao hàng',
                 order_from: 'Từ',
                 cancel_order: 'Hủy đơn',
                 empty_data: 'Chưa có dữ liệu.',
                 select_dish: 'Chọn món ăn',
                 select_channel: 'Chọn kênh bán',
+                order_id: 'Mã Đơn Hàng',
+                customer_name: 'Tên Khách Hàng',
+                phone_number: 'Số Điện Thoại',
+                delivery_address: 'Địa chỉ giao hàng',
+                completed_orders: 'Đơn Hàng Đã Hoàn Tất',
+                total_time: 'Tổng thời gian',
+                completed_at: 'Hoàn thành lúc',
+                time_in_stage: 'TG trong khâu',
+
             },
             zh: {
                 login_title: '登入',
@@ -176,25 +184,27 @@
                 dish: '菜式',
                 quantity: '數量',
                 sales_channel: '銷售渠道',
-                customer_info: '客戶資訊',
-                order_id: '訂單號碼',
-                customer_name: '客戶姓名',
-                customer_phone: '電話號碼',
-                customer_address: '配送地址',
+                customer_info: '客戶資訊(電話/訂單號)',
                 add_order_btn: '新增訂單',
                 new_orders: '新訂單',
                 preparing: '準備中',
-                ready_for_delivery: '等待配送',
                 delivering: '配送中',
-                confirm_prepare: '廚房確認',
-                kitchen_complete: '廚房完成',
+                confirm_prepare: '廚房完成',
                 confirm_deliver: '交給配送員',
-                complete_order: '完成',
+                complete_order: '完成配送',
                 order_from: '來自',
                 cancel_order: '取消訂單',
                 empty_data: '暫無數據。',
                 select_dish: '選擇菜式',
                 select_channel: '選擇銷售渠道',
+                order_id: '訂單號碼',
+                customer_name: '客戶姓名',
+                phone_number: '電話號碼',
+                delivery_address: '配送地址',
+                completed_orders: '已完成訂單',
+                total_time: '總時間',
+                completed_at: '完成於',
+                time_in_stage: '階段時間',
             }
         };
 
@@ -235,38 +245,48 @@
 
         const rolesConfig = {
             taker: {
-                name: 'Nhận Đơn', name_zh: '接單員',
-                canSee: ['new', 'preparing', 'ready', 'delivering'],
+                name: 'Nhận Đơn',
+                name_zh: '接單員',
+                canSee: ['new', 'preparing', 'delivering', 'completed'],
                 canCreate: true
             },
             kitchen: {
-                name: 'Bếp', name_zh: '廚房',
+                name: 'Bếp',
+                name_zh: '廚房',
                 canSee: ['new', 'preparing'],
                 canCreate: false
             },
             shipper: {
-                name: 'Giao Hàng', name_zh: '配送員',
-                canSee: ['ready', 'delivering'],
+                name: 'Giao Hàng',
+                name_zh: '配送員',
+                canSee: ['preparing', 'delivering'],
                 canCreate: false
             }
         };
 
         // --- Helper Functions ---
         const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
-        const todayISO = () => new Date().toISOString().split('T')[0];
+        const formatTime = (ms) => {
+            if (!ms || ms < 0) return '00:00';
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        };
 
         // --- Data Initialization from localStorage ---
         let dishes = JSON.parse(localStorage.getItem('dishes')) || [];
         let salesRecords = JSON.parse(localStorage.getItem('salesRecords')) || [];
         let activeOrders = JSON.parse(localStorage.getItem('activeOrders')) || [];
+        let completedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
         let employees = JSON.parse(localStorage.getItem('employees')) || [];
         
         const salesChannels = {
-            'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內' },
-            'GrabFood': { name: 'GrabFood', commission: 0.25, name_zh: 'GrabFood' },
-            'ShopeeFood': { name: 'ShopeeFood', commission: 0.25, name_zh: 'ShopeeFood' },
-            'Zalo': { name: 'Zalo', commission: 0, name_zh: 'Zalo' },
-            'Hotline': { name: 'Hotline', commission: 0, name_zh: '熱線電話' }
+            'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內', externalId: false },
+            'GrabFood': { name: 'GrabFood', commission: 0.25, name_zh: 'GrabFood', externalId: true },
+            'ShopeeFood': { name: 'ShopeeFood', commission: 0.25, name_zh: 'ShopeeFood', externalId: true },
+            'Zalo': { name: 'Zalo', commission: 0, name_zh: 'Zalo', externalId: false },
+            'Hotline': { name: 'Hotline', commission: 0, name_zh: '熱線電話', externalId: false }
         };
 
         // --- DOM Elements ---
@@ -278,8 +298,8 @@
         const addOrderForm = document.getElementById('add-order-form');
         const newOrdersCol = document.getElementById('new-orders-col');
         const preparingOrdersCol = document.getElementById('preparing-orders-col');
-        const readyOrdersCol = document.getElementById('ready-orders-col');
         const deliveringOrdersCol = document.getElementById('delivering-orders-col');
+        const completedOrdersList = document.getElementById('completed-orders-list');
         const userInfoDiv = document.getElementById('user-info');
         const orderChannelSelect = document.getElementById('order-channel-select');
         const orderIdInput = document.getElementById('order-id');
@@ -292,32 +312,50 @@
             const roleName = roleInfo[`name${currentLang === 'zh' ? '_zh' : ''}`];
             userInfoDiv.innerHTML = `<p class="font-semibold">${user.name} (${user.idCode})</p><p class="text-indigo-600">${roleName}</p>`;
 
-            // Show/hide UI elements based on role
             document.getElementById('new-order-form-container').classList.toggle('hidden', !roleInfo.canCreate);
-            
             document.getElementById('col-new-container').classList.toggle('hidden', !roleInfo.canSee.includes('new'));
             document.getElementById('col-preparing-container').classList.toggle('hidden', !roleInfo.canSee.includes('preparing'));
-            document.getElementById('col-ready-container').classList.toggle('hidden', !roleInfo.canSee.includes('ready'));
             document.getElementById('col-delivering-container').classList.toggle('hidden', !roleInfo.canSee.includes('delivering'));
-
+            document.getElementById('completed-orders-container').classList.toggle('hidden', !roleInfo.canSee.includes('completed'));
+            
             populateOrderFormSelects();
-            renderOrderKanban(user.role);
+            renderAll(user.role);
         }
+
+        async function generateOrderId() {
+            const today = new Date();
+            const yyyymmdd = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+            const key = `order_counter_${yyyymmdd}`;
+            let lastCounter = parseInt(localStorage.getItem(key) || '0');
+            const newCounter = lastCounter + 1;
+            localStorage.setItem(key, newCounter);
+            return `${yyyymmdd}.${newCounter.toString().padStart(7, '0')}`;
+        }
+
+        orderChannelSelect.addEventListener('change', async (e) => {
+            const channelKey = e.target.value;
+            const channel = salesChannels[channelKey];
+            if (channel && channel.externalId) {
+                orderIdInput.readOnly = false;
+                orderIdInput.classList.remove('bg-gray-100');
+                orderIdInput.value = '';
+                orderIdInput.focus();
+            } else {
+                orderIdInput.readOnly = true;
+                orderIdInput.classList.add('bg-gray-100');
+                orderIdInput.value = await generateOrderId();
+            }
+        });
+
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const employeeId = parseInt(employeeSelect.value);
             const selectedRole = roleSelect.value;
-            
             const employee = findById(employees, employeeId);
 
             if (employee && selectedRole) {
-                const currentUser = {
-                    id: employee.id,
-                    name: employee.name,
-                    idCode: employee.idCode,
-                    role: selectedRole,
-                };
+                const currentUser = { id: employee.id, name: employee.name, idCode: employee.idCode, role: selectedRole };
                 sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
                 initializeMainView(currentUser);
             } else {
@@ -336,70 +374,57 @@
                 id: Date.now(),
                 dishId: parseInt(document.getElementById('order-dish-select').value),
                 quantity: parseInt(document.getElementById('order-quantity').value),
-                channelKey: orderChannelSelect.value,
+                channelKey: document.getElementById('order-channel-select').value,
                 customer: {
-                    orderId: orderIdInput.value,
+                    orderId: document.getElementById('order-id').value,
                     name: document.getElementById('order-customer-name').value,
                     phone: document.getElementById('order-customer-phone').value,
                     address: document.getElementById('order-customer-address').value,
                 },
                 status: 'new',
                 timestamps: {
-                    createdAt: new Date().toISOString(),
-                    kitchenConfirmedAt: null,
-                    readyForDeliveryAt: null,
-                    deliveryStartedAt: null,
-                    completedAt: null
+                    created: Date.now(),
+                    confirmedByKitchen: null,
+                    confirmedByShipper: null,
+                    completed: null,
                 }
             };
 
-            if (newOrder.dishId && newOrder.quantity > 0 && newOrder.channelKey) {
+            if (newOrder.dishId && newOrder.quantity > 0 && newOrder.channelKey && newOrder.customer.orderId) {
                 activeOrders.unshift(newOrder);
                 localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
                 const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-                renderOrderKanban(currentUser.role);
+                renderAll(currentUser.role);
                 e.target.reset();
-                generateOrderId(); // Generate new ID for the next order
+                orderChannelSelect.dispatchEvent(new Event('change')); // Reset order ID
             } else {
-                alert('Vui lòng điền đầy đủ thông tin món ăn, số lượng và kênh bán.');
+                alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
             }
         });
-
-        orderChannelSelect.addEventListener('change', generateOrderId);
-
-        function generateOrderId() {
-             const channel = orderChannelSelect.value;
-             if (channel === 'GrabFood' || channel === 'ShopeeFood') {
-                 orderIdInput.value = '';
-                 orderIdInput.placeholder = 'Nhập mã đơn từ ứng dụng';
-             } else {
-                 const now = new Date();
-                 const yyyymmdd = now.getFullYear().toString() + 
-                                  (now.getMonth() + 1).toString().padStart(2, '0') + 
-                                  now.getDate().toString().padStart(2, '0');
-                 const lastFive = (Date.now() % 100000).toString().padStart(5, '0');
-                 orderIdInput.value = `${yyyymmdd}.${lastFive}`;
-             }
+        
+        function renderAll(role) {
+            renderOrderKanban(role);
+            if (rolesConfig[role].canSee.includes('completed')) {
+                renderCompletedOrders();
+            }
         }
 
         function renderOrderKanban(role) {
             const cols = {
                 new: newOrdersCol,
                 preparing: preparingOrdersCol,
-                ready: readyOrdersCol,
                 delivering: deliveringOrdersCol,
             };
             Object.values(cols).forEach(col => col.innerHTML = '');
+            
+            const visibleOrders = activeOrders.filter(o => rolesConfig[role].canSee.includes(o.status));
 
-            if (activeOrders.length === 0) {
-                const visibleCols = Object.keys(cols).filter(key => !document.getElementById(`col-${key}-container`).classList.contains('hidden'));
-                if (visibleCols.length > 0) {
-                     cols[visibleCols[0]].innerHTML = `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang].empty_data}</p>`;
-                }
+            if (visibleOrders.length === 0 && !document.getElementById('col-new-container').classList.contains('hidden')) {
+                newOrdersCol.innerHTML = `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang].empty_data}</p>`;
                 return;
             }
 
-            activeOrders.forEach(order => {
+            visibleOrders.forEach(order => {
                 if (cols[order.status]) {
                     cols[order.status].innerHTML += renderOrderCard(order, role);
                 }
@@ -411,64 +436,78 @@
             const channelName = salesChannels[order.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || order.channelKey;
             
             let actionButton = '';
-            const statusConfig = {
-                new: {
-                    allowedRoles: ['taker', 'kitchen'],
-                    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-                    buttonTextKey: 'confirm_prepare',
-                    buttonActionClass: 'confirm-prepare-btn',
-                    borderColor: 'border-blue-500'
-                },
-                preparing: {
-                    allowedRoles: ['kitchen'],
-                     buttonClass: 'bg-cyan-500 hover:bg-cyan-600',
-                    buttonTextKey: 'kitchen_complete',
-                    buttonActionClass: 'kitchen-complete-btn',
-                    borderColor: 'border-cyan-500'
-                },
-                ready: {
-                    allowedRoles: ['taker', 'shipper'],
-                     buttonClass: 'bg-yellow-500 hover:bg-yellow-600',
-                    buttonTextKey: 'confirm_deliver',
-                    buttonActionClass: 'confirm-deliver-btn',
-                    borderColor: 'border-yellow-500'
-                },
-                delivering: {
-                    allowedRoles: ['shipper', 'taker'],
-                     buttonClass: 'bg-green-500 hover:bg-green-600',
-                    buttonTextKey: 'complete_order',
-                    buttonActionClass: 'complete-order-btn',
-                    borderColor: 'border-green-500'
-                }
-            };
+            let stageStartTime;
+            let cardColorClass = 'border-blue-500';
             
-            const currentStatusConfig = statusConfig[order.status];
-            if (currentStatusConfig && currentStatusConfig.allowedRoles.includes(role)) {
-                 actionButton = `<button class="w-full mt-3 ${currentStatusConfig.buttonClass} text-white text-sm py-1.5 rounded ${currentStatusConfig.buttonActionClass}" data-id="${order.id}">${translations[currentLang][currentStatusConfig.buttonTextKey]}</button>`;
+            if (order.status === 'new') {
+                 if (role === 'taker' || role === 'kitchen') {
+                    actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded hover:bg-blue-600 confirm-prepare-btn" data-id="${order.id}">${translations[currentLang].confirm_prepare}</button>`;
+                 }
+                 stageStartTime = order.timestamps.created;
+            } else if (order.status === 'preparing') {
+                cardColorClass = 'border-red-500 bg-red-50';
+                if (role === 'taker' || role === 'shipper' || role === 'kitchen') { // Kitchen also needs to move it on
+                    actionButton = `<button class="w-full mt-3 bg-yellow-500 text-white text-sm py-1.5 rounded hover:bg-yellow-600 confirm-deliver-btn" data-id="${order.id}">${translations[currentLang].confirm_deliver}</button>`;
+                }
+                stageStartTime = order.timestamps.confirmedByKitchen;
+            } else if (order.status === 'delivering') {
+                cardColorClass = 'border-red-500 bg-red-50';
+                if (role === 'taker' || role === 'shipper') {
+                    actionButton = `<button class="w-full mt-3 bg-green-500 text-white text-sm py-1.5 rounded hover:bg-green-600 complete-order-btn" data-id="${order.id}">${translations[currentLang].complete_order}</button>`;
+                }
+                stageStartTime = order.timestamps.confirmedByShipper;
             }
 
             return `
-                <div class="bg-white p-3 rounded-md shadow-sm border-l-4 ${currentStatusConfig.borderColor}">
+                <div class="order-card bg-white p-3 rounded-md shadow-sm border-l-4 ${cardColorClass}" data-stage-start-time="${stageStartTime}">
                     <div class="flex justify-between items-start">
                          <div>
-                            <p class="font-bold">${dish ? dish.name : 'Unknown Dish'} (x${order.quantity})</p>
-                            <p class="text-xs text-gray-600">${translations[currentLang].order_from}: <span class="font-semibold">${channelName}</span></p>
-                            <div class="text-xs text-gray-500 mt-2 space-y-1">
-                                ${order.customer.orderId ? `<p><strong>#${order.customer.orderId}</strong></p>` : ''}
-                                ${order.customer.name ? `<p>${order.customer.name} - ${order.customer.phone || 'N/A'}</p>` : ''}
-                                ${order.customer.address ? `<p>${order.customer.address}</p>` : ''}
-                            </div>
-                        </div>
-                        ${(role === 'taker') ? `
-                        <button class="cancel-order-btn text-gray-400 hover:text-red-500" data-id="${order.id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>` : ''}
+                            <p class="font-bold text-gray-800">${dish ? dish.name : 'Unknown Dish'} (x${order.quantity})</p>
+                            <p class="text-xs text-gray-500">${translations[currentLang].order_from}: <span class="font-semibold">${channelName}</span> | <span class="font-mono">${order.customer.orderId}</span></p>
+                         </div>
+                         <div class="text-right">
+                            <div class="font-semibold text-sm timer">00:00</div>
+                            <div class="text-xs text-gray-400">${translations[currentLang].time_in_stage}</div>
+                         </div>
                     </div>
+                     <div class="text-xs text-gray-700 mt-2 pt-2 border-t border-dashed">
+                        ${order.customer.name ? `<p><strong>KH:</strong> ${order.customer.name}</p>` : ''}
+                        ${order.customer.phone ? `<p><strong>SĐT:</strong> ${order.customer.phone}</p>` : ''}
+                        ${order.customer.address ? `<p><strong>Đ/C:</strong> ${order.customer.address}</p>` : ''}
+                     </div>
                     ${actionButton}
                 </div>
             `;
+        }
+        
+        function renderCompletedOrders() {
+            renderList(completedOrders, completedOrdersList, (order) => {
+                const dish = findById(dishes, order.dishId);
+                const totalTime = formatTime(order.timestamps.completed - order.timestamps.created);
+                const completedTime = new Date(order.timestamps.completed).toLocaleTimeString('vi-VN');
+                return `
+                    <div class="p-3 bg-gray-50 rounded-md border text-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-semibold">${dish ? dish.name : 'N/A'} (x${order.quantity}) - <span class="font-mono">${order.customer.orderId}</span></p>
+                                <p class="text-xs text-gray-500">${order.customer.name || ''} - ${order.customer.phone || ''}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-green-700">${totalTime}</p>
+                                <p class="text-xs text-gray-500">${translations[currentLang].completed_at} ${completedTime}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 'empty_data', completedOrdersList);
+        }
+
+        function renderList(data, container, renderItemFn, emptyTextKey, listContainer) {
+            if (data.length === 0) {
+                container.innerHTML = `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang][emptyTextKey]}</p>`;
+                return;
+            }
+            container.innerHTML = data.map(renderItemFn).join('');
         }
 
         mainView.addEventListener('click', e => {
@@ -478,87 +517,72 @@
             const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
             if (button.classList.contains('confirm-prepare-btn')) {
-                updateOrderStatus(orderId, 'preparing', 'kitchenConfirmedAt', currentUser.role);
-            } else if (button.classList.contains('kitchen-complete-btn')) {
-                updateOrderStatus(orderId, 'ready', 'readyForDeliveryAt', currentUser.role);
+                updateOrderStatus(orderId, 'preparing', 'confirmedByKitchen', currentUser.role);
             } else if (button.classList.contains('confirm-deliver-btn')) {
-                updateOrderStatus(orderId, 'delivering', 'deliveryStartedAt', currentUser.role);
+                updateOrderStatus(orderId, 'delivering', 'confirmedByShipper', currentUser.role);
             } else if (button.classList.contains('complete-order-btn')) {
                 completeOrder(orderId, currentUser.role);
-            } else if (button.classList.contains('cancel-order-btn')) {
-                if (confirm(currentLang === 'vi' ? 'Bạn có chắc muốn hủy đơn hàng này?' : '您確定要取消此訂單嗎？')) {
-                    cancelOrder(orderId, currentUser.role);
-                }
             }
         });
 
         function updateOrderStatus(orderId, newStatus, timestampKey, role) {
-            activeOrders = activeOrders.map(order => {
-                if (order.id === orderId) {
-                    const updatedOrder = { ...order, status: newStatus };
-                    updatedOrder.timestamps[timestampKey] = new Date().toISOString();
-                    return updatedOrder;
-                }
-                return order;
-            });
+            activeOrders = activeOrders.map(order => 
+                order.id === orderId ? { ...order, status: newStatus, timestamps: { ...order.timestamps, [timestampKey]: Date.now() } } : order
+            );
             localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
-            renderOrderKanban(role);
-        }
-
-        function cancelOrder(orderId, role) {
-            activeOrders = activeOrders.filter(order => order.id !== orderId);
-            localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
-            renderOrderKanban(role);
+            renderAll(role);
         }
 
         function completeOrder(orderId, role) {
-            const order = findById(activeOrders, orderId);
-            if (!order) return;
+            const orderIndex = activeOrders.findIndex(o => o.id === orderId);
+            if (orderIndex === -1) return;
+            
+            const order = { ...activeOrders[orderIndex] };
+            order.timestamps.completed = Date.now();
 
             const dish = findById(dishes, order.dishId);
             const channel = salesChannels[order.channelKey];
             if (!dish || !channel) return;
 
-            order.timestamps.completedAt = new Date().toISOString();
-
             const totalRevenue = dish.price * order.quantity;
             const commissionFee = totalRevenue * channel.commission;
-            const netRevenue = totalRevenue - commissionFee;
 
             salesRecords.unshift({
-                id: order.id,
-                date: new Date(order.timestamps.createdAt).toISOString().split('T')[0],
+                id: Date.now(),
+                date: new Date(order.timestamps.created).toISOString().split('T')[0],
                 dishId: order.dishId,
                 quantity: order.quantity,
                 channelKey: order.channelKey,
-                customer: order.customer,
-                timestamps: order.timestamps,
                 totalRevenue,
                 commissionFee,
-                netRevenue,
+                netRevenue: totalRevenue - commissionFee,
                 dishName: dish.name,
                 dishCost: dish.cost
             });
             localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
-
-            activeOrders = activeOrders.filter(o => o.id !== orderId);
+            
+            completedOrders.unshift(order);
+            localStorage.setItem('completedOrders', JSON.stringify(completedOrders));
+            
+            activeOrders.splice(orderIndex, 1);
             localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
             
-            renderOrderKanban(role);
+            renderAll(role);
         }
 
         function populateOrderFormSelects() {
             const dishSelect = document.getElementById('order-dish-select');
+            const channelSelect = document.getElementById('order-channel-select');
             
             dishSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_dish} --</option>`;
             dishes.forEach(item => {
                 dishSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
             });
 
-            orderChannelSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_channel} --</option>`;
+            channelSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_channel} --</option>`;
             for (const key in salesChannels) {
                 const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
-                orderChannelSelect.innerHTML += `<option value="${key}">${name}</option>`;
+                channelSelect.innerHTML += `<option value="${key}">${name}</option>`;
             }
         }
         
@@ -594,6 +618,17 @@
             populateRoleSelect(employeeId);
         });
 
+        // --- Timers Update ---
+        setInterval(() => {
+            document.querySelectorAll('.order-card').forEach(card => {
+                const startTime = parseInt(card.dataset.stageStartTime);
+                if (startTime) {
+                    const elapsedTime = Date.now() - startTime;
+                    card.querySelector('.timer').textContent = formatTime(elapsedTime);
+                }
+            });
+        }, 1000);
+
         // --- Initial Load ---
         function checkSession() {
             const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -607,8 +642,8 @@
         }
         
         setLanguage(currentLang);
-        generateOrderId();
         checkSession();
+        orderChannelSelect.dispatchEvent(new Event('change'));
     });
     </script>
 </body>
