@@ -532,9 +532,9 @@
     <!-- Employee Details Modal -->
     <div id="employee-details-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center overflow-y-auto p-4">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex justify-between items-start mb-4">
                 <h2 class="text-2xl font-bold" data-lang="employee_details_title">Thông Tin Chi Tiết Nhân Viên</h2>
-                <button id="close-employee-modal-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+                <button id="close-employee-modal-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800">&times;</button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-1">
@@ -554,26 +554,33 @@
                 </div>
             </div>
             <div id="termination-section" class="mt-6 pt-6 border-t">
+                <!-- Shown for terminated employees -->
                 <div id="termination-info" class="hidden space-y-2 text-sm text-red-700 bg-red-50 p-4 rounded-lg">
                      <p><strong><span data-lang="employee_status">Trạng thái</span>:</strong> <span data-lang="status_terminated">Đã thôi việc</span></p>
                      <p><strong><span data-lang="termination_date">Ngày thôi việc</span>:</strong> <span id="modal-employee-end-date"></span></p>
                      <p><strong><span data-lang="termination_reason">Lý do</span>:</strong> <span id="modal-employee-termination-reason"></span></p>
                 </div>
-                <form id="terminate-employee-form" class="">
+                <!-- Shown for active employees -->
+                <div id="terminate-actions" class="text-right">
+                    <button id="show-terminate-form-btn" type="button" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700" data-lang="terminate_employee_btn">Thôi việc</button>
+                </div>
+                <!-- Form, hidden initially -->
+                <form id="terminate-employee-form" class="hidden">
                      <h3 class="text-lg font-semibold mb-3" data-lang="terminate_employee_title">Chấm Dứt Hợp Đồng</h3>
                      <input type="hidden" id="terminate-employee-id">
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div class="space-y-4">
                          <div>
                             <label for="employee-end-date" class="block text-sm font-medium" data-lang="termination_date">Ngày thôi việc</label>
                             <input type="date" id="employee-end-date" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
                          </div>
-                         <div class="md:col-span-2">
+                         <div>
                              <label for="employee-termination-reason" class="block text-sm font-medium" data-lang="termination_reason">Lý do thôi việc</label>
                              <textarea id="employee-termination-reason" rows="2" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3"></textarea>
                          </div>
                      </div>
                      <div class="flex justify-end gap-4 mt-4">
-                         <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md" data-lang="confirm_termination_btn">Xác nhận thôi việc</button>
+                         <button type="button" id="cancel-termination-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300" data-lang="cancel_btn">Hủy</button>
+                         <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700" data-lang="confirm_termination_btn">Xác nhận thôi việc</button>
                      </div>
                 </form>
             </div>
@@ -684,6 +691,7 @@
                 add_employee_btn: 'Thêm Nhân Viên',
                 employee_list: 'Danh Sách Nhân Viên',
                 employee_details_title: 'Thông Tin Chi Tiết Nhân Viên',
+                terminate_employee_btn: 'Thôi việc',
                 terminate_employee_title: 'Chấm Dứt Hợp Đồng',
                 termination_date: 'Ngày thôi việc',
                 termination_reason: 'Lý do thôi việc',
@@ -841,6 +849,7 @@
                 add_employee_btn: '新增員工',
                 employee_list: '員工列表',
                 employee_details_title: '員工詳細資訊',
+                terminate_employee_btn: '終止合約',
                 terminate_employee_title: '終止合約',
                 termination_date: '離職日期',
                 termination_reason: '離職原因',
@@ -1059,6 +1068,10 @@
             employeeDetailsModal: document.getElementById('employee-details-modal'),
             closeEmployeeModalBtn: document.getElementById('close-employee-modal-btn'),
             terminateEmployeeForm: document.getElementById('terminate-employee-form'),
+            showTerminateFormBtn: document.getElementById('show-terminate-form-btn'),
+            cancelTerminationBtn: document.getElementById('cancel-termination-btn'),
+            terminateActions: document.getElementById('terminate-actions'),
+            terminationInfo: document.getElementById('termination-info'),
             // Sales / Order Lookup
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
             orderLookupEndDate: document.getElementById('order-lookup-end-date'),
@@ -1227,25 +1240,43 @@
             document.getElementById('modal-employee-type').textContent = employmentTypes[employee.type]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || employee.type;
             document.getElementById('modal-employee-roles').textContent = employee.roles.map(r => employeeRoles[r]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || r).join(', ');
             
-            const terminationInfoDiv = document.getElementById('termination-info');
-            const terminationForm = document.getElementById('terminate-employee-form');
+            const terminationInfoDiv = elements.terminationInfo;
+            const terminationForm = elements.terminateEmployeeForm;
+            const terminateActionsDiv = elements.terminateActions;
             
             if (employee.status === 'terminated') {
                 terminationInfoDiv.classList.remove('hidden');
                 terminationForm.classList.add('hidden');
+                terminateActionsDiv.classList.add('hidden');
                 document.getElementById('modal-employee-end-date').textContent = employee.endDate;
                 document.getElementById('modal-employee-termination-reason').textContent = employee.terminationReason;
-            } else {
+            } else { // 'active' status
                 terminationInfoDiv.classList.add('hidden');
-                terminationForm.classList.remove('hidden');
+                terminationForm.classList.add('hidden'); // Hide form initially
+                terminateActionsDiv.classList.remove('hidden'); // Show the "Thôi việc" button
                 document.getElementById('terminate-employee-id').value = employee.id;
             }
             
             elements.employeeDetailsModal.classList.add('active');
         }
 
+        elements.showTerminateFormBtn.addEventListener('click', () => {
+            elements.terminateEmployeeForm.classList.remove('hidden');
+            elements.terminateActions.classList.add('hidden');
+        });
+
+        elements.cancelTerminationBtn.addEventListener('click', () => {
+            elements.terminateEmployeeForm.classList.add('hidden');
+            elements.terminateActions.classList.remove('hidden');
+            elements.terminateEmployeeForm.reset();
+        });
+
         elements.closeEmployeeModalBtn.addEventListener('click', () => {
              elements.employeeDetailsModal.classList.remove('active');
+             // Reset the form state for next time
+             elements.terminateEmployeeForm.classList.add('hidden');
+             elements.terminateActions.classList.remove('hidden');
+             elements.terminateEmployeeForm.reset();
         });
 
         elements.terminateEmployeeForm.addEventListener('submit', (e) => {
