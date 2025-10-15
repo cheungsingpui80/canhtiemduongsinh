@@ -40,12 +40,16 @@
                     <button class="lang-btn flex-1 text-sm py-1 px-2 rounded-md" data-lang-code="zh">繁體中文</button>
                 </div>
             </div>
-            <nav class="flex-1 px-4 py-2 space-y-2">
-                <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="sales-management">
+            <nav class="flex-1 px-4 py-2 space-y-2 overflow-y-auto">
+                 <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="employee-management">
+                    <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.663M12 12A3 3 0 1012 6a3 3 0 000 6z" /></svg>
+                    <span data-lang="employee_management">Quản Lý Nhân Viên</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="sales-management">
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l.383-1.437M7.5 14.25L5.106 5.165A2.25 2.25 0 002.854 3H2.25" />
                     </svg>
-                    <span data-lang="sales_management">Quản Lý Bán Hàng</span>
+                    <span data-lang="order_lookup">Tra Cứu Đơn Hàng</span>
                 </a>
                 <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="menu-management">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -90,46 +94,97 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-6 md:p-10 overflow-y-auto">
-            <!-- Tab: Quản Lý Bán Hàng -->
-            <div id="sales-management" class="tab-content active">
-                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="sales_management_title">Quản Lý Bán Hàng</h1>
-                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                     <div class="lg:col-span-1">
-                         <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h2 class="text-xl font-semibold mb-4" data-lang="record_sale">Ghi Nhận Bán Hàng</h2>
-                             <form id="add-sale-form" class="space-y-4">
-                                <div>
-                                    <label for="sale-date" class="block text-sm font-medium text-gray-700" data-lang="sale_date">Ngày bán</label>
-                                    <input type="date" id="sale-date" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+            
+             <!-- Tab: Quản Lý Nhân Viên -->
+            <div id="employee-management" class="tab-content active">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="employee_management_title">Quản Lý Nhân Viên</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-semibold mb-4" data-lang="add_new_employee">Thêm Nhân Viên Mới</h2>
+                            <form id="add-employee-form" class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="employee-name" class="block text-sm font-medium text-gray-700" data-lang="employee_name">Họ và Tên</label>
+                                        <input type="text" id="employee-name" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    </div>
+                                    <div>
+                                        <label for="employee-id-code" class="block text-sm font-medium text-gray-700" data-lang="employee_id_code">Mã số nhân viên</label>
+                                        <input type="text" id="employee-id-code" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    </div>
+                                    <div>
+                                        <label for="employee-dob" class="block text-sm font-medium text-gray-700" data-lang="employee_dob">Ngày sinh</label>
+                                        <input type="date" id="employee-dob" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    </div>
+                                    <div>
+                                        <label for="employee-nid" class="block text-sm font-medium text-gray-700" data-lang="employee_nid">Số CCCD/CC</label>
+                                        <input type="text" id="employee-nid" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    </div>
                                 </div>
                                 <div>
-                                    <label for="sale-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
-                                    <select id="sale-dish-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                                    <label for="employee-photo-url" class="block text-sm font-medium text-gray-700" data-lang="employee_photo_url">URL Hình ảnh</label>
+                                    <input type="url" id="employee-photo-url" data-lang-placeholder="employee_photo_url_placeholder" placeholder="https://example.com/photo.jpg" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                 <div>
+                                    <label for="employee-permanent-address" class="block text-sm font-medium text-gray-700" data-lang="employee_permanent_address">Địa chỉ thường trú</label>
+                                    <input type="text" id="employee-permanent-address" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
                                 </div>
                                 <div>
-                                    <label for="sale-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
-                                    <input type="number" id="sale-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    <label for="employee-current-address" class="block text-sm font-medium text-gray-700" data-lang="employee_current_address">Địa chỉ hiện tại</label>
+                                    <input type="text" id="employee-current-address" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                     <div>
+                                        <label for="employee-start-date" class="block text-sm font-medium text-gray-700" data-lang="employee_start_date">Ngày nhận việc</label>
+                                        <input type="date" id="employee-start-date" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    </div>
+                                    <div>
+                                        <label for="employee-type" class="block text-sm font-medium text-gray-700" data-lang="employee_type">Hình thức làm việc</label>
+                                        <select id="employee-type" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                            <option value="part-time" data-lang="employee_type_part_time">Bán thời gian</option>
+                                            <option value="contract" data-lang="employee_type_contract">Hợp đồng lao động</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label for="sale-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán hàng</label>
-                                    <select id="sale-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                                    <label class="block text-sm font-medium text-gray-700" data-lang="roles">Vai trò</label>
+                                    <div id="employee-roles-checkboxes" class="mt-2 space-y-2">
+                                        <!-- Checkboxes will be inserted here by JS -->
+                                    </div>
                                 </div>
-                                <div class="p-3 bg-gray-50 rounded-md space-y-2 text-sm">
-                                    <div class="flex justify-between"><span>Doanh thu:</span><span id="calculated-revenue" class="font-semibold">0 VND</span></div>
-                                    <div class="flex justify-between"><span>Phí chiết khấu:</span><span id="calculated-commission" class="font-semibold text-red-600">0 VND</span></div>
-                                    <div class="flex justify-between font-bold"><span>Thực nhận:</span><span id="calculated-net-revenue" class="text-green-600">0 VND</span></div>
-                                </div>
-                                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700" data-lang="add_sale_btn">Thêm Giao Dịch</button>
-                             </form>
-                         </div>
-                     </div>
-                     <div class="lg:col-span-2">
-                         <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h2 class="text-xl font-semibold mb-4" data-lang="sales_history">Lịch Sử Bán Hàng</h2>
-                            <div id="sales-history-list" class="space-y-3 max-h-[70vh] overflow-y-auto"></div>
-                         </div>
-                     </div>
-                 </div>
+                                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700" data-lang="add_employee_btn">Thêm Nhân Viên</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-semibold mb-4" data-lang="employee_list">Danh Sách Nhân Viên</h2>
+                            <div id="employees-list" class="space-y-4 max-h-[80vh] overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Tra Cứu Đơn Hàng -->
+            <div id="sales-management" class="tab-content">
+                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="order_lookup_title">Tra Cứu Đơn Hàng</h1>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
+                        <div>
+                            <label for="order-lookup-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
+                            <input type="date" id="order-lookup-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label for="order-lookup-end-date" class="block text-sm font-medium text-gray-700" data-lang="to_date">Đến ngày</label>
+                            <input type="date" id="order-lookup-end-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="self-end">
+                            <button id="order-lookup-btn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700" data-lang="search_btn">Tra cứu</button>
+                        </div>
+                    </div>
+                    <h2 class="text-xl font-semibold mb-4" data-lang="order_history">Lịch Sử Đơn Hàng</h2>
+                    <div id="order-lookup-results" class="space-y-3 max-h-[60vh] overflow-y-auto"></div>
+                </div>
             </div>
 
             <!-- Tab: Quản Lý Thực Đơn -->
@@ -474,6 +529,58 @@
         </main>
     </div>
 
+    <!-- Employee Details Modal -->
+    <div id="employee-details-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold" data-lang="employee_details_title">Thông Tin Chi Tiết Nhân Viên</h2>
+                <button id="close-employee-modal-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-1">
+                    <img id="modal-employee-photo" src="https://placehold.co/300x400/EFEFEF/AAAAAA&text=Ảnh" alt="Employee Photo" class="rounded-lg w-full h-auto object-cover">
+                </div>
+                <div class="md:col-span-2 space-y-3 text-sm">
+                    <p><strong><span data-lang="employee_name">Họ và Tên</span>:</strong> <span id="modal-employee-name"></span></p>
+                    <p><strong><span data-lang="employee_id_code">Mã số nhân viên</span>:</strong> <span id="modal-employee-id-code"></span></p>
+                    <p><strong><span data-lang="employee_dob">Ngày sinh</span>:</strong> <span id="modal-employee-dob"></span></p>
+                    <p><strong><span data-lang="employee_nid">Số CCCD/CC</span>:</strong> <span id="modal-employee-nid"></span></p>
+                    <p><strong><span data-lang="employee_permanent_address">Địa chỉ thường trú</span>:</strong> <span id="modal-employee-permanent-address"></span></p>
+                    <p><strong><span data-lang="employee_current_address">Địa chỉ hiện tại</span>:</strong> <span id="modal-employee-current-address"></span></p>
+                    <hr>
+                    <p><strong><span data-lang="employee_start_date">Ngày nhận việc</span>:</strong> <span id="modal-employee-start-date"></span></p>
+                    <p><strong><span data-lang="employee_type">Hình thức làm việc</span>:</strong> <span id="modal-employee-type"></span></p>
+                    <p><strong><span data-lang="roles">Vai trò</span>:</strong> <span id="modal-employee-roles"></span></p>
+                </div>
+            </div>
+            <div id="termination-section" class="mt-6 pt-6 border-t">
+                <div id="termination-info" class="hidden space-y-2 text-sm text-red-700 bg-red-50 p-4 rounded-lg">
+                     <p><strong><span data-lang="employee_status">Trạng thái</span>:</strong> <span data-lang="status_terminated">Đã thôi việc</span></p>
+                     <p><strong><span data-lang="termination_date">Ngày thôi việc</span>:</strong> <span id="modal-employee-end-date"></span></p>
+                     <p><strong><span data-lang="termination_reason">Lý do</span>:</strong> <span id="modal-employee-termination-reason"></span></p>
+                </div>
+                <form id="terminate-employee-form" class="">
+                     <h3 class="text-lg font-semibold mb-3" data-lang="terminate_employee_title">Chấm Dứt Hợp Đồng</h3>
+                     <input type="hidden" id="terminate-employee-id">
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                            <label for="employee-end-date" class="block text-sm font-medium" data-lang="termination_date">Ngày thôi việc</label>
+                            <input type="date" id="employee-end-date" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                         </div>
+                         <div class="md:col-span-2">
+                             <label for="employee-termination-reason" class="block text-sm font-medium" data-lang="termination_reason">Lý do thôi việc</label>
+                             <textarea id="employee-termination-reason" rows="2" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3"></textarea>
+                         </div>
+                     </div>
+                     <div class="flex justify-end gap-4 mt-4">
+                         <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md" data-lang="confirm_termination_btn">Xác nhận thôi việc</button>
+                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Edit Supplier Modal -->
     <div id="edit-supplier-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
@@ -558,7 +665,40 @@
         const translations = {
             vi: {
                 dashboard_title: 'Bảng Điều Khiển',
-                sales_management: 'Quản Lý Bán Hàng',
+                employee_management: 'Quản Lý Nhân Viên',
+                employee_management_title: 'Quản Lý Nhân Viên',
+                add_new_employee: 'Thêm Nhân Viên Mới',
+                employee_id_code: 'Mã số nhân viên',
+                employee_name: 'Họ và Tên',
+                employee_dob: 'Ngày sinh',
+                employee_nid: 'Số CCCD/CC',
+                employee_photo_url: 'URL Hình ảnh',
+                employee_photo_url_placeholder: 'https://example.com/photo.jpg',
+                employee_permanent_address: 'Địa chỉ thường trú',
+                employee_current_address: 'Địa chỉ hiện tại',
+                employee_start_date: 'Ngày nhận việc',
+                employee_type: 'Hình thức làm việc',
+                employee_type_part_time: 'Bán thời gian',
+                employee_type_contract: 'Hợp đồng lao động',
+                roles: 'Vai trò',
+                add_employee_btn: 'Thêm Nhân Viên',
+                employee_list: 'Danh Sách Nhân Viên',
+                employee_details_title: 'Thông Tin Chi Tiết Nhân Viên',
+                terminate_employee_title: 'Chấm Dứt Hợp Đồng',
+                termination_date: 'Ngày thôi việc',
+                termination_reason: 'Lý do thôi việc',
+                confirm_termination_btn: 'Xác nhận thôi việc',
+                employee_status: 'Trạng thái',
+                status_active: 'Đang làm việc',
+                status_terminated: 'Đã thôi việc',
+                view_details: 'Xem chi tiết',
+                role_taker: 'Nhận Đơn',
+                role_kitchen: 'Bếp',
+                role_shipper: 'Giao Hàng',
+                order_lookup: 'Tra Cứu Đơn Hàng',
+                order_lookup_title: 'Tra Cứu Đơn Hàng',
+                search_btn: 'Tra cứu',
+                order_history: 'Lịch Sử Đơn Hàng',
                 menu_management: 'Quản Lý Thực Đơn',
                 supplier_management: 'Nhà Cung Cấp',
                 material_management: 'Nguyên Vật Liệu',
@@ -567,13 +707,8 @@
                 profit_report: 'Báo Cáo Lợi Nhuận',
                 inventory_report: 'Báo Cáo Tồn Kho',
                 adjustment_logs: 'Lịch Sử Điều Chỉnh',
-                sales_management_title: 'Quản Lý Bán Hàng',
-                record_sale: 'Ghi Nhận Bán Hàng',
-                sale_date: 'Ngày bán',
                 dish: 'Món ăn',
                 sales_channel: 'Kênh bán hàng',
-                add_sale_btn: 'Thêm Giao Dịch',
-                sales_history: 'Lịch Sử Bán Hàng',
                 menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
                 add_new_dish: 'Thêm Món Mới',
                 dish_name: 'Tên món',
@@ -687,7 +822,40 @@
             },
             zh: {
                 dashboard_title: '儀表板',
-                sales_management: '銷售管理',
+                employee_management: '員工管理',
+                employee_management_title: '員工管理',
+                add_new_employee: '新增員工',
+                employee_id_code: '員工編號',
+                employee_name: '姓名',
+                employee_dob: '出生日期',
+                employee_nid: '身分證號碼',
+                employee_photo_url: '照片網址',
+                employee_photo_url_placeholder: 'https://example.com/photo.jpg',
+                employee_permanent_address: '戶籍地址',
+                employee_current_address: '目前地址',
+                employee_start_date: '到職日期',
+                employee_type: '工作類型',
+                employee_type_part_time: '兼職',
+                employee_type_contract: '勞動合約',
+                roles: '角色',
+                add_employee_btn: '新增員工',
+                employee_list: '員工列表',
+                employee_details_title: '員工詳細資訊',
+                terminate_employee_title: '終止合約',
+                termination_date: '離職日期',
+                termination_reason: '離職原因',
+                confirm_termination_btn: '確認離職',
+                employee_status: '狀態',
+                status_active: '在職',
+                status_terminated: '已離職',
+                view_details: '查看詳情',
+                role_taker: '接單員',
+                role_kitchen: '廚房',
+                role_shipper: '配送員',
+                order_lookup: '訂單查詢',
+                order_lookup_title: '訂單查詢',
+                search_btn: '查詢',
+                order_history: '訂單歷史',
                 menu_management: '菜單管理',
                 supplier_management: '供應商管理',
                 material_management: '原材料管理',
@@ -696,13 +864,8 @@
                 profit_report: '利潤報告',
                 inventory_report: '庫存報告',
                 adjustment_logs: '調整日誌',
-                sales_management_title: '銷售管理',
-                record_sale: '記錄銷售',
-                sale_date: '銷售日期',
                 dish: '菜式',
                 sales_channel: '銷售渠道',
-                add_sale_btn: '新增交易',
-                sales_history: '銷售歷史',
                 menu_management_title: '菜單與物料清單(BOM)管理',
                 add_new_dish: '新增菜式',
                 dish_name: '菜式名稱',
@@ -864,6 +1027,7 @@
         let spoilageRecords = JSON.parse(localStorage.getItem('spoilageRecords')) || [];
         let adjustmentLogs = JSON.parse(localStorage.getItem('adjustmentLogs')) || [];
         let salesRecords = JSON.parse(localStorage.getItem('salesRecords')) || [];
+        let employees = JSON.parse(localStorage.getItem('employees')) || [];
         let currentBomItems = [];
         let otherCosts = [];
 
@@ -875,22 +1039,31 @@
             'Hotline': { name: 'Hotline', commission: 0, name_zh: '熱線電話' }
         };
 
-        // Set default dates
-        document.getElementById('purchase-date').value = todayISO();
-        document.getElementById('spoilage-date').value = todayISO();
-        document.getElementById('sale-date').value = todayISO();
+        const employeeRoles = {
+            'taker': { name: 'Nhận Đơn', name_zh: '接單員' },
+            'kitchen': { name: 'Bếp', name_zh: '廚房' },
+            'shipper': { name: 'Giao Hàng', name_zh: '配送員' }
+        };
+        
+        const employmentTypes = {
+            'part-time': {name: 'Bán thời gian', name_zh: '兼職'},
+            'contract': {name: 'Hợp đồng lao động', name_zh: '勞動合約'}
+        };
 
         // --- DOM Elements ---
         const elements = {
-            // Sales
-            addSaleForm: document.getElementById('add-sale-form'),
-            saleDishSelect: document.getElementById('sale-dish-select'),
-            saleQuantityInput: document.getElementById('sale-quantity'),
-            saleChannelSelect: document.getElementById('sale-channel-select'),
-            calculatedRevenue: document.getElementById('calculated-revenue'),
-            calculatedCommission: document.getElementById('calculated-commission'),
-            calculatedNetRevenue: document.getElementById('calculated-net-revenue'),
-            salesHistoryList: document.getElementById('sales-history-list'),
+            // Employee
+            addEmployeeForm: document.getElementById('add-employee-form'),
+            employeeRolesCheckboxes: document.getElementById('employee-roles-checkboxes'),
+            employeesList: document.getElementById('employees-list'),
+            employeeDetailsModal: document.getElementById('employee-details-modal'),
+            closeEmployeeModalBtn: document.getElementById('close-employee-modal-btn'),
+            terminateEmployeeForm: document.getElementById('terminate-employee-form'),
+            // Sales / Order Lookup
+            orderLookupStartDate: document.getElementById('order-lookup-start-date'),
+            orderLookupEndDate: document.getElementById('order-lookup-end-date'),
+            orderLookupBtn: document.getElementById('order-lookup-btn'),
+            orderLookupResults: document.getElementById('order-lookup-results'),
             // Menu
             addDishForm: document.getElementById('add-dish-form'),
             dishesList: document.getElementById('dishes-list'),
@@ -940,6 +1113,15 @@
             analyzeSpoilageBtn: document.getElementById('analyze-spoilage-btn'),
             spoilageAnalysisResult: document.getElementById('spoilage-analysis-result'),
         };
+        
+        // Set default dates
+        const today = todayISO();
+        elements.orderLookupStartDate.value = today;
+        elements.orderLookupEndDate.value = today;
+        document.getElementById('purchase-date').value = today;
+        document.getElementById('spoilage-date').value = today;
+        document.getElementById('employee-start-date').value = today;
+
 
         // --- Tab Switching Logic ---
         const tabLinks = document.querySelectorAll('.tab-link');
@@ -953,6 +1135,143 @@
                 document.getElementById(link.dataset.tab).classList.add('active');
             });
         });
+
+        // --- Employee Management Logic ---
+        function renderEmployeeRolesCheckboxes() {
+            elements.employeeRolesCheckboxes.innerHTML = Object.keys(employeeRoles).map(roleKey => {
+                const roleName = employeeRoles[roleKey][`name${currentLang === 'zh' ? '_zh' : ''}`];
+                return `
+                    <label class="flex items-center">
+                        <input type="checkbox" value="${roleKey}" class="form-checkbox h-5 w-5 text-indigo-600">
+                        <span class="ml-2 text-gray-700">${roleName}</span>
+                    </label>
+                `;
+            }).join('');
+        }
+
+        elements.addEmployeeForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const selectedRoles = Array.from(elements.employeeRolesCheckboxes.querySelectorAll('input:checked')).map(input => input.value);
+            
+            const newEmployee = {
+                id: Date.now(),
+                name: document.getElementById('employee-name').value,
+                idCode: document.getElementById('employee-id-code').value,
+                dob: document.getElementById('employee-dob').value,
+                nid: document.getElementById('employee-nid').value,
+                photoUrl: document.getElementById('employee-photo-url').value,
+                permanentAddress: document.getElementById('employee-permanent-address').value,
+                currentAddress: document.getElementById('employee-current-address').value,
+                startDate: document.getElementById('employee-start-date').value,
+                type: document.getElementById('employee-type').value,
+                roles: selectedRoles,
+                status: 'active', // 'active' or 'terminated'
+                endDate: null,
+                terminationReason: null
+            };
+
+            if (newEmployee.idCode && newEmployee.name && newEmployee.roles.length > 0) {
+                employees.push(newEmployee);
+                localStorage.setItem('employees', JSON.stringify(employees));
+                renderEmployees();
+                e.target.reset();
+                 document.getElementById('employee-start-date').value = todayISO();
+            } else {
+                alert('Vui lòng điền đầy đủ Mã số, Họ tên và chọn ít nhất một vai trò.');
+            }
+        });
+        
+        function renderEmployees() {
+             renderList(elements.employeesList, employees, (employee) => {
+                const typeName = employmentTypes[employee.type]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || employee.type;
+                const statusActive = employee.status === 'active';
+                return `
+                    <div class="p-4 bg-white rounded-lg border flex items-center gap-4">
+                        <img src="${employee.photoUrl || 'https://placehold.co/80x80/EFEFEF/AAAAAA&text=Ảnh'}" alt="Photo of ${employee.name}" class="w-20 h-20 rounded-full object-cover">
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold text-lg">${employee.name}</p>
+                                    <p class="text-sm text-gray-500">${employee.idCode} - ${typeName}</p>
+                                </div>
+                                <span class="text-xs font-bold py-1 px-2.5 rounded-full ${statusActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                    ${translations[currentLang][statusActive ? 'status_active' : 'status_terminated']}
+                                </span>
+                            </div>
+                             <button class="view-employee-details-btn text-sm text-indigo-600 hover:text-indigo-800 font-semibold mt-2" data-id="${employee.id}">${translations[currentLang].view_details}</button>
+                        </div>
+                    </div>
+                `;
+             });
+        }
+        
+        elements.employeesList.addEventListener('click', e => {
+            if (e.target.classList.contains('view-employee-details-btn')) {
+                const employeeId = parseInt(e.target.dataset.id);
+                const employee = findById(employees, employeeId);
+                if (employee) {
+                    showEmployeeDetailsModal(employee);
+                }
+            }
+        });
+        
+        function showEmployeeDetailsModal(employee) {
+            document.getElementById('modal-employee-photo').src = employee.photoUrl || 'https://placehold.co/300x400/EFEFEF/AAAAAA&text=Ảnh';
+            document.getElementById('modal-employee-name').textContent = employee.name;
+            document.getElementById('modal-employee-id-code').textContent = employee.idCode;
+            document.getElementById('modal-employee-dob').textContent = employee.dob;
+            document.getElementById('modal-employee-nid').textContent = employee.nid;
+            document.getElementById('modal-employee-permanent-address').textContent = employee.permanentAddress;
+            document.getElementById('modal-employee-current-address').textContent = employee.currentAddress;
+            document.getElementById('modal-employee-start-date').textContent = employee.startDate;
+            document.getElementById('modal-employee-type').textContent = employmentTypes[employee.type]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || employee.type;
+            document.getElementById('modal-employee-roles').textContent = employee.roles.map(r => employeeRoles[r]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || r).join(', ');
+            
+            const terminationInfoDiv = document.getElementById('termination-info');
+            const terminationForm = document.getElementById('terminate-employee-form');
+            
+            if (employee.status === 'terminated') {
+                terminationInfoDiv.classList.remove('hidden');
+                terminationForm.classList.add('hidden');
+                document.getElementById('modal-employee-end-date').textContent = employee.endDate;
+                document.getElementById('modal-employee-termination-reason').textContent = employee.terminationReason;
+            } else {
+                terminationInfoDiv.classList.add('hidden');
+                terminationForm.classList.remove('hidden');
+                document.getElementById('terminate-employee-id').value = employee.id;
+            }
+            
+            elements.employeeDetailsModal.classList.add('active');
+        }
+
+        elements.closeEmployeeModalBtn.addEventListener('click', () => {
+             elements.employeeDetailsModal.classList.remove('active');
+        });
+
+        elements.terminateEmployeeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const employeeId = parseInt(document.getElementById('terminate-employee-id').value);
+            const endDate = document.getElementById('employee-end-date').value;
+            const reason = document.getElementById('employee-termination-reason').value;
+
+            if (!endDate || !reason) {
+                alert('Vui lòng điền ngày và lý do thôi việc.');
+                return;
+            }
+
+            employees = employees.map(emp => {
+                if (emp.id === employeeId) {
+                    return {...emp, status: 'terminated', endDate: endDate, terminationReason: reason};
+                }
+                return emp;
+            });
+
+            localStorage.setItem('employees', JSON.stringify(employees));
+            renderEmployees();
+            elements.employeeDetailsModal.classList.remove('active');
+            e.target.reset();
+        });
+
 
         // --- Gemini API Integration ---
         const callGeminiAPI = async (prompt, button) => {
@@ -999,75 +1318,37 @@
         // --- Generic Render Functions ---
         function renderList(container, items, renderItemFn, emptyTextKey = "empty_data") {
             const emptyText = translations[currentLang][emptyTextKey];
-            container.innerHTML = items.length ? items.map(renderItemFn).join('') : `<p class="text-gray-500 text-sm">${emptyText}</p>`;
+            container.innerHTML = items.length ? items.map(renderItemFn).join('') : `<p class="text-gray-500 text-sm p-4 text-center">${emptyText}</p>`;
         }
         
-        // --- Sales Management Logic ---
-        function updateSaleCalculations() {
-            const dishId = parseInt(elements.saleDishSelect.value);
-            const quantity = parseInt(elements.saleQuantityInput.value) || 0;
-            const channelKey = elements.saleChannelSelect.value;
-
-            const dish = findById(dishes, dishId);
-            const channel = salesChannels[channelKey];
-
-            if (dish && quantity > 0 && channel) {
-                const revenue = dish.price * quantity;
-                const commission = revenue * channel.commission;
-                const netRevenue = revenue - commission;
-                elements.calculatedRevenue.textContent = formatCurrency(revenue);
-                elements.calculatedCommission.textContent = formatCurrency(commission);
-                elements.calculatedNetRevenue.textContent = formatCurrency(netRevenue);
-            } else {
-                elements.calculatedRevenue.textContent = formatCurrency(0);
-                elements.calculatedCommission.textContent = formatCurrency(0);
-                elements.calculatedNetRevenue.textContent = formatCurrency(0);
+        // --- Order Lookup Logic ---
+        elements.orderLookupBtn.addEventListener('click', () => {
+            const startDate = elements.orderLookupStartDate.value;
+            const endDate = elements.orderLookupEndDate.value;
+            if (!startDate || !endDate) {
+                alert(currentLang === 'vi' ? 'Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.' : '請選擇開始和結束日期。');
+                return;
             }
-        }
-
-        elements.saleDishSelect.addEventListener('change', updateSaleCalculations);
-        elements.saleQuantityInput.addEventListener('input', updateSaleCalculations);
-        elements.saleChannelSelect.addEventListener('change', updateSaleCalculations);
-
-        elements.addSaleForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const dishId = parseInt(elements.saleDishSelect.value);
-            const quantity = parseInt(elements.saleQuantityInput.value);
-            const channelKey = elements.saleChannelSelect.value;
-            const date = document.getElementById('sale-date').value;
-
-            const dish = findById(dishes, dishId);
-            const channel = salesChannels[channelKey];
-
-            if (dish && quantity > 0 && channel && date) {
-                const totalRevenue = dish.price * quantity;
-                const commissionFee = totalRevenue * channel.commission;
-                const netRevenue = totalRevenue - commissionFee;
-
-                salesRecords.unshift({
-                    id: Date.now(),
-                    date,
-                    dishId,
-                    quantity,
-                    channelKey,
-                    totalRevenue,
-                    commissionFee,
-                    netRevenue,
-                    dishName: dish.name,
-                    dishCost: dish.cost
-                });
-                localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
-                renderSalesHistory();
-                e.target.reset();
-                document.getElementById('sale-date').value = todayISO();
-                updateSaleCalculations();
-            } else {
-                alert('Vui lòng điền đầy đủ thông tin giao dịch.');
+             if (new Date(startDate) > new Date(endDate)) {
+                alert(currentLang === 'vi' ? 'Ngày bắt đầu không thể lớn hơn ngày kết thúc.' : '開始日期不能晚於結束日期。');
+                return;
             }
+
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+
+            const filteredSales = salesRecords.filter(sale => {
+                const saleDate = new Date(sale.date);
+                return saleDate >= start && saleDate <= end;
+            });
+            
+            renderOrderLookupResults(filteredSales);
         });
 
-        function renderSalesHistory() {
-            renderList(elements.salesHistoryList, salesRecords, (sale) => {
+        function renderOrderLookupResults(data) {
+            renderList(elements.orderLookupResults, data, (sale) => {
                 const channelName = salesChannels[sale.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || sale.channelKey;
                 return `
                     <div class="p-3 bg-gray-50 rounded-md border text-sm">
@@ -1124,15 +1405,6 @@
             populateSelect(elements.purchaseMaterialSelect, rawMaterials, 'select_material');
             populateSelect(elements.purchaseSupplierSelect, suppliers, 'select_supplier');
             populateSelect(elements.spoilageMaterialSelect, rawMaterials, 'select_material');
-            populateSelect(elements.saleDishSelect, dishes, 'select_dish');
-
-            const channelSelect = elements.saleChannelSelect;
-            const placeholder = translations[currentLang]['select_channel'];
-            channelSelect.innerHTML = `<option value="">-- ${placeholder} --</option>`;
-            for (const key in salesChannels) {
-                const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
-                channelSelect.innerHTML += `<option value="${key}">${name}</option>`;
-            }
         }
 
         elements.addMaterialForm.addEventListener('submit', e => {
@@ -1831,6 +2103,8 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
             migrateCosts();
             updateAllMaterialPrices();
             recalculateAllDishCosts();
+            renderEmployeeRolesCheckboxes();
+            renderEmployees();
             renderList(elements.materialsList, rawMaterials, renderMaterial);
             renderList(elements.suppliersList, suppliers, renderSupplier);
             renderList(elements.purchasesList, purchases, renderPurchase);
@@ -1839,8 +2113,9 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
             renderOtherCosts();
             renderSpoilageList();
             renderAdjustmentLogs();
-            renderSalesHistory();
-            updateSaleCalculations();
+            
+            const todaySales = salesRecords.filter(s => s.date === todayISO());
+            renderOrderLookupResults(todaySales);
         }
 
         function migrateCosts() {
