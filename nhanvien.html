@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Đơn Hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .kanban-column { min-height: 70vh; }
+        .role-card { transition: all 0.2s ease-in-out; }
+        .role-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .modal { display: none; }
+        .modal.active { display: flex; }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Login View -->
+    <div id="login-view" class="flex items-center justify-center h-screen">
+        <div class="text-center p-8 bg-white rounded-xl shadow-2xl max-w-md mx-auto">
+             <h1 class="text-3xl font-bold text-gray-800 mb-2" data-lang="login_title">Đăng Nhập</h1>
+            <p class="text-gray-500 mb-8" data-lang="login_subtitle">Chọn thông tin của bạn để bắt đầu làm việc.</p>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="employee-select" class="block text-sm font-medium text-gray-700 text-left" data-lang="employee_name">Tên nhân viên</label>
+                    <select id="employee-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                </div>
+                <div>
+                     <label for="role-select" class="block text-sm font-medium text-gray-700 text-left" data-lang="role">Vai trò</label>
+                    <select id="role-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                </div>
+                 <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="start_working_btn">Bắt đầu làm việc</button>
+            </form>
+             <div class="mt-8 flex justify-center items-center gap-4">
+                <button class="lang-btn text-sm py-2 px-4 rounded-full" data-lang-code="vi">Tiếng Việt</button>
+                <button class="lang-btn text-sm py-2 px-4 rounded-full" data-lang-code="zh">繁體中文</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Main Order Management View -->
+    <div id="main-view" class="hidden">
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800" data-lang="order_management">Quản Lý Đơn Hàng</h1>
+                    <div id="user-info" class="text-sm text-gray-600"></div>
+                </div>
+                <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg" data-lang="logout">Đăng Xuất</button>
+            </div>
+        </header>
+        
+        <main class="container mx-auto px-6 py-8">
+            <!-- New Order Form (for Order Takers only) -->
+            <div id="new-order-form-container" class="hidden bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4" data-lang="receive_new_order">Nhận Đơn Hàng Mới</h2>
+                <form id="add-order-form" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                    <div class="md:col-span-2">
+                        <label for="order-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
+                        <select id="order-dish-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                    </div>
+                    <div>
+                         <label for="order-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
+                         <input type="number" id="order-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                    </div>
+                    <div>
+                        <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
+                        <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                    </div>
+                    <div class="md:col-span-2">
+                         <label for="order-customer-info" class="block text-sm font-medium text-gray-700" data-lang="customer_info">Thông tin KH (SĐT/Mã ĐH)</label>
+                         <input type="text" id="order-customer-info" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                    </div>
+                    <button type="submit" class="md:col-span-5 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700" data-lang="add_order_btn">Thêm Đơn Hàng</button>
+                </form>
+            </div>
+
+            <!-- Kanban Board -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div id="col-new-container" class="bg-gray-200 rounded-lg p-4 hidden">
+                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="new_orders">Đơn Hàng Mới</h3>
+                    <div id="new-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
+                </div>
+                <div id="col-preparing-container" class="bg-gray-200 rounded-lg p-4 hidden">
+                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="preparing">Đang Chuẩn Bị</h3>
+                    <div id="preparing-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
+                </div>
+                <div id="col-delivering-container" class="bg-gray-200 rounded-lg p-4 hidden">
+                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="delivering">Đang Giao Hàng</h3>
+                    <div id="delivering-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const translations = {
+            vi: {
+                login_title: 'Đăng Nhập',
+                login_subtitle: 'Chọn thông tin của bạn để bắt đầu làm việc.',
+                employee_name: 'Tên nhân viên',
+                role: 'Vai trò',
+                start_working_btn: 'Bắt đầu làm việc',
+                select_employee: '--- Chọn nhân viên ---',
+                select_role: '--- Chọn vai trò ---',
+                role_taker: 'Nhận Đơn',
+                role_kitchen: 'Bếp',
+                role_shipper: 'Giao Hàng',
+                order_management: 'Quản Lý Đơn Hàng',
+                logout: 'Đăng Xuất',
+                receive_new_order: 'Nhận Đơn Hàng Mới',
+                dish: 'Món ăn',
+                quantity: 'Số lượng',
+                sales_channel: 'Kênh bán',
+                customer_info: 'Thông tin KH (SĐT/Mã ĐH)',
+                add_order_btn: 'Thêm Đơn Hàng',
+                new_orders: 'Đơn Hàng Mới',
+                preparing: 'Đang Chuẩn Bị',
+                delivering: 'Đang Giao Hàng',
+                confirm_prepare: 'Xác nhận chuẩn bị',
+                confirm_deliver: 'Xác nhận giao hàng',
+                complete_order: 'Hoàn tất',
+                order_from: 'Từ',
+                cancel_order: 'Hủy đơn',
+                empty_data: 'Chưa có dữ liệu.',
+                select_dish: 'Chọn món ăn',
+                select_channel: 'Chọn kênh bán',
+            },
+            zh: {
+                login_title: '登入',
+                login_subtitle: '選擇您的資訊以開始工作。',
+                employee_name: '員工姓名',
+                role: '角色',
+                start_working_btn: '開始工作',
+                select_employee: '--- 選擇員工 ---',
+                select_role: '--- 選擇角色 ---',
+                role_taker: '接單員',
+                role_kitchen: '廚房',
+                role_shipper: '配送員',
+                order_management: '訂單管理',
+                logout: '登出',
+                receive_new_order: '接收新訂單',
+                dish: '菜式',
+                quantity: '數量',
+                sales_channel: '銷售渠道',
+                customer_info: '客戶資訊(電話/訂單號)',
+                add_order_btn: '新增訂單',
+                new_orders: '新訂單',
+                preparing: '準備中',
+                delivering: '配送中',
+                confirm_prepare: '確認準備',
+                confirm_deliver: '確認配送',
+                complete_order: '完成',
+                order_from: '來自',
+                cancel_order: '取消訂單',
+                empty_data: '暫無數據。',
+                select_dish: '選擇菜式',
+                select_channel: '選擇銷售渠道',
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'vi';
+
+        const setLanguage = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'vi';
+
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.langCode === lang);
+                btn.classList.toggle('bg-indigo-600', btn.dataset.langCode === lang);
+                btn.classList.toggle('text-white', btn.dataset.langCode === lang);
+            });
+            
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                 initializeMainView(currentUser);
+            } else {
+                 populateEmployeeSelect();
+            }
+        };
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setLanguage(btn.dataset.langCode);
+            });
+        });
+
+        const rolesConfig = {
+            taker: {
+                name: 'Nhận Đơn',
+                name_zh: '接單員',
+                canSee: ['new', 'preparing', 'delivering'],
+                canCreate: true
+            },
+            kitchen: {
+                name: 'Bếp',
+                name_zh: '廚房',
+                canSee: ['new', 'preparing'],
+                canCreate: false
+            },
+            shipper: {
+                name: 'Giao Hàng',
+                name_zh: '配送員',
+                canSee: ['preparing', 'delivering'],
+                canCreate: false
+            }
+        };
+
+        // --- Helper Functions ---
+        const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
+        const todayISO = () => new Date().toISOString().split('T')[0];
+
+        // --- Data Initialization from localStorage ---
+        let dishes = JSON.parse(localStorage.getItem('dishes')) || [];
+        let salesRecords = JSON.parse(localStorage.getItem('salesRecords')) || [];
+        let activeOrders = JSON.parse(localStorage.getItem('activeOrders')) || [];
+        let employees = JSON.parse(localStorage.getItem('employees')) || [];
+        
+        const salesChannels = {
+            'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內' },
+            'GrabFood': { name: 'GrabFood', commission: 0.25, name_zh: 'GrabFood' },
+            'ShopeeFood': { name: 'ShopeeFood', commission: 0.25, name_zh: 'ShopeeFood' },
+            'Zalo': { name: 'Zalo', commission: 0, name_zh: 'Zalo' },
+            'Hotline': { name: 'Hotline', commission: 0, name_zh: '熱線電話' }
+        };
+
+        // --- DOM Elements ---
+        const loginView = document.getElementById('login-view');
+        const mainView = document.getElementById('main-view');
+        const loginForm = document.getElementById('login-form');
+        const employeeSelect = document.getElementById('employee-select');
+        const roleSelect = document.getElementById('role-select');
+        const addOrderForm = document.getElementById('add-order-form');
+        const newOrdersCol = document.getElementById('new-orders-col');
+        const preparingOrdersCol = document.getElementById('preparing-orders-col');
+        const deliveringOrdersCol = document.getElementById('delivering-orders-col');
+        const userInfoDiv = document.getElementById('user-info');
+
+        function initializeMainView(user) {
+            loginView.classList.add('hidden');
+            mainView.classList.remove('hidden');
+
+            const roleInfo = rolesConfig[user.role];
+            const roleName = roleInfo[`name${currentLang === 'zh' ? '_zh' : ''}`];
+            userInfoDiv.innerHTML = `<p class="font-semibold">${user.name} (${user.idCode})</p><p class="text-indigo-600">${roleName}</p>`;
+
+            // Show/hide UI elements based on role
+            document.getElementById('new-order-form-container').classList.toggle('hidden', !roleInfo.canCreate);
+            
+            document.getElementById('col-new-container').classList.toggle('hidden', !roleInfo.canSee.includes('new'));
+            document.getElementById('col-preparing-container').classList.toggle('hidden', !roleInfo.canSee.includes('preparing'));
+            document.getElementById('col-delivering-container').classList.toggle('hidden', !roleInfo.canSee.includes('delivering'));
+
+            populateOrderFormSelects();
+            renderOrderKanban(user.role);
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const employeeId = parseInt(employeeSelect.value);
+            const selectedRole = roleSelect.value;
+            
+            const employee = findById(employees, employeeId);
+
+            if (employee && selectedRole) {
+                const currentUser = {
+                    id: employee.id,
+                    name: employee.name,
+                    idCode: employee.idCode,
+                    role: selectedRole,
+                };
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                initializeMainView(currentUser);
+            } else {
+                alert('Vui lòng chọn nhân viên và vai trò.');
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            sessionStorage.removeItem('currentUser');
+            window.location.reload();
+        });
+
+        addOrderForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newOrder = {
+                id: Date.now(),
+                dishId: parseInt(document.getElementById('order-dish-select').value),
+                quantity: parseInt(document.getElementById('order-quantity').value),
+                channelKey: document.getElementById('order-channel-select').value,
+                customerInfo: document.getElementById('order-customer-info').value,
+                status: 'new',
+                orderDate: todayISO()
+            };
+
+            if (newOrder.dishId && newOrder.quantity > 0 && newOrder.channelKey) {
+                activeOrders.unshift(newOrder);
+                localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
+                const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+                renderOrderKanban(currentUser.role);
+                e.target.reset();
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin món ăn, số lượng và kênh bán.');
+            }
+        });
+
+        function renderOrderKanban(role) {
+            const cols = {
+                new: newOrdersCol,
+                preparing: preparingOrdersCol,
+                delivering: deliveringOrdersCol,
+            };
+            Object.values(cols).forEach(col => col.innerHTML = '');
+
+            if (activeOrders.length === 0) {
+                const visibleCols = Object.keys(cols).filter(key => !document.getElementById(`col-${key}-container`).classList.contains('hidden'));
+                if (visibleCols.length > 0) {
+                     cols[visibleCols[0]].innerHTML = `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang].empty_data}</p>`;
+                }
+                return;
+            }
+
+            activeOrders.forEach(order => {
+                if (cols[order.status]) {
+                    cols[order.status].innerHTML += renderOrderCard(order, role);
+                }
+            });
+        }
+        
+        function renderOrderCard(order, role) {
+            const dish = findById(dishes, order.dishId);
+            const channelName = salesChannels[order.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || order.channelKey;
+            
+            let actionButton = '';
+            if (order.status === 'new' && (role === 'taker' || role === 'kitchen')) {
+                actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded hover:bg-blue-600 confirm-prepare-btn" data-id="${order.id}">${translations[currentLang].confirm_prepare}</button>`;
+            } else if (order.status === 'preparing' && (role === 'taker' || role === 'shipper')) {
+                actionButton = `<button class="w-full mt-3 bg-yellow-500 text-white text-sm py-1.5 rounded hover:bg-yellow-600 confirm-deliver-btn" data-id="${order.id}">${translations[currentLang].confirm_deliver}</button>`;
+            } else if (order.status === 'delivering' && (role === 'taker' || role === 'shipper')) {
+                actionButton = `<button class="w-full mt-3 bg-green-500 text-white text-sm py-1.5 rounded hover:bg-green-600 complete-order-btn" data-id="${order.id}">${translations[currentLang].complete_order}</button>`;
+            }
+
+            return `
+                <div class="bg-white p-3 rounded-md shadow-sm border-l-4 ${order.status === 'new' ? 'border-blue-500' : order.status === 'preparing' ? 'border-yellow-500' : 'border-green-500'}">
+                    <div class="flex justify-between items-start">
+                         <div>
+                            <p class="font-bold">${dish ? dish.name : 'Unknown Dish'} (x${order.quantity})</p>
+                            <p class="text-xs text-gray-600">${translations[currentLang].order_from}: <span class="font-semibold">${channelName}</span></p>
+                            ${order.customerInfo ? `<p class="text-xs text-gray-600 mt-1">${order.customerInfo}</p>` : ''}
+                        </div>
+                        ${(role === 'taker') ? `
+                        <button class="cancel-order-btn text-gray-400 hover:text-red-500" data-id="${order.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>` : ''}
+                    </div>
+                    ${actionButton}
+                </div>
+            `;
+        }
+
+        mainView.addEventListener('click', e => {
+            const button = e.target.closest('button');
+            if (!button) return;
+            const orderId = parseInt(button.dataset.id);
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+            if (button.classList.contains('confirm-prepare-btn')) {
+                updateOrderStatus(orderId, 'preparing', currentUser.role);
+            } else if (button.classList.contains('confirm-deliver-btn')) {
+                updateOrderStatus(orderId, 'delivering', currentUser.role);
+            } else if (button.classList.contains('complete-order-btn')) {
+                completeOrder(orderId, currentUser.role);
+            } else if (button.classList.contains('cancel-order-btn')) {
+                if (confirm(currentLang === 'vi' ? 'Bạn có chắc muốn hủy đơn hàng này?' : '您確定要取消此訂單嗎？')) {
+                    cancelOrder(orderId, currentUser.role);
+                }
+            }
+        });
+
+        function updateOrderStatus(orderId, newStatus, role) {
+            activeOrders = activeOrders.map(order => order.id === orderId ? { ...order, status: newStatus } : order);
+            localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
+            renderOrderKanban(role);
+        }
+
+        function cancelOrder(orderId, role) {
+            activeOrders = activeOrders.filter(order => order.id !== orderId);
+            localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
+            renderOrderKanban(role);
+        }
+
+        function completeOrder(orderId, role) {
+            const order = findById(activeOrders, orderId);
+            if (!order) return;
+
+            const dish = findById(dishes, order.dishId);
+            const channel = salesChannels[order.channelKey];
+            if (!dish || !channel) return;
+
+            const totalRevenue = dish.price * order.quantity;
+            const commissionFee = totalRevenue * channel.commission;
+            const netRevenue = totalRevenue - commissionFee;
+
+            salesRecords.unshift({
+                id: Date.now(),
+                date: order.orderDate,
+                dishId: order.dishId,
+                quantity: order.quantity,
+                channelKey: order.channelKey,
+                totalRevenue,
+                commissionFee,
+                netRevenue,
+                dishName: dish.name,
+                dishCost: dish.cost
+            });
+            localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
+
+            activeOrders = activeOrders.filter(o => o.id !== orderId);
+            localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
+            
+            renderOrderKanban(role);
+        }
+
+        function populateOrderFormSelects() {
+            const dishSelect = document.getElementById('order-dish-select');
+            const channelSelect = document.getElementById('order-channel-select');
+            
+            dishSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_dish} --</option>`;
+            dishes.forEach(item => {
+                dishSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+            });
+
+            channelSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_channel} --</option>`;
+            for (const key in salesChannels) {
+                const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
+                channelSelect.innerHTML += `<option value="${key}">${name}</option>`;
+            }
+        }
+        
+        function populateEmployeeSelect() {
+            employeeSelect.innerHTML = `<option value="">${translations[currentLang].select_employee}</option>`;
+            const activeEmployees = employees.filter(emp => emp.status === 'active');
+            activeEmployees.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id;
+                option.textContent = `${emp.name} (${emp.idCode})`;
+                employeeSelect.appendChild(option);
+            });
+        }
+        
+        function populateRoleSelect(employeeId) {
+            roleSelect.innerHTML = `<option value="">${translations[currentLang].select_role}</option>`;
+            const employee = findById(employees, employeeId);
+            if(employee) {
+                employee.roles.forEach(roleKey => {
+                    const role = rolesConfig[roleKey];
+                     if (role) {
+                        const option = document.createElement('option');
+                        option.value = roleKey;
+                        option.textContent = role[`name${currentLang === 'zh' ? '_zh' : ''}`];
+                        roleSelect.appendChild(option);
+                    }
+                });
+            }
+        }
+
+        employeeSelect.addEventListener('change', (e) => {
+            const employeeId = parseInt(e.target.value);
+            populateRoleSelect(employeeId);
+        });
+
+        // --- Initial Load ---
+        function checkSession() {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                initializeMainView(currentUser);
+            } else {
+                loginView.classList.remove('hidden');
+                mainView.classList.add('hidden');
+                populateEmployeeSelect();
+            }
+        }
+        
+        setLanguage(currentLang);
+        checkSession();
+    });
+    </script>
+</body>
+</html>
+
