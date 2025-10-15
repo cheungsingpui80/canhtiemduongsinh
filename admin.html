@@ -41,7 +41,13 @@
                 </div>
             </div>
             <nav class="flex-1 px-4 py-2 space-y-2">
-                <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="menu-management">
+                <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="sales-management">
+                    <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l.383-1.437M7.5 14.25L5.106 5.165A2.25 2.25 0 002.854 3H2.25" />
+                    </svg>
+                    <span data-lang="sales_management">Quản Lý Bán Hàng</span>
+                </a>
+                <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="menu-management">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     <span data-lang="menu_management">Quản Lý Thực Đơn</span>
                 </a>
@@ -84,8 +90,50 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            <!-- Tab: Quản Lý Bán Hàng -->
+            <div id="sales-management" class="tab-content active">
+                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="sales_management_title">Quản Lý Bán Hàng</h1>
+                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                     <div class="lg:col-span-1">
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-semibold mb-4" data-lang="record_sale">Ghi Nhận Bán Hàng</h2>
+                             <form id="add-sale-form" class="space-y-4">
+                                <div>
+                                    <label for="sale-date" class="block text-sm font-medium text-gray-700" data-lang="sale_date">Ngày bán</label>
+                                    <input type="date" id="sale-date" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                <div>
+                                    <label for="sale-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
+                                    <select id="sale-dish-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                                </div>
+                                <div>
+                                    <label for="sale-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
+                                    <input type="number" id="sale-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                <div>
+                                    <label for="sale-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán hàng</label>
+                                    <select id="sale-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                                </div>
+                                <div class="p-3 bg-gray-50 rounded-md space-y-2 text-sm">
+                                    <div class="flex justify-between"><span>Doanh thu:</span><span id="calculated-revenue" class="font-semibold">0 VND</span></div>
+                                    <div class="flex justify-between"><span>Phí chiết khấu:</span><span id="calculated-commission" class="font-semibold text-red-600">0 VND</span></div>
+                                    <div class="flex justify-between font-bold"><span>Thực nhận:</span><span id="calculated-net-revenue" class="text-green-600">0 VND</span></div>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700" data-lang="add_sale_btn">Thêm Giao Dịch</button>
+                             </form>
+                         </div>
+                     </div>
+                     <div class="lg:col-span-2">
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-semibold mb-4" data-lang="sales_history">Lịch Sử Bán Hàng</h2>
+                            <div id="sales-history-list" class="space-y-3 max-h-[70vh] overflow-y-auto"></div>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+
             <!-- Tab: Quản Lý Thực Đơn -->
-            <div id="menu-management" class="tab-content active">
+            <div id="menu-management" class="tab-content">
                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="menu_management_title">Quản Lý Thực Đơn &amp; Định Lượng (BOM)</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Form thêm món ăn -->
@@ -334,18 +382,29 @@
 
             <!-- Tab: Báo Cáo Lợi Nhuận -->
             <div id="profit-report" class="tab-content">
-                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="profit_report_title">Báo Cáo Lợi Nhuận (Ước Tính)</h1>
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="profit_report_title">Báo Cáo Lợi Nhuận</h1>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4" data-lang="enter_sales_volume">Nhập Số Lượng Bán Ra (Trong Tháng)</h2>
-                    <div id="sales-input-area" class="space-y-4 mb-6"></div>
-                    <button id="calculate-profit-btn" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 text-lg font-semibold" data-lang="calculate_profit_btn">Tính Lợi Nhuận</button>
+                    <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
+                         <div>
+                            <label for="profit-report-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
+                            <input type="date" id="profit-report-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label for="profit-report-end-date" class="block text-sm font-medium text-gray-700" data-lang="to_date">Đến ngày</label>
+                            <input type="date" id="profit-report-end-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="self-end">
+                            <button id="calculate-profit-btn" class="w-full bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700" data-lang="calculate_profit_btn">Xem Báo Cáo Lợi Nhuận</button>
+                        </div>
+                    </div>
                     <div id="profit-results" class="mt-8 pt-6 border-t hidden">
-                        <h3 class="text-2xl font-semibold mb-4 text-center" data-lang="monthly_business_results">Kết Quả Kinh Doanh Tháng Này</h3>
+                        <h3 class="text-2xl font-semibold mb-4 text-center" data-lang="business_results_period">Kết Quả Kinh Doanh Trong Kỳ</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
                             <div class="bg-blue-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_revenue">Tổng Doanh Thu:</p><p id="result-revenue" class="font-bold text-2xl text-blue-700">0 VND</p></div>
                             <div class="bg-orange-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_cogs">Tổng Giá Vốn Hàng Bán:</p><p id="result-cogs" class="font-bold text-2xl text-orange-700">0 VND</p></div>
+                             <div class="bg-red-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_commission_fees">Tổng Phí Chiết Khấu:</p><p id="result-commission-fees" class="font-bold text-2xl text-red-700">0 VND</p></div>
                             <div class="bg-yellow-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_operating_expenses">Tổng Chi Phí Hoạt Động (Tháng):</p><p id="result-monthly-expense" class="font-bold text-2xl text-yellow-700">0 VND</p></div>
-                            <div class="bg-red-50 p-4 rounded-md"><p class="text-gray-600" data-lang="spoilage_cost">Chi Phí Hư Hao (Ước Tính):</p><p id="result-spoilage-cost" class="font-bold text-2xl text-red-700">0 VND</p></div>
+                            <div class="bg-red-100 p-4 rounded-md"><p class="text-gray-600" data-lang="spoilage_cost">Chi Phí Hư Hao (Ước Tính):</p><p id="result-spoilage-cost" class="font-bold text-2xl text-red-800">0 VND</p></div>
                             <div class="bg-green-100 p-4 rounded-md col-span-1 md:col-span-2"><p class="text-gray-600" data-lang="net_profit">Lợi Nhuận Ròng (Trước Thuế):</p><p id="result-net-profit" class="font-bold text-3xl text-green-800">0 VND</p></div>
                         </div>
                         <div class="mt-8 text-center">
@@ -385,10 +444,6 @@
                         </div>
                     </div>
                     
-                    <p class="text-sm text-yellow-700 bg-yellow-100 p-3 rounded-md mb-4">
-                        <strong data-lang="note">Lưu ý:</strong> <span data-lang="inventory_report_note">Báo cáo này chưa tính toán lượng nguyên liệu đã sử dụng (xuất kho) để bán hàng.</span>
-                    </p>
-    
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -397,6 +452,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="unit_header">ĐVT</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="opening_stock">Tồn Đầu Kỳ</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="purchased_in_period">Nhập Trong Kỳ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="used_in_period">Xuất Trong Kỳ (Bán)</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="spoiled_in_period">Hư Hao Trong Kỳ</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang="closing_stock">Tồn Cuối Kỳ</th>
                                 </tr>
@@ -502,6 +558,7 @@
         const translations = {
             vi: {
                 dashboard_title: 'Bảng Điều Khiển',
+                sales_management: 'Quản Lý Bán Hàng',
                 menu_management: 'Quản Lý Thực Đơn',
                 supplier_management: 'Nhà Cung Cấp',
                 material_management: 'Nguyên Vật Liệu',
@@ -510,6 +567,13 @@
                 profit_report: 'Báo Cáo Lợi Nhuận',
                 inventory_report: 'Báo Cáo Tồn Kho',
                 adjustment_logs: 'Lịch Sử Điều Chỉnh',
+                sales_management_title: 'Quản Lý Bán Hàng',
+                record_sale: 'Ghi Nhận Bán Hàng',
+                sale_date: 'Ngày bán',
+                dish: 'Món ăn',
+                sales_channel: 'Kênh bán hàng',
+                add_sale_btn: 'Thêm Giao Dịch',
+                sales_history: 'Lịch Sử Bán Hàng',
                 menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
                 add_new_dish: 'Thêm Món Mới',
                 dish_name: 'Tên món',
@@ -569,12 +633,12 @@
                 total_yearly: 'Tổng cộng năm:',
                 onetime_costs: 'Chi phí một lần (Đầu tư)',
                 total: 'Tổng cộng:',
-                profit_report_title: 'Báo Cáo Lợi Nhuận (Ước Tính)',
-                enter_sales_volume: 'Nhập Số Lượng Bán Ra (Trong Tháng)',
-                calculate_profit_btn: 'Tính Lợi Nhuận',
-                monthly_business_results: 'Kết Quả Kinh Doanh Tháng Này',
+                profit_report_title: 'Báo Cáo Lợi Nhuận',
+                calculate_profit_btn: 'Xem Báo Cáo Lợi Nhuận',
+                business_results_period: 'Kết Quả Kinh Doanh Trong Kỳ',
                 total_revenue: 'Tổng Doanh Thu:',
                 total_cogs: 'Tổng Giá Vốn Hàng Bán:',
+                total_commission_fees: 'Tổng Phí Chiết Khấu:',
                 total_operating_expenses: 'Tổng Chi Phí Hoạt Động (Tháng):',
                 spoilage_cost: 'Chi Phí Hư Hao (Ước Tính):',
                 net_profit: 'Lợi Nhuận Ròng (Trước Thuế):',
@@ -588,12 +652,11 @@
                 from_date: 'Từ ngày',
                 to_date: 'Đến ngày',
                 view_report_btn: 'Xem Báo Cáo',
-                note: 'Lưu ý:',
-                inventory_report_note: 'Báo cáo này chưa tính toán lượng nguyên liệu đã sử dụng (xuất kho) để bán hàng.',
                 material_name_header: 'Tên Nguyên Liệu',
                 unit_header: 'ĐVT',
                 opening_stock: 'Tồn Đầu Kỳ',
                 purchased_in_period: 'Nhập Trong Kỳ',
+                used_in_period: 'Xuất Trong Kỳ (Bán)',
                 spoiled_in_period: 'Hư Hao Trong Kỳ',
                 closing_stock: 'Tồn Cuối Kỳ',
                 adjustment_logs_title: 'Lịch Sử Điều Chỉnh Dữ Liệu',
@@ -612,6 +675,8 @@
                 ai_connection_error: 'Đã xảy ra lỗi khi kết nối với AI.',
                 select_material: 'Chọn nguyên liệu',
                 select_supplier: 'Chọn NCC',
+                select_dish: 'Chọn món ăn',
+                select_channel: 'Chọn kênh bán',
                 log_type_supplier: 'Nhà Cung Cấp',
                 log_type_purchase: 'Nhập kho',
                 sales_volume_placeholder: 'Số lượng bán',
@@ -622,6 +687,7 @@
             },
             zh: {
                 dashboard_title: '儀表板',
+                sales_management: '銷售管理',
                 menu_management: '菜單管理',
                 supplier_management: '供應商管理',
                 material_management: '原材料管理',
@@ -630,6 +696,13 @@
                 profit_report: '利潤報告',
                 inventory_report: '庫存報告',
                 adjustment_logs: '調整日誌',
+                sales_management_title: '銷售管理',
+                record_sale: '記錄銷售',
+                sale_date: '銷售日期',
+                dish: '菜式',
+                sales_channel: '銷售渠道',
+                add_sale_btn: '新增交易',
+                sales_history: '銷售歷史',
                 menu_management_title: '菜單與物料清單(BOM)管理',
                 add_new_dish: '新增菜式',
                 dish_name: '菜式名稱',
@@ -689,12 +762,12 @@
                 total_yearly: '每年總計:',
                 onetime_costs: '一次性費用 (投資)',
                 total: '總計:',
-                profit_report_title: '利潤報告 (估計)',
-                enter_sales_volume: '輸入本月銷售數量',
-                calculate_profit_btn: '計算利潤',
-                monthly_business_results: '本月經營業績',
+                profit_report_title: '利潤報告',
+                calculate_profit_btn: '查看利潤報告',
+                business_results_period: '期間經營業績',
                 total_revenue: '總收入:',
                 total_cogs: '總銷售成本:',
+                total_commission_fees: '總佣金費用:',
                 total_operating_expenses: '每月總營運費用:',
                 spoilage_cost: '損耗成本 (估計):',
                 net_profit: '淨利潤 (稅前):',
@@ -708,12 +781,11 @@
                 from_date: '開始日期',
                 to_date: '結束日期',
                 view_report_btn: '查看報告',
-                note: '注意:',
-                inventory_report_note: '此報告未計算已用於銷售的原材料數量（出庫）。',
                 material_name_header: '原材料名稱',
                 unit_header: '單位',
                 opening_stock: '期初庫存',
                 purchased_in_period: '本期入庫',
+                used_in_period: '本期出庫 (銷售)',
                 spoiled_in_period: '本期損耗',
                 closing_stock: '期末庫存',
                 adjustment_logs_title: '數據調整日誌',
@@ -732,6 +804,8 @@
                 ai_connection_error: '連接AI時發生錯誤。',
                 select_material: '選擇原材料',
                 select_supplier: '選擇供應商',
+                select_dish: '選擇菜式',
+                select_channel: '選擇銷售渠道',
                 log_type_supplier: '供應商',
                 log_type_purchase: '入庫',
                 sales_volume_placeholder: '銷售數量',
@@ -789,15 +863,35 @@
         let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
         let spoilageRecords = JSON.parse(localStorage.getItem('spoilageRecords')) || [];
         let adjustmentLogs = JSON.parse(localStorage.getItem('adjustmentLogs')) || [];
+        let salesRecords = JSON.parse(localStorage.getItem('salesRecords')) || [];
         let currentBomItems = [];
         let otherCosts = [];
+
+        const salesChannels = {
+            'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內' },
+            'GrabFood': { name: 'GrabFood', commission: 0.25, name_zh: 'GrabFood' },
+            'ShopeeFood': { name: 'ShopeeFood', commission: 0.25, name_zh: 'ShopeeFood' },
+            'Zalo': { name: 'Zalo', commission: 0, name_zh: 'Zalo' },
+            'Hotline': { name: 'Hotline', commission: 0, name_zh: '熱線電話' }
+        };
 
         // Set default dates
         document.getElementById('purchase-date').value = todayISO();
         document.getElementById('spoilage-date').value = todayISO();
+        document.getElementById('sale-date').value = todayISO();
 
         // --- DOM Elements ---
         const elements = {
+            // Sales
+            addSaleForm: document.getElementById('add-sale-form'),
+            saleDishSelect: document.getElementById('sale-dish-select'),
+            saleQuantityInput: document.getElementById('sale-quantity'),
+            saleChannelSelect: document.getElementById('sale-channel-select'),
+            calculatedRevenue: document.getElementById('calculated-revenue'),
+            calculatedCommission: document.getElementById('calculated-commission'),
+            calculatedNetRevenue: document.getElementById('calculated-net-revenue'),
+            salesHistoryList: document.getElementById('sales-history-list'),
+            // Menu
             addDishForm: document.getElementById('add-dish-form'),
             dishesList: document.getElementById('dishes-list'),
             bomMaterialSelect: document.getElementById('bom-material-select'),
@@ -805,10 +899,12 @@
             addBomItemBtn: document.getElementById('add-bom-item-btn'),
             bomItemsList: document.getElementById('bom-items-list'),
             estimatedCostSpan: document.getElementById('estimated-cost'),
+            // Materials & Suppliers
             addMaterialForm: document.getElementById('add-material-form'),
             materialsList: document.getElementById('materials-list'),
             addSupplierForm: document.getElementById('add-supplier-form'),
             suppliersList: document.getElementById('suppliers-list'),
+            // Purchase
             addPurchaseForm: document.getElementById('add-purchase-form'),
             purchaseMaterialSelect: document.getElementById('purchase-material-select'),
             purchaseSupplierSelect: document.getElementById('purchase-supplier-select'),
@@ -817,11 +913,14 @@
             purchaseUnitInput: document.getElementById('purchase-unit'),
             newUnitPriceSpan: document.getElementById('new-unit-price'),
             purchasesList: document.getElementById('purchases-list'),
-            salesInputArea: document.getElementById('sales-input-area'),
-            calculateProfitBtn: document.getElementById('calculate-profit-btn'),
+            // Spoilage
             spoilageMaterialSelect: document.getElementById('spoilage-material-select'),
             spoilageUnitInput: document.getElementById('spoilage-unit'),
             spoilageList: document.getElementById('spoilage-list'),
+            // Reports
+            calculateProfitBtn: document.getElementById('calculate-profit-btn'),
+            profitReportStartDate: document.getElementById('profit-report-start-date'),
+            profitReportEndDate: document.getElementById('profit-report-end-date'),
             viewInventoryReportBtn: document.getElementById('view-inventory-report-btn'),
             reportPresetFilter: document.getElementById('report-preset-filter'),
             reportStartDate: document.getElementById('report-start-date'),
@@ -862,12 +961,10 @@
             button.innerHTML = loadingSpinner;
             button.disabled = true;
 
-            // QUAN TRỌNG: Dán API Key của bạn vào đây.
-            // Lấy key miễn phí tại: https://aistudio.google.com/app/apikey
             const apiKey = "AIzaSyDGY_sja2mUqs4KlE7bCKmwOKoFz3sfMRg";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-            if (apiKey === "AIzaSyDGY_sja2mUqs4KlE7bCKmwOKoFz3sfMRg" ) {
+            if (apiKey === "DÁN_API_KEY_CỦA_BẠN_VÀO_ĐÂY") {
                 const errorMsg = "Lỗi: Vui lòng thêm API Key của bạn để sử dụng tính năng AI.";
                 alert(errorMsg);
                 console.error(errorMsg);
@@ -905,6 +1002,91 @@
             container.innerHTML = items.length ? items.map(renderItemFn).join('') : `<p class="text-gray-500 text-sm">${emptyText}</p>`;
         }
         
+        // --- Sales Management Logic ---
+        function updateSaleCalculations() {
+            const dishId = parseInt(elements.saleDishSelect.value);
+            const quantity = parseInt(elements.saleQuantityInput.value) || 0;
+            const channelKey = elements.saleChannelSelect.value;
+
+            const dish = findById(dishes, dishId);
+            const channel = salesChannels[channelKey];
+
+            if (dish && quantity > 0 && channel) {
+                const revenue = dish.price * quantity;
+                const commission = revenue * channel.commission;
+                const netRevenue = revenue - commission;
+                elements.calculatedRevenue.textContent = formatCurrency(revenue);
+                elements.calculatedCommission.textContent = formatCurrency(commission);
+                elements.calculatedNetRevenue.textContent = formatCurrency(netRevenue);
+            } else {
+                elements.calculatedRevenue.textContent = formatCurrency(0);
+                elements.calculatedCommission.textContent = formatCurrency(0);
+                elements.calculatedNetRevenue.textContent = formatCurrency(0);
+            }
+        }
+
+        elements.saleDishSelect.addEventListener('change', updateSaleCalculations);
+        elements.saleQuantityInput.addEventListener('input', updateSaleCalculations);
+        elements.saleChannelSelect.addEventListener('change', updateSaleCalculations);
+
+        elements.addSaleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const dishId = parseInt(elements.saleDishSelect.value);
+            const quantity = parseInt(elements.saleQuantityInput.value);
+            const channelKey = elements.saleChannelSelect.value;
+            const date = document.getElementById('sale-date').value;
+
+            const dish = findById(dishes, dishId);
+            const channel = salesChannels[channelKey];
+
+            if (dish && quantity > 0 && channel && date) {
+                const totalRevenue = dish.price * quantity;
+                const commissionFee = totalRevenue * channel.commission;
+                const netRevenue = totalRevenue - commissionFee;
+
+                salesRecords.unshift({
+                    id: Date.now(),
+                    date,
+                    dishId,
+                    quantity,
+                    channelKey,
+                    totalRevenue,
+                    commissionFee,
+                    netRevenue,
+                    dishName: dish.name,
+                    dishCost: dish.cost
+                });
+                localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
+                renderSalesHistory();
+                e.target.reset();
+                document.getElementById('sale-date').value = todayISO();
+                updateSaleCalculations();
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin giao dịch.');
+            }
+        });
+
+        function renderSalesHistory() {
+            renderList(elements.salesHistoryList, salesRecords, (sale) => {
+                const channelName = salesChannels[sale.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || sale.channelKey;
+                return `
+                    <div class="p-3 bg-gray-50 rounded-md border text-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-semibold">${sale.dishName} (x${sale.quantity})</p>
+                                <p class="text-xs text-gray-500">${new Date(sale.date).toLocaleDateString('vi-VN')} - ${channelName}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-green-600">${formatCurrency(sale.netRevenue)}</p>
+                                <p class="text-xs text-gray-500 line-through">${formatCurrency(sale.totalRevenue)}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+
         // --- Material & Supplier Logic ---
         const renderMaterial = (m) => `<div class="flex justify-between items-center p-2 bg-gray-50 rounded-md"><span>${m.name} (${m.unit})</span><span class="font-mono text-sm">${formatCurrency(m.price)}</span></div>`;
         
@@ -929,12 +1111,11 @@
             </div>`;
         };
         
-        function populateSelect(select, items, placeholderKey, selectedId) {
+        function populateSelect(select, items, placeholderKey, valueField = 'id', textField = 'name') {
             const placeholder = translations[currentLang][placeholderKey];
             select.innerHTML = `<option value="">-- ${placeholder} --</option>`;
             items.forEach(item => {
-                const selected = item.id === selectedId ? 'selected' : '';
-                select.innerHTML += `<option value="${item.id}" ${selected}>${item.name}</option>`;
+                select.innerHTML += `<option value="${item[valueField]}">${item[textField]}</option>`;
             });
         }
         
@@ -943,6 +1124,15 @@
             populateSelect(elements.purchaseMaterialSelect, rawMaterials, 'select_material');
             populateSelect(elements.purchaseSupplierSelect, suppliers, 'select_supplier');
             populateSelect(elements.spoilageMaterialSelect, rawMaterials, 'select_material');
+            populateSelect(elements.saleDishSelect, dishes, 'select_dish');
+
+            const channelSelect = elements.saleChannelSelect;
+            const placeholder = translations[currentLang]['select_channel'];
+            channelSelect.innerHTML = `<option value="">-- ${placeholder} --</option>`;
+            for (const key in salesChannels) {
+                const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
+                channelSelect.innerHTML += `<option value="${key}">${name}</option>`;
+            }
         }
 
         elements.addMaterialForm.addEventListener('submit', e => {
@@ -1427,15 +1617,6 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
             }
         });
         
-        function renderSalesInput() {
-            renderList(elements.salesInputArea, dishes, d => `
-                <div class="grid grid-cols-3 gap-4 items-center">
-                    <label for="sales-${d.id}" class="col-span-2">${d.name}</label>
-                    <input type="number" id="sales-${d.id}" data-dish-id="${d.id}" min="0" placeholder="${translations[currentLang].sales_volume_placeholder}" class="col-span-1 border border-gray-300 rounded-md py-2 px-3">
-                </div>
-            `);
-        }
-        
         const renderSpoilageRecord = (r) => {
             const material = findById(rawMaterials, r.materialId);
             const cost = material ? material.price * r.quantity : 0;
@@ -1515,39 +1696,48 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
                 let openingStock = 0;
                 let purchasedInPeriod = 0;
                 let spoiledInPeriod = 0;
+                let usedInPeriod = 0;
                 
+                // Calculate opening stock
                 purchases.forEach(p => {
-                    const pDate = new Date(p.date);
-                    if (p.materialId === material.id && pDate < startDate) {
-                        openingStock += p.quantity;
-                    }
+                    if (p.materialId === material.id && new Date(p.date) < startDate) openingStock += p.quantity;
                 });
                 spoilageRecords.forEach(s => {
-                    const sDate = new Date(s.date);
-                    if (s.materialId === material.id && sDate < startDate) {
-                        openingStock -= s.quantity;
-                    }
+                    if (s.materialId === material.id && new Date(s.date) < startDate) openingStock -= s.quantity;
                 });
-                purchases.forEach(p => {
-                    const pDate = new Date(p.date);
-                    if (p.materialId === material.id && pDate >= startDate && pDate <= endDate) {
-                        purchasedInPeriod += p.quantity;
-                    }
-                });
-                spoilageRecords.forEach(s => {
-                    const sDate = new Date(s.date);
-                    if (s.materialId === material.id && sDate >= startDate && sDate <= endDate) {
-                        spoiledInPeriod += s.quantity;
+                salesRecords.forEach(sale => {
+                    const dish = findById(dishes, sale.dishId);
+                    if (dish && new Date(sale.date) < startDate) {
+                        dish.bom.forEach(item => {
+                            if (item.materialId === material.id) openingStock -= (item.quantity * sale.quantity);
+                        });
                     }
                 });
 
-                const closingStock = openingStock + purchasedInPeriod - spoiledInPeriod;
+                // Calculate movements within period
+                purchases.forEach(p => {
+                    if (p.materialId === material.id && new Date(p.date) >= startDate && new Date(p.date) <= endDate) purchasedInPeriod += p.quantity;
+                });
+                spoilageRecords.forEach(s => {
+                    if (s.materialId === material.id && new Date(s.date) >= startDate && new Date(s.date) <= endDate) spoiledInPeriod += s.quantity;
+                });
+                 salesRecords.forEach(sale => {
+                    const dish = findById(dishes, sale.dishId);
+                    if (dish && new Date(sale.date) >= startDate && new Date(sale.date) <= endDate) {
+                        dish.bom.forEach(item => {
+                            if (item.materialId === material.id) usedInPeriod += (item.quantity * sale.quantity);
+                        });
+                    }
+                });
+
+                const closingStock = openingStock + purchasedInPeriod - spoiledInPeriod - usedInPeriod;
 
                 return {
                     name: material.name,
                     unit: material.unit,
                     openingStock: openingStock > 0 ? openingStock : 0,
                     purchasedInPeriod,
+                    usedInPeriod,
                     spoiledInPeriod,
                     closingStock: closingStock > 0 ? closingStock : 0,
                 };
@@ -1556,20 +1746,21 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
         }
 
         function renderInventoryReport(reportData) {
-            const formatNumber = (num) => parseFloat(num.toFixed(2));
+            const formatNumber = (num) => parseFloat(num.toFixed(3));
             elements.inventoryReportBody.innerHTML = reportData.map(item => `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.unit}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatNumber(item.openingStock)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">${formatNumber(item.purchasedInPeriod)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">${formatNumber(item.spoiledInPeriod)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">+${formatNumber(item.purchasedInPeriod)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">-${formatNumber(item.usedInPeriod)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">-${formatNumber(item.spoiledInPeriod)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">${formatNumber(item.closingStock)}</td>
                 </tr>
             `).join('');
             
             if (reportData.length === 0) {
-                elements.inventoryReportBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">${translations[currentLang].empty_data}</td></tr>`;
+                elements.inventoryReportBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-gray-500">${translations[currentLang].empty_data}</td></tr>`;
             }
         }
 
@@ -1586,27 +1777,50 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
         });
 
         elements.calculateProfitBtn.addEventListener('click', () => {
-            let totalRevenue = 0, totalCogs = 0;
-            dishes.forEach(dish => {
-                const input = document.getElementById(`sales-${dish.id}`);
-                const quantity = parseInt(input.value) || 0;
-                if (quantity > 0) {
-                    totalRevenue += dish.price * quantity;
-                    totalCogs += dish.cost * quantity;
-                }
+            const startDateStr = elements.profitReportStartDate.value;
+            const endDateStr = elements.profitReportEndDate.value;
+             if (!startDateStr || !endDateStr) {
+                alert('Vui lòng chọn khoảng thời gian để xem báo cáo.'); return;
+            }
+             if (new Date(startDateStr) > new Date(endDateStr)) {
+                alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc.'); return;
+            }
+
+            const startDate = new Date(startDateStr);
+            startDate.setHours(0,0,0,0);
+            const endDate = new Date(endDateStr);
+            endDate.setHours(23,59,59,999);
+
+            const salesInPeriod = salesRecords.filter(s => {
+                const saleDate = new Date(s.date);
+                return saleDate >= startDate && saleDate <= endDate;
+            });
+
+            let totalRevenue = 0, totalCogs = 0, totalCommission = 0;
+            salesInPeriod.forEach(sale => {
+                totalRevenue += sale.totalRevenue;
+                totalCogs += (sale.dishCost * sale.quantity);
+                totalCommission += sale.commissionFee;
             });
             
             const totalMonthlyCost = otherCosts.filter(c => c.frequency === 'monthly').reduce((s, c) => s + c.amount, 0);
             const totalYearlyCost = otherCosts.filter(c => c.frequency === 'yearly').reduce((s, c) => s + c.amount, 0);
             const totalMonthlyOperationalExpense = totalMonthlyCost + (totalYearlyCost / 12);
-            const totalSpoilageCost = spoilageRecords.reduce((total, record) => {
+            
+            const spoilageInPeriod = spoilageRecords.filter(s => {
+                const spDate = new Date(s.date);
+                return spDate >= startDate && spDate <= endDate;
+            });
+            const totalSpoilageCost = spoilageInPeriod.reduce((total, record) => {
                 const material = findById(rawMaterials, record.materialId);
                 return total + (material ? material.price * record.quantity : 0);
             }, 0);
-            const netProfit = totalRevenue - totalCogs - totalMonthlyOperationalExpense - totalSpoilageCost;
+
+            const netProfit = totalRevenue - totalCogs - totalCommission - totalMonthlyOperationalExpense - totalSpoilageCost;
 
             document.getElementById('result-revenue').textContent = formatCurrency(totalRevenue);
             document.getElementById('result-cogs').textContent = formatCurrency(totalCogs);
+            document.getElementById('result-commission-fees').textContent = formatCurrency(totalCommission);
             document.getElementById('result-monthly-expense').textContent = formatCurrency(totalMonthlyOperationalExpense);
             document.getElementById('result-spoilage-cost').textContent = formatCurrency(totalSpoilageCost);
             document.getElementById('result-net-profit').textContent = formatCurrency(netProfit);
@@ -1615,15 +1829,18 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
         
         function renderApp() {
             migrateCosts();
+            updateAllMaterialPrices();
+            recalculateAllDishCosts();
             renderList(elements.materialsList, rawMaterials, renderMaterial);
             renderList(elements.suppliersList, suppliers, renderSupplier);
             renderList(elements.purchasesList, purchases, renderPurchase);
             renderList(elements.dishesList, dishes, renderDish);
-            renderSalesInput();
             updateAllSelects();
             renderOtherCosts();
             renderSpoilageList();
             renderAdjustmentLogs();
+            renderSalesHistory();
+            updateSaleCalculations();
         }
 
         function migrateCosts() {
@@ -1642,10 +1859,8 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
         }
         
         setLanguage(currentLang);
-        renderApp();
     });
     </script>
 </body>
 </html>
-
 
