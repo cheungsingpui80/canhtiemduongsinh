@@ -930,7 +930,7 @@
             
             const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
             renderAll(currentUser.role);
-            closeEditModal();
+            closeEditModal(); // Tự động đóng cửa sổ chỉnh sửa sau khi đã lưu các thay đổi thành công.
         });
 
         document.getElementById('add-dish-to-edit-order-btn').addEventListener('click', () => {
