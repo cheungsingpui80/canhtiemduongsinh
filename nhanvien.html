@@ -149,8 +149,8 @@
                 new_orders: 'Đơn Hàng Mới',
                 preparing: 'Đang Chuẩn Bị',
                 delivering: 'Đang Giao Hàng',
-                confirm_prepare: 'Bếp đã xong',
-                confirm_deliver: 'Giao cho Shipper',
+                confirm_prepare: 'Nhận đơn hàng',
+                confirm_deliver: 'Chế biến xong',
                 complete_order: 'Hoàn tất giao hàng',
                 order_from: 'Từ',
                 cancel_order: 'Hủy đơn',
@@ -189,8 +189,8 @@
                 new_orders: '新訂單',
                 preparing: '準備中',
                 delivering: '配送中',
-                confirm_prepare: '廚房完成',
-                confirm_deliver: '交給配送員',
+                confirm_prepare: '接收訂單',
+                confirm_deliver: '製作完成',
                 complete_order: '完成配送',
                 order_from: '來自',
                 cancel_order: '取消訂單',
@@ -368,15 +368,31 @@
             window.location.reload();
         });
 
-        addOrderForm.addEventListener('submit', e => {
+        addOrderForm.addEventListener('submit', async e => {
             e.preventDefault();
+            
+            const channelKey = document.getElementById('order-channel-select').value;
+            const channel = salesChannels[channelKey];
+            let orderIdToSave = document.getElementById('order-id').value;
+
+            // If it is an internal order, finalize the ID and update the counter.
+            if (channel && !channel.externalId) {
+                 const today = new Date();
+                 const yyyymmdd = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+                 const key = `order_counter_${yyyymmdd}`;
+                 const lastCounter = parseInt(localStorage.getItem(key) || '0');
+                 const newCounter = lastCounter + 1;
+                 localStorage.setItem(key, newCounter); // Save the incremented counter
+                 orderIdToSave = `${yyyymmdd}.${newCounter.toString().padStart(7, '0')}`;
+            }
+            
             const newOrder = {
                 id: Date.now(),
                 dishId: parseInt(document.getElementById('order-dish-select').value),
                 quantity: parseInt(document.getElementById('order-quantity').value),
-                channelKey: document.getElementById('order-channel-select').value,
+                channelKey: channelKey,
                 customer: {
-                    orderId: document.getElementById('order-id').value,
+                    orderId: orderIdToSave,
                     name: document.getElementById('order-customer-name').value,
                     phone: document.getElementById('order-customer-phone').value,
                     address: document.getElementById('order-customer-address').value,
@@ -648,4 +664,5 @@
     </script>
 </body>
 </html>
+
 
