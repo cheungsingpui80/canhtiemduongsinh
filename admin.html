@@ -23,6 +23,11 @@
             background-color: #4f46e5;
             color: white;
         }
+        .stat-card:hover {
+             border-color: var(--status-color, #d1d5db); /* Default to gray-300 */
+             transform: translateY(-2px);
+             transition: all 0.2s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -169,7 +174,17 @@
             <div id="sales-management" class="tab-content">
                  <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="order_lookup_title">Tra Cứu Đơn Hàng</h1>
                  <div class="bg-white p-6 rounded-lg shadow-md">
+                    <!-- Filters -->
                     <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
+                        <div>
+                            <label for="order-lookup-preset-filter" class="block text-sm font-medium text-gray-700" data-lang="view_by">Xem theo</label>
+                            <select id="order-lookup-preset-filter" class="mt-1 block w-full md:w-auto border-gray-300 rounded-md shadow-sm">
+                                <option value="this_month" data-lang="this_month">Tháng này</option>
+                                <option value="this_quarter" data-lang="this_quarter">Quí này</option>
+                                <option value="this_year" data-lang="this_year">Năm này</option>
+                                <option value="custom" data-lang="custom_option">Tùy chọn</option>
+                            </select>
+                        </div>
                         <div>
                             <label for="order-lookup-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
                             <input type="date" id="order-lookup-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
@@ -182,8 +197,17 @@
                             <button id="order-lookup-btn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700" data-lang="search_btn">Tra cứu</button>
                         </div>
                     </div>
-                    <h2 class="text-xl font-semibold mb-4" data-lang="order_list">Danh sách Đơn Hàng</h2>
-                    <div id="order-lookup-results" class="space-y-3 max-h-[70vh] overflow-y-auto"></div>
+                    
+                    <!-- Statistics Section -->
+                    <div id="order-stats" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <!-- Stat cards will be injected here by JS -->
+                    </div>
+
+                    <!-- Order Details Section -->
+                    <div id="order-details-container" class="mt-8">
+                         <h3 id="order-details-title" class="text-xl font-semibold mb-4 hidden"></h3>
+                         <div id="order-details-list" class="space-y-3 max-h-[50vh] overflow-y-auto"></div>
+                    </div>
                 </div>
             </div>
 
@@ -711,7 +735,10 @@
                 search_btn: 'Tra cứu',
                 order_history: 'Lịch Sử Đơn Hàng',
                 order_list: 'Danh sách Đơn Hàng',
-                status_pending: 'Chờ xử lý',
+                status_new: 'Đơn hàng mới',
+                status_confirmed: 'Đã nhận đơn',
+                status_preparing: 'Đang chuẩn bị',
+                status_shipping: 'Chờ giao hàng',
                 status_completed: 'Đã hoàn thành',
                 status_cancelled: 'Đã hủy',
                 menu_management: 'Quản Lý Thực Đơn',
@@ -876,7 +903,10 @@
                 search_btn: '查詢',
                 order_history: '訂單歷史',
                 order_list: '訂單列表',
-                status_pending: '待處理',
+                status_new: '新訂單',
+                status_confirmed: '已接單',
+                status_preparing: '準備中',
+                status_shipping: '待配送',
                 status_completed: '已完成',
                 status_cancelled: '已取消',
                 menu_management: '菜單管理',
@@ -1006,6 +1036,7 @@
         };
 
         let currentLang = localStorage.getItem('language') || 'vi';
+        let salesDataInPeriod = []; // Store filtered sales data globally for this tab
 
         const setLanguage = (lang) => {
             currentLang = lang;
@@ -1050,7 +1081,7 @@
                 return data ? JSON.parse(data) : [];
             } catch (e) {
                 console.error(`Error parsing ${key} from localStorage`, e);
-                return []; // Return empty array on error to prevent app crash
+                return [];
             }
         };
 
@@ -1061,7 +1092,13 @@
         let purchases = loadFromStorage('purchases');
         let spoilageRecords = loadFromStorage('spoilageRecords');
         let adjustmentLogs = loadFromStorage('adjustmentLogs');
-        let salesRecords = loadFromStorage('salesRecords').map(s => ({ ...s, status: s.status || 'completed' })); // Add default status for backward compatibility
+        let salesRecords = loadFromStorage('salesRecords').map(s => {
+            let newStatus = s.status || 'completed';
+            if (newStatus === 'pending') {
+                newStatus = 'new'; // Map old 'pending' status to 'new'
+            }
+            return { ...s, status: newStatus };
+        });
         let employees = loadFromStorage('employees');
         let otherCosts = loadFromStorage('otherCosts');
         let currentBomItems = [];
@@ -1075,9 +1112,12 @@
         };
 
         const orderStatuses = {
-            'pending': { name: 'Chờ xử lý', name_zh: '待處理', color: 'yellow', textColor: 'yellow-800', bgColor: 'yellow-100', borderColor: 'yellow-300' },
-            'completed': { name: 'Đã hoàn thành', name_zh: '已完成', color: 'green', textColor: 'green-800', bgColor: 'green-100', borderColor: 'green-300' },
-            'cancelled': { name: 'Đã hủy', name_zh: '已取消', color: 'red', textColor: 'red-800', bgColor: 'red-100', borderColor: 'red-300' }
+            'new': { name: 'Đơn hàng mới', name_zh: '新訂單', color: '#3B82F6' }, // blue-500
+            'confirmed': { name: 'Đã nhận đơn', name_zh: '已接單', color: '#8B5CF6' }, // violet-500
+            'preparing': { name: 'Đang chuẩn bị', name_zh: '準備中', color: '#F97316' }, // orange-500
+            'shipping': { name: 'Chờ giao hàng', name_zh: '待配送', color: '#F59E0B' }, // amber-500
+            'completed': { name: 'Đã hoàn thành', name_zh: '已完成', color: '#10B981' }, // green-500
+            'cancelled': { name: 'Đã hủy', name_zh: '已取消', color: '#EF4444' } // red-500
         };
 
         const employeeRoles = {
@@ -1105,10 +1145,14 @@
             terminateActions: document.getElementById('terminate-actions'),
             terminationInfo: document.getElementById('termination-info'),
             // Sales / Order Lookup
+            orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
             orderLookupEndDate: document.getElementById('order-lookup-end-date'),
             orderLookupBtn: document.getElementById('order-lookup-btn'),
-            orderLookupResults: document.getElementById('order-lookup-results'),
+            orderStats: document.getElementById('order-stats'),
+            orderDetailsContainer: document.getElementById('order-details-container'),
+            orderDetailsTitle: document.getElementById('order-details-title'),
+            orderDetailsList: document.getElementById('order-details-list'),
             // Menu
             addDishForm: document.getElementById('add-dish-form'),
             dishesList: document.getElementById('dishes-list'),
@@ -1160,12 +1204,9 @@
         };
         
         // Set default dates
-        const today = todayISO();
-        elements.orderLookupStartDate.value = today;
-        elements.orderLookupEndDate.value = today;
-        document.getElementById('purchase-date').value = today;
-        document.getElementById('spoilage-date').value = today;
-        document.getElementById('employee-start-date').value = today;
+        document.getElementById('purchase-date').value = todayISO();
+        document.getElementById('spoilage-date').value = todayISO();
+        document.getElementById('employee-start-date').value = todayISO();
 
 
         // --- Tab Switching Logic ---
@@ -1178,6 +1219,10 @@
                 tabContents.forEach(c => c.classList.remove('active'));
                 link.classList.add('active:bg-gray-700', 'bg-gray-700');
                 document.getElementById(link.dataset.tab).classList.add('active');
+                 if (link.dataset.tab === 'sales-management') {
+                    setOrderLookupDatesFromPreset();
+                    elements.orderLookupBtn.click();
+                }
             });
         });
 
@@ -1381,7 +1426,33 @@
         }
         
         // --- Sales & Order Lookup Logic ---
-        // The addSaleForm event listener is removed as per user request.
+        function setOrderLookupDatesFromPreset() {
+            const preset = elements.orderLookupPresetFilter.value;
+            const now = new Date();
+            let startDate, endDate = new Date(now);
+
+            now.setHours(0, 0, 0, 0);
+            endDate.setHours(23, 59, 59, 999);
+
+            if (preset === 'this_month') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            } else if (preset === 'this_quarter') {
+                const quarter = Math.floor(now.getMonth() / 3);
+                startDate = new Date(now.getFullYear(), quarter * 3, 1);
+            } else if (preset === 'this_year') {
+                startDate = new Date(now.getFullYear(), 0, 1);
+            } else {
+                elements.orderLookupStartDate.disabled = false;
+                elements.orderLookupEndDate.disabled = false;
+                return;
+            }
+
+            elements.orderLookupStartDate.value = startDate.toISOString().split('T')[0];
+            elements.orderLookupEndDate.value = endDate.toISOString().split('T')[0];
+            elements.orderLookupStartDate.disabled = true;
+            elements.orderLookupEndDate.disabled = true;
+        }
+        elements.orderLookupPresetFilter.addEventListener('change', setOrderLookupDatesFromPreset);
 
         elements.orderLookupBtn.addEventListener('click', () => {
             const startDate = elements.orderLookupStartDate.value;
@@ -1400,18 +1471,60 @@
             const end = new Date(endDate);
             end.setHours(23, 59, 59, 999);
 
-            const filteredSales = salesRecords.filter(sale => {
+            salesDataInPeriod = salesRecords.filter(sale => {
                 const saleDate = new Date(sale.date);
                 return saleDate >= start && saleDate <= end;
             });
             
-            renderOrderLookupResults(filteredSales);
+            renderOrderStats(salesDataInPeriod);
+            elements.orderDetailsTitle.classList.add('hidden');
+            elements.orderDetailsList.innerHTML = '';
         });
 
-        function renderOrderLookupResults(data) {
-            renderList(elements.orderLookupResults, data, (sale) => {
+        function renderOrderStats(salesInPeriod) {
+            const counts = {};
+            for (const status in orderStatuses) {
+                counts[status] = 0;
+            }
+
+            salesInPeriod.forEach(sale => {
+                if (counts[sale.status] !== undefined) {
+                    counts[sale.status]++;
+                }
+            });
+
+            elements.orderStats.innerHTML = Object.keys(orderStatuses).map(statusKey => {
+                const status = orderStatuses[statusKey];
+                const count = counts[statusKey];
+                const name = status[`name${currentLang === 'zh' ? '_zh' : ''}`] || status.name;
+                return `
+                    <div class="stat-card p-4 bg-white rounded-lg shadow-md text-center cursor-pointer border-2 border-transparent" style="--status-color: ${status.color};" data-status="${statusKey}">
+                        <p class="text-3xl font-bold" style="color: ${status.color};">${count}</p>
+                        <p class="text-sm font-medium text-gray-600">${name}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        elements.orderStats.addEventListener('click', (e) => {
+            const card = e.target.closest('.stat-card');
+            if (!card) return;
+
+            const statusKey = card.dataset.status;
+            const statusInfo = orderStatuses[statusKey];
+            const filteredData = salesDataInPeriod.filter(sale => sale.status === statusKey);
+
+            const statusName = statusInfo[`name${currentLang === 'zh' ? '_zh' : ''}`] || statusInfo.name;
+            elements.orderDetailsTitle.textContent = `${translations[currentLang].order_list}: ${statusName}`;
+            elements.orderDetailsTitle.classList.remove('hidden');
+
+            renderOrderDetailsList(filteredData);
+        });
+
+        function renderOrderDetailsList(data) {
+            renderList(elements.orderDetailsList, data, (sale) => {
                 const channelName = salesChannels[sale.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || sale.channelKey;
-                const statusInfo = orderStatuses[sale.status] || orderStatuses['pending'];
+                const statusInfo = orderStatuses[sale.status];
 
                 const statusOptions = Object.keys(orderStatuses).map(key => {
                     const status = orderStatuses[key];
@@ -1441,23 +1554,16 @@
             });
         }
         
-        elements.orderLookupResults.addEventListener('change', e => {
+        elements.orderDetailsList.addEventListener('change', e => {
             if (e.target.classList.contains('order-status-select')) {
                 const saleId = parseInt(e.target.dataset.id);
                 const newStatus = e.target.value;
 
-                const saleIndex = salesRecords.findIndex(s => s.id === saleId);
-                if (saleIndex !== -1) {
-                    salesRecords[saleIndex].status = newStatus;
-                    localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
-
-                    // Visual feedback
-                    const card = e.target.closest('.order-card');
-                    const statusInfo = orderStatuses[newStatus];
-                    if (card && statusInfo) {
-                        card.style.borderColor = statusInfo.color;
-                    }
-                }
+                salesRecords = salesRecords.map(s => s.id === saleId ? { ...s, status: newStatus } : s);
+                localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
+                
+                // Re-render stats and details list to reflect the change
+                elements.orderLookupBtn.click();
             }
         });
 
@@ -2202,18 +2308,16 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
             renderEmployees();
             renderList(elements.materialsList, rawMaterials, renderMaterial);
             renderList(elements.suppliersList, suppliers, renderSupplier);
-            renderList(elements.purchasesList, purchases.slice(0, 20), renderPurchase); // Limit to recent 20
+            renderList(elements.purchasesList, purchases.slice(0, 20), renderPurchase);
             renderList(elements.dishesList, dishes, renderDish);
             updateAllSelects();
             renderOtherCosts();
             renderSpoilageList();
             renderAdjustmentLogs();
             
-            const todaySales = salesRecords.filter(s => {
-                const saleDate = new Date(s.date).toISOString().split('T')[0];
-                return saleDate === todayISO();
-            });
-            renderOrderLookupResults(todaySales);
+            // Initial render for order lookup
+            setOrderLookupDatesFromPreset();
+            elements.orderLookupBtn.click();
         }
         
         // Initial Load
