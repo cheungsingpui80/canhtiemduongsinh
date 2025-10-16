@@ -57,46 +57,57 @@
             <!-- New Order Form (for Order Takers only) -->
             <div id="new-order-form-container" class="hidden bg-white p-6 rounded-lg shadow-md mb-8">
                 <h2 class="text-xl font-semibold mb-4" data-lang="receive_new_order">Nhận Đơn Hàng Mới</h2>
-                <form id="add-order-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                    <!-- Column 1 -->
-                    <div class="md:col-span-2 space-y-4">
-                         <div>
-                            <label for="order-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
-                            <select id="order-dish-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                <form id="add-order-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <!-- Left Column: Order Items -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-900" data-lang="order_items">Các Món Ăn</h3>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-5 gap-2 items-end">
+                                <div class="col-span-3">
+                                    <label for="add-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
+                                    <select id="add-dish-select" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                                </div>
+                                <div>
+                                    <label for="add-dish-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity_short">SL</label>
+                                    <input type="number" id="add-dish-quantity" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                <button type="button" id="add-dish-to-order-btn" class="bg-blue-600 text-white rounded-md h-10 flex items-center justify-center hover:bg-blue-700 text-xl font-bold">+</button>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="order-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
-                                <input type="number" id="order-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                            </div>
-                             <div>
-                                <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
-                                <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
-                            </div>
+                        <div id="current-order-items" class="space-y-2 min-h-[100px]">
+                            <!-- Items will be injected here -->
                         </div>
                     </div>
-                    <!-- Column 2 -->
-                    <div class="md:col-span-2 space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã Đơn Hàng</label>
-                                <input type="text" id="order-id" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3 bg-gray-100" readonly>
-                            </div>
-                            <div>
-                                <label for="order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên Khách Hàng</label>
-                                <input type="text" id="order-customer-name" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                            </div>
-                        </div>
+
+                    <!-- Right Column: Customer Info -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-900" data-lang="customer_details">Thông Tin Đơn Hàng</h3>
                          <div>
-                            <label for="order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="phone_number">Số Điện Thoại</label>
-                            <input type="tel" id="order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                            <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
+                            <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
                         </div>
-                         <div>
+                        <div>
+                            <label for="order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã Đơn Hàng</label>
+                            <input type="text" id="order-id" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3 bg-gray-100" readonly>
+                        </div>
+                        <div>
+                            <label for="order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên Khách Hàng</label>
+                            <input type="text" id="order-customer-name" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                        </div>
+                        <div>
                             <label for="order-customer-address" class="block text-sm font-medium text-gray-700" data-lang="delivery_address">Địa chỉ giao hàng</label>
                             <input type="text" id="order-customer-address" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
                         </div>
+                        <div>
+                            <label for="order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="phone_number">Số Điện Thoại</label>
+                            <input type="tel" id="order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                        </div>
                     </div>
-                    <button type="submit" class="md:col-span-4 w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="add_order_btn">Thêm Đơn Hàng</button>
+
+                    <!-- Submit Button -->
+                    <div class="md:col-span-2">
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="add_order_btn">Thêm Đơn Hàng</button>
+                    </div>
                 </form>
             </div>
 
@@ -165,6 +176,10 @@
                 total_time: 'Tổng thời gian',
                 completed_at: 'Hoàn thành lúc',
                 time_in_stage: 'TG trong khâu',
+                order_items: 'Các Món Ăn',
+                customer_details: 'Thông Tin Đơn Hàng',
+                quantity_short: 'SL',
+                no_items_added: 'Chưa có món nào được thêm.',
 
             },
             zh: {
@@ -205,6 +220,10 @@
                 total_time: '總時間',
                 completed_at: '完成於',
                 time_in_stage: '階段時間',
+                order_items: '訂單項目',
+                customer_details: '訂單詳情',
+                quantity_short: '數量',
+                no_items_added: '尚未加入任何菜式。',
             }
         };
 
@@ -280,6 +299,7 @@
         let activeOrders = JSON.parse(localStorage.getItem('activeOrders')) || [];
         let completedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
         let employees = JSON.parse(localStorage.getItem('employees')) || [];
+        let currentOrderItems = [];
         
         const salesChannels = {
             'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內', externalId: false },
@@ -303,6 +323,9 @@
         const userInfoDiv = document.getElementById('user-info');
         const orderChannelSelect = document.getElementById('order-channel-select');
         const orderIdInput = document.getElementById('order-id');
+        const addDishToOrderBtn = document.getElementById('add-dish-to-order-btn');
+        const currentOrderItemsContainer = document.getElementById('current-order-items');
+
 
         function initializeMainView(user) {
             loginView.classList.add('hidden');
@@ -370,6 +393,11 @@
         addOrderForm.addEventListener('submit', async e => {
             e.preventDefault();
             
+            if (currentOrderItems.length === 0) {
+                alert('Vui lòng thêm ít nhất một món ăn vào đơn hàng.');
+                return;
+            }
+
             const channelKey = document.getElementById('order-channel-select').value;
             const channel = salesChannels[channelKey];
             let orderIdToSave = document.getElementById('order-id').value;
@@ -387,8 +415,7 @@
             
             const newOrder = {
                 id: Date.now(),
-                dishId: parseInt(document.getElementById('order-dish-select').value),
-                quantity: parseInt(document.getElementById('order-quantity').value),
+                items: [...currentOrderItems],
                 channelKey: channelKey,
                 customer: {
                     orderId: orderIdToSave,
@@ -405,10 +432,12 @@
                 }
             };
 
-            if (newOrder.dishId && newOrder.quantity > 0 && newOrder.channelKey && newOrder.customer.orderId) {
+            if (newOrder.channelKey && newOrder.customer.orderId) {
                 activeOrders.unshift(newOrder);
                 localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
                 const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+                
+                currentOrderItems = [];
                 renderAll(currentUser.role);
                 e.target.reset();
                 orderChannelSelect.dispatchEvent(new Event('change')); // Reset order ID
@@ -422,6 +451,7 @@
             if (rolesConfig[role].canSee.includes('completed')) {
                 renderCompletedOrders();
             }
+            renderCurrentOrderItems();
         }
 
         function renderOrderKanban(role) {
@@ -447,13 +477,17 @@
         }
         
         function renderOrderCard(order, role) {
-            const dish = findById(dishes, order.dishId);
             const channelName = salesChannels[order.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || order.channelKey;
             
             let actionButton = '';
             let stageStartTime;
             let cardColorClass = 'border-blue-500';
             
+            const itemsHtml = order.items.map(item => {
+                const dish = findById(dishes, item.dishId);
+                return `<li class="text-sm text-gray-800">${dish ? dish.name : 'Unknown Dish'} <span class="font-semibold">(x${item.quantity})</span></li>`;
+            }).join('');
+
             if (order.status === 'new') {
                  if (role === 'taker' || role === 'kitchen') {
                     actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded hover:bg-blue-600 confirm-prepare-btn" data-id="${order.id}">${translations[currentLang].confirm_prepare}</button>`;
@@ -461,7 +495,7 @@
                  stageStartTime = order.timestamps.created;
             } else if (order.status === 'preparing') {
                 cardColorClass = 'border-red-500 bg-red-50';
-                if (role === 'taker' || role === 'shipper' || role === 'kitchen') { // Kitchen also needs to move it on
+                if (role === 'taker' || role === 'shipper' || role === 'kitchen') {
                     actionButton = `<button class="w-full mt-3 bg-yellow-500 text-white text-sm py-1.5 rounded hover:bg-yellow-600 confirm-deliver-btn" data-id="${order.id}">${translations[currentLang].confirm_deliver}</button>`;
                 }
                 stageStartTime = order.timestamps.confirmedByKitchen;
@@ -477,14 +511,15 @@
                 <div class="order-card bg-white p-3 rounded-md shadow-sm border-l-4 ${cardColorClass}" data-stage-start-time="${stageStartTime}">
                     <div class="flex justify-between items-start">
                          <div>
-                            <p class="font-bold text-gray-800">${dish ? dish.name : 'Unknown Dish'} (x${order.quantity})</p>
-                            <p class="text-xs text-gray-500">${translations[currentLang].order_from}: <span class="font-semibold">${channelName}</span> | <span class="font-mono">${order.customer.orderId}</span></p>
+                            <p class="font-bold text-gray-800">${order.customer.orderId}</p>
+                            <p class="text-xs text-gray-500">${translations[currentLang].order_from}: <span class="font-semibold">${channelName}</span></p>
                          </div>
                          <div class="text-right">
                             <div class="font-semibold text-sm timer">00:00</div>
                             <div class="text-xs text-gray-400">${translations[currentLang].time_in_stage}</div>
                          </div>
                     </div>
+                    <ul class="list-disc list-inside ml-4 mt-2">${itemsHtml}</ul>
                      <div class="text-xs text-gray-700 mt-2 pt-2 border-t border-dashed">
                         ${order.customer.name ? `<p><strong>KH:</strong> ${order.customer.name}</p>` : ''}
                         ${order.customer.phone ? `<p><strong>SĐT:</strong> ${order.customer.phone}</p>` : ''}
@@ -497,14 +532,14 @@
         
         function renderCompletedOrders() {
             renderList(completedOrders, completedOrdersList, (order) => {
-                const dish = findById(dishes, order.dishId);
+                const dishName = order.items.map(i => findById(dishes, i.dishId)?.name || '').join(', ');
                 const totalTime = formatTime(order.timestamps.completed - order.timestamps.created);
                 const completedTime = new Date(order.timestamps.completed).toLocaleTimeString('vi-VN');
                 return `
                     <div class="p-3 bg-gray-50 rounded-md border text-sm">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="font-semibold">${dish ? dish.name : 'N/A'} (x${order.quantity}) - <span class="font-mono">${order.customer.orderId}</span></p>
+                                <p class="font-semibold">${dishName} - <span class="font-mono">${order.customer.orderId}</span></p>
                                 <p class="text-xs text-gray-500">${order.customer.name || ''} - ${order.customer.phone || ''}</p>
                             </div>
                             <div class="text-right">
@@ -516,7 +551,7 @@
                 `;
             }, 'empty_data', completedOrdersList);
         }
-
+        
         function renderList(data, container, renderItemFn, emptyTextKey, listContainer) {
             if (data.length === 0) {
                 container.innerHTML = `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang][emptyTextKey]}</p>`;
@@ -554,26 +589,29 @@
             
             const order = { ...activeOrders[orderIndex] };
             order.timestamps.completed = Date.now();
+            
+            order.items.forEach(item => {
+                const dish = findById(dishes, item.dishId);
+                const channel = salesChannels[order.channelKey];
+                if (!dish || !channel) return;
 
-            const dish = findById(dishes, order.dishId);
-            const channel = salesChannels[order.channelKey];
-            if (!dish || !channel) return;
+                const totalRevenue = dish.price * item.quantity;
+                const commissionFee = totalRevenue * channel.commission;
 
-            const totalRevenue = dish.price * order.quantity;
-            const commissionFee = totalRevenue * channel.commission;
-
-            salesRecords.unshift({
-                id: Date.now(),
-                date: new Date(order.timestamps.created).toISOString().split('T')[0],
-                dishId: order.dishId,
-                quantity: order.quantity,
-                channelKey: order.channelKey,
-                totalRevenue,
-                commissionFee,
-                netRevenue: totalRevenue - commissionFee,
-                dishName: dish.name,
-                dishCost: dish.cost
+                salesRecords.unshift({
+                    id: Date.now() + Math.random(),
+                    date: new Date(order.timestamps.created).toISOString().split('T')[0],
+                    dishId: item.dishId,
+                    quantity: item.quantity,
+                    channelKey: order.channelKey,
+                    totalRevenue,
+                    commissionFee,
+                    netRevenue: totalRevenue - commissionFee,
+                    dishName: dish.name,
+                    dishCost: dish.cost
+                });
             });
+
             localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
             
             completedOrders.unshift(order);
@@ -584,9 +622,9 @@
             
             renderAll(role);
         }
-
+        
         function populateOrderFormSelects() {
-            const dishSelect = document.getElementById('order-dish-select');
+            const dishSelect = document.getElementById('add-dish-select');
             const channelSelect = document.getElementById('order-channel-select');
             
             dishSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_dish} --</option>`;
@@ -632,6 +670,52 @@
             const employeeId = parseInt(e.target.value);
             populateRoleSelect(employeeId);
         });
+
+        // --- Multi-dish logic ---
+        addDishToOrderBtn.addEventListener('click', () => {
+            const dishSelect = document.getElementById('add-dish-select');
+            const quantityInput = document.getElementById('add-dish-quantity');
+            const dishId = parseInt(dishSelect.value);
+            const quantity = parseInt(quantityInput.value);
+
+            if (dishId && quantity > 0) {
+                const existingItem = currentOrderItems.find(item => item.dishId === dishId);
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    currentOrderItems.push({ dishId, quantity });
+                }
+                renderCurrentOrderItems();
+                quantityInput.value = 1;
+                dishSelect.value = '';
+            }
+        });
+
+        currentOrderItemsContainer.addEventListener('click', e => {
+            if (e.target.classList.contains('remove-order-item-btn') || e.target.closest('.remove-order-item-btn')) {
+                const button = e.target.closest('.remove-order-item-btn');
+                const index = parseInt(button.dataset.index);
+                currentOrderItems.splice(index, 1);
+                renderCurrentOrderItems();
+            }
+        });
+
+        function renderCurrentOrderItems() {
+            if (currentOrderItems.length === 0) {
+                currentOrderItemsContainer.innerHTML = `<p class="text-center text-sm text-gray-500 pt-4" data-lang="no_items_added">${translations[currentLang].no_items_added}</p>`;
+                return;
+            }
+            currentOrderItemsContainer.innerHTML = currentOrderItems.map((item, index) => {
+                const dish = findById(dishes, item.dishId);
+                return `
+                    <div class="flex justify-between items-center p-2 bg-blue-50 rounded-md text-sm">
+                        <span><strong>${dish.name}</strong> x ${item.quantity}</span>
+                        <button type="button" class="remove-order-item-btn text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
 
         // --- Timers Update ---
         setInterval(() => {
