@@ -213,6 +213,26 @@
         </div>
     </div>
 
+    <!-- Cancel Order Modal -->
+    <div id="cancel-order-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div class="p-6 border-b">
+                 <h2 class="text-xl font-semibold" data-lang="cancel_order_title">Hủy Đơn Hàng</h2>
+            </div>
+            <form id="cancel-order-form" class="p-6 space-y-4">
+                <input type="hidden" id="cancel-order-id-input">
+                <div>
+                    <label for="cancellation-reason" class="block text-sm font-medium text-gray-700" data-lang="cancel_reason_prompt">Lý do hủy đơn</label>
+                    <textarea id="cancellation-reason" required rows="3" class="mt-1 block w-full border-gray-300 rounded-lg py-2 px-3 focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                </div>
+            </form>
+            <div class="p-6 border-t flex gap-4">
+                 <button type="submit" form="cancel-order-form" class="w-full bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold" data-lang="confirm_cancellation">Xác Nhận Hủy</button>
+                 <button type="button" id="close-cancel-modal-btn" class="w-full bg-gray-200 text-gray-700 py-2.5 rounded-lg hover:bg-gray-300 font-semibold" data-lang="cancel_edit">Không</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -260,7 +280,10 @@
                 no_items_added: 'Chưa có món nào được thêm.',
                 edit_order: 'Chỉnh Sửa Đơn Hàng',
                 save_changes: 'Lưu Thay Đổi',
-                cancel_edit: 'Hủy'
+                cancel_edit: 'Hủy',
+                cancel_order_title: 'Hủy Đơn Hàng',
+                cancel_reason_prompt: 'Lý do hủy đơn',
+                confirm_cancellation: 'Xác Nhận Hủy'
             },
             zh: {
                 login_title: '登入',
@@ -305,7 +328,10 @@
                 no_items_added: '尚未加入任何菜式。',
                 edit_order: '編輯訂單',
                 save_changes: '儲存變更',
-                cancel_edit: '取消'
+                cancel_edit: '取消',
+                cancel_order_title: '取消訂單',
+                cancel_reason_prompt: '取消原因',
+                confirm_cancellation: '確認取消'
             }
         };
 
@@ -380,6 +406,7 @@
         let salesRecords = JSON.parse(localStorage.getItem('salesRecords')) || [];
         let activeOrders = JSON.parse(localStorage.getItem('activeOrders')) || [];
         let completedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
+        let cancelledOrders = JSON.parse(localStorage.getItem('cancelledOrders')) || [];
         let employees = JSON.parse(localStorage.getItem('employees')) || [];
         let currentOrderItems = [];
         let editingOrderItems = [];
@@ -410,6 +437,7 @@
         const currentOrderItemsContainer = document.getElementById('current-order-items');
         const editOrderModal = document.getElementById('edit-order-modal');
         const editOrderForm = document.getElementById('edit-order-form');
+        const cancelOrderModal = document.getElementById('cancel-order-modal');
 
 
         function initializeMainView(user) {
@@ -509,6 +537,7 @@
                     address: document.getElementById('order-customer-address').value,
                 },
                 status: 'new',
+                editHistory: [],
                 timestamps: {
                     created: Date.now(),
                     confirmedByKitchen: null,
@@ -522,12 +551,10 @@
                 localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
                 const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
                 
-                // Clear form and temporary items list first
                 currentOrderItems = [];
                 addOrderForm.reset();
-                orderChannelSelect.dispatchEvent(new Event('change')); // Reset order ID
+                orderChannelSelect.dispatchEvent(new Event('change')); 
                 
-                // Then, re-render the whole UI
                 renderAll(currentUser.role);
             } else {
                 alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
@@ -680,7 +707,7 @@
             } else if (button.classList.contains('edit-order-btn')) {
                 openEditModal(orderId);
             } else if (button.classList.contains('cancel-order-btn')) {
-                cancelOrder(orderId, currentUser.role);
+                openCancelModal(orderId);
             }
         });
 
@@ -830,15 +857,13 @@
 
             editOrderModal.dataset.editingId = orderId;
 
-            // Populate fields
             document.getElementById('edit-order-channel-select').value = orderToEdit.channelKey;
             document.getElementById('edit-order-id').value = orderToEdit.customer.orderId;
             document.getElementById('edit-order-customer-name').value = orderToEdit.customer.name;
             document.getElementById('edit-order-customer-address').value = orderToEdit.customer.address;
             document.getElementById('edit-order-customer-phone').value = orderToEdit.customer.phone;
 
-            // Populate items
-            editingOrderItems = JSON.parse(JSON.stringify(orderToEdit.items)); // Deep copy
+            editingOrderItems = JSON.parse(JSON.stringify(orderToEdit.items)); 
             renderEditingOrderItems();
             
             editOrderModal.classList.remove('hidden');
@@ -852,9 +877,7 @@
             editOrderModal.dataset.editingId = '';
         }
 
-        editOrderModal.querySelectorAll('#close-edit-modal-btn, #cancel-edit-modal-btn').forEach(btn => {
-            btn.addEventListener('click', closeEditModal);
-        });
+        document.getElementById('close-edit-modal-btn').addEventListener('click', closeEditModal);
         
         editOrderForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -871,11 +894,37 @@
                 return;
             }
 
-            // Update order data
-            activeOrders[orderIndex].customer.name = document.getElementById('edit-order-customer-name').value;
-            activeOrders[orderIndex].customer.address = document.getElementById('edit-order-customer-address').value;
-            activeOrders[orderIndex].customer.phone = document.getElementById('edit-order-customer-phone').value;
-            activeOrders[orderIndex].items = editingOrderItems;
+            const originalOrder = JSON.parse(JSON.stringify(activeOrders[orderIndex])); 
+
+            const updatedOrderData = {
+                customer: {
+                    name: document.getElementById('edit-order-customer-name').value,
+                    address: document.getElementById('edit-order-customer-address').value,
+                    phone: document.getElementById('edit-order-customer-phone').value,
+                },
+                items: editingOrderItems
+            };
+
+            const changes = generateChangesLog(originalOrder, updatedOrderData);
+
+            if (changes.length > 0) {
+                const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+                const historyEntry = {
+                    employeeId: currentUser.id,
+                    employeeName: currentUser.name,
+                    timestamp: Date.now(),
+                    changes: changes
+                };
+                if (!activeOrders[orderIndex].editHistory) {
+                    activeOrders[orderIndex].editHistory = [];
+                }
+                activeOrders[orderIndex].editHistory.push(historyEntry);
+            }
+
+            activeOrders[orderIndex].customer.name = updatedOrderData.customer.name;
+            activeOrders[orderIndex].customer.address = updatedOrderData.customer.address;
+            activeOrders[orderIndex].customer.phone = updatedOrderData.customer.phone;
+            activeOrders[orderIndex].items = updatedOrderData.items;
 
             localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
             
@@ -903,7 +952,9 @@
             }
         });
         
-        document.getElementById('editing-order-items').addEventListener('click', e => {
+        const editingItemsContainer = document.getElementById('editing-order-items');
+
+        editingItemsContainer.addEventListener('click', e => {
             const button = e.target.closest('.remove-editing-item-btn');
             if(button) {
                 const index = parseInt(button.dataset.index);
@@ -912,15 +963,72 @@
             }
         });
 
+        editingItemsContainer.addEventListener('change', e => {
+            const input = e.target;
+            if (input.classList.contains('edit-quantity-input')) {
+                const index = parseInt(input.dataset.index, 10);
+                const newQuantity = parseInt(input.value, 10);
+
+                if (index >= 0 && index < editingOrderItems.length) {
+                    if (newQuantity > 0) {
+                         editingOrderItems[index].quantity = newQuantity;
+                    } else {
+                        editingOrderItems.splice(index, 1);
+                        renderEditingOrderItems(); 
+                    }
+                }
+            }
+        });
+
         function renderEditingOrderItems() {
-            renderItemsList(editingOrderItems, document.getElementById('editing-order-items'), 'no_items_added', true);
+            renderItemsList(editingOrderItems, editingItemsContainer, 'no_items_added', true);
         }
-        
-        function cancelOrder(orderId, role) {
-            activeOrders = activeOrders.filter(order => order.id !== orderId);
+
+        // --- CANCEL MODAL LOGIC ---
+        function openCancelModal(orderId) {
+            document.getElementById('cancel-order-id-input').value = orderId;
+            cancelOrderModal.classList.remove('hidden');
+            cancelOrderModal.classList.add('flex');
+        }
+
+        document.getElementById('close-cancel-modal-btn').addEventListener('click', () => {
+            cancelOrderModal.classList.add('hidden');
+            cancelOrderModal.classList.remove('flex');
+            document.getElementById('cancel-order-form').reset();
+        });
+
+        document.getElementById('cancel-order-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const orderId = parseInt(document.getElementById('cancel-order-id-input').value);
+            const reason = document.getElementById('cancellation-reason').value.trim();
+            
+            if (!reason) {
+                alert('Vui lòng nhập lý do hủy đơn.');
+                return;
+            }
+
+            const orderIndex = activeOrders.findIndex(o => o.id === orderId);
+            if (orderIndex === -1) { return; }
+            
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            const orderToCancel = activeOrders[orderIndex];
+
+            const cancellationRecord = {
+                order: orderToCancel,
+                reason: reason,
+                cancelledBy: { id: currentUser.id, name: currentUser.name },
+                timestamp: Date.now()
+            };
+            
+            cancelledOrders.unshift(cancellationRecord);
+            localStorage.setItem('cancelledOrders', JSON.stringify(cancelledOrders));
+            
+            activeOrders.splice(orderIndex, 1);
             localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
-            renderAll(role);
-        }
+
+            document.getElementById('close-cancel-modal-btn').click();
+            renderAll(currentUser.role);
+        });
         
         function renderItemsList(items, container, emptyTextKey, isEditing = false) {
              if (items.length === 0) {
@@ -929,13 +1037,66 @@
             }
             container.innerHTML = items.map((item, index) => {
                 const dish = findById(dishes, item.dishId);
-                return `
-                    <div class="flex justify-between items-center p-2 bg-blue-50 rounded-lg text-sm">
-                        <span><strong>${dish.name}</strong> x ${item.quantity}</span>
-                        <button type="button" class="${isEditing ? 'remove-editing-item-btn' : 'remove-order-item-btn'} text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
-                    </div>
-                `;
+                if (isEditing) {
+                     return `
+                        <div class="flex justify-between items-center p-2 bg-blue-50 rounded-lg text-sm">
+                            <span class="font-semibold">${dish.name}</span>
+                            <div class="flex items-center gap-2">
+                                <input type="number" value="${item.quantity}" min="1" class="edit-quantity-input w-16 text-center border-gray-300 rounded-md py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500" data-index="${index}">
+                                <button type="button" class="remove-editing-item-btn text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                     return `
+                        <div class="flex justify-between items-center p-2 bg-blue-50 rounded-lg text-sm">
+                            <span><strong>${dish.name}</strong> x ${item.quantity}</span>
+                            <button type="button" class="remove-order-item-btn text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
+                        </div>
+                    `;
+                }
             }).join('');
+        }
+
+        function generateChangesLog(originalOrder, updatedOrderData) {
+            const changes = [];
+            const originalCustomer = originalOrder.customer;
+            const updatedCustomer = updatedOrderData.customer;
+
+            if (originalCustomer.name !== updatedCustomer.name) {
+                changes.push(`Tên KH: từ "${originalCustomer.name}" thành "${updatedCustomer.name}"`);
+            }
+            if (originalCustomer.address !== updatedCustomer.address) {
+                changes.push(`Địa chỉ: từ "${originalCustomer.address}" thành "${updatedCustomer.address}"`);
+            }
+            if (originalCustomer.phone !== updatedCustomer.phone) {
+                changes.push(`SĐT: từ "${originalCustomer.phone}" thành "${updatedCustomer.phone}"`);
+            }
+
+            const originalItemsMap = new Map(originalOrder.items.map(item => [item.dishId, item.quantity]));
+            const updatedItemsMap = new Map(updatedOrderData.items.map(item => [item.dishId, item.quantity]));
+
+            for (const [dishId, originalQuantity] of originalItemsMap.entries()) {
+                const dish = findById(dishes, dishId);
+                const dishName = dish ? dish.name : `#${dishId}`;
+                if (updatedItemsMap.has(dishId)) {
+                    const updatedQuantity = updatedItemsMap.get(dishId);
+                    if (originalQuantity !== updatedQuantity) {
+                        changes.push(`${dishName}: SL từ ${originalQuantity} thành ${updatedQuantity}`);
+                    }
+                } else {
+                    changes.push(`Xóa món: ${dishName} (SL: ${originalQuantity})`);
+                }
+            }
+
+            for (const [dishId, updatedQuantity] of updatedItemsMap.entries()) {
+                if (!originalItemsMap.has(dishId)) {
+                    const dish = findById(dishes, dishId);
+                    const dishName = dish ? dish.name : `#${dishId}`;
+                    changes.push(`Thêm món: ${dishName} (SL: ${updatedQuantity})`);
+                }
+            }
+            return changes;
         }
 
 
