@@ -155,7 +155,12 @@
 
     <!-- Edit Order Modal -->
     <div id="edit-order-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col relative">
+            <button id="x-close-edit-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             <div class="p-6 border-b">
                  <h2 class="text-xl font-semibold" data-lang="edit_order">Chỉnh Sửa Đơn Hàng</h2>
             </div>
@@ -878,7 +883,8 @@
         }
 
         document.getElementById('close-edit-modal-btn').addEventListener('click', closeEditModal);
-        
+        document.getElementById('x-close-edit-modal-btn').addEventListener('click', closeEditModal);
+
         editOrderForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const orderId = parseInt(editOrderModal.dataset.editingId);
@@ -929,8 +935,8 @@
             localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
             
             const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            closeEditModal(); // Close modal first to provide immediate feedback
             renderAll(currentUser.role);
-            closeEditModal(); // Tự động đóng cửa sổ chỉnh sửa sau khi đã lưu các thay đổi thành công.
         });
 
         document.getElementById('add-dish-to-edit-order-btn').addEventListener('click', () => {
