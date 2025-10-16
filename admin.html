@@ -49,7 +49,7 @@
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l.383-1.437M7.5 14.25L5.106 5.165A2.25 2.25 0 002.854 3H2.25" />
                     </svg>
-                    <span data-lang="order_lookup">Tra Cứu Đơn Hàng</span>
+                    <span data-lang="order_lookup">Ghi Nhận & Tra Cứu Đơn</span>
                 </a>
                 <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="menu-management">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -167,7 +167,27 @@
 
             <!-- Tab: Tra Cứu Đơn Hàng -->
             <div id="sales-management" class="tab-content">
-                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="order_lookup_title">Tra Cứu Đơn Hàng</h1>
+                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="order_lookup_title">Ghi Nhận & Tra Cứu Đơn Hàng</h1>
+                 <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                    <h2 class="text-xl font-semibold mb-4" data-lang="record_sale">Ghi Nhận Đơn Hàng Mới</h2>
+                    <form id="add-sale-form" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                        <div class="md:col-span-2">
+                            <label for="sale-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
+                            <select id="sale-dish-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                        </div>
+                        <div>
+                            <label for="sale-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity">Số lượng</label>
+                            <input type="number" id="sale-quantity" min="1" value="1" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                        </div>
+                        <div>
+                             <label for="sale-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán hàng</label>
+                            <select id="sale-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                        </div>
+                        <div>
+                             <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700" data-lang="add_order_btn">Thêm Đơn</button>
+                        </div>
+                    </form>
+                 </div>
                  <div class="bg-white p-6 rounded-lg shadow-md">
                     <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
                         <div>
@@ -668,7 +688,10 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-
+        // --- IMPORTANT: API KEY ---
+        // Vui lòng điền API Key của bạn từ Google AI Studio vào đây để các tính năng AI hoạt động.
+        const GEMINI_API_KEY = ""; 
+        
         const translations = {
             vi: {
                 dashboard_title: 'Bảng Điều Khiển',
@@ -703,8 +726,8 @@
                 role_taker: 'Nhận Đơn',
                 role_kitchen: 'Bếp',
                 role_shipper: 'Giao Hàng',
-                order_lookup: 'Tra Cứu Đơn Hàng',
-                order_lookup_title: 'Tra Cứu Đơn Hàng',
+                order_lookup: 'Ghi Nhận & Tra Cứu Đơn',
+                order_lookup_title: 'Ghi Nhận & Tra Cứu Đơn Hàng',
                 search_btn: 'Tra cứu',
                 order_history: 'Lịch Sử Đơn Hàng',
                 menu_management: 'Quản Lý Thực Đơn',
@@ -717,6 +740,8 @@
                 adjustment_logs: 'Lịch Sử Điều Chỉnh',
                 dish: 'Món ăn',
                 sales_channel: 'Kênh bán hàng',
+                record_sale: 'Ghi Nhận Đơn Hàng Mới',
+                add_order_btn: 'Thêm Đơn',
                 menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
                 add_new_dish: 'Thêm Món Mới',
                 dish_name: 'Tên món',
@@ -816,6 +841,7 @@
                 thinking: 'Đang nghĩ...',
                 suggestion_error: 'Không thể nhận được gợi ý. Vui lòng thử lại.',
                 ai_connection_error: 'Đã xảy ra lỗi khi kết nối với AI.',
+                api_key_missing: 'Lỗi: Vui lòng thêm API Key của bạn vào đầu file script để sử dụng tính năng AI.',
                 select_material: 'Chọn nguyên liệu',
                 select_supplier: 'Chọn NCC',
                 select_dish: 'Chọn món ăn',
@@ -861,8 +887,8 @@
                 role_taker: '接單員',
                 role_kitchen: '廚房',
                 role_shipper: '配送員',
-                order_lookup: '訂單查詢',
-                order_lookup_title: '訂單查詢',
+                order_lookup: '記錄與查詢訂單',
+                order_lookup_title: '記錄與查詢訂單',
                 search_btn: '查詢',
                 order_history: '訂單歷史',
                 menu_management: '菜單管理',
@@ -875,6 +901,8 @@
                 adjustment_logs: '調整日誌',
                 dish: '菜式',
                 sales_channel: '銷售渠道',
+                record_sale: '記錄新訂單',
+                add_order_btn: '新增訂單',
                 menu_management_title: '菜單與物料清單(BOM)管理',
                 add_new_dish: '新增菜式',
                 dish_name: '菜式名稱',
@@ -974,6 +1002,7 @@
                 thinking: '思考中...',
                 suggestion_error: '無法獲取建議。請重試。',
                 ai_connection_error: '連接AI時發生錯誤。',
+                api_key_missing: '錯誤：請在腳本文件頂部添加您的 API Key 以使用 AI 功能。',
                 select_material: '選擇原材料',
                 select_supplier: '選擇供應商',
                 select_dish: '選擇菜式',
@@ -1013,7 +1042,6 @@
                 btn.classList.toggle('active', btn.dataset.langCode === lang);
             });
 
-            // Re-render dynamic content that needs translation
             renderApp();
         };
 
@@ -1027,18 +1055,28 @@
         const formatCurrency = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
         const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
         const todayISO = () => new Date().toISOString().split('T')[0];
+        
+        const loadFromStorage = (key) => {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error(`Error parsing ${key} from localStorage`, e);
+                return []; // Return empty array on error to prevent app crash
+            }
+        };
 
         // --- Data Initialization from localStorage ---
-        let dishes = JSON.parse(localStorage.getItem('dishes')) || [];
-        let rawMaterials = JSON.parse(localStorage.getItem('rawMaterials')) || [];
-        let suppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
-        let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
-        let spoilageRecords = JSON.parse(localStorage.getItem('spoilageRecords')) || [];
-        let adjustmentLogs = JSON.parse(localStorage.getItem('adjustmentLogs')) || [];
-        let salesRecords = JSON.parse(localStorage.getItem('salesRecords')) || [];
-        let employees = JSON.parse(localStorage.getItem('employees')) || [];
+        let dishes = loadFromStorage('dishes');
+        let rawMaterials = loadFromStorage('rawMaterials');
+        let suppliers = loadFromStorage('suppliers');
+        let purchases = loadFromStorage('purchases');
+        let spoilageRecords = loadFromStorage('spoilageRecords');
+        let adjustmentLogs = loadFromStorage('adjustmentLogs');
+        let salesRecords = loadFromStorage('salesRecords');
+        let employees = loadFromStorage('employees');
+        let otherCosts = loadFromStorage('otherCosts');
         let currentBomItems = [];
-        let otherCosts = [];
 
         const salesChannels = {
             'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內' },
@@ -1073,6 +1111,9 @@
             terminateActions: document.getElementById('terminate-actions'),
             terminationInfo: document.getElementById('termination-info'),
             // Sales / Order Lookup
+            addSaleForm: document.getElementById('add-sale-form'),
+            saleDishSelect: document.getElementById('sale-dish-select'),
+            saleChannelSelect: document.getElementById('sale-channel-select'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
             orderLookupEndDate: document.getElementById('order-lookup-end-date'),
             orderLookupBtn: document.getElementById('order-lookup-btn'),
@@ -1273,7 +1314,6 @@
 
         elements.closeEmployeeModalBtn.addEventListener('click', () => {
              elements.employeeDetailsModal.classList.remove('active');
-             // Reset the form state for next time
              elements.terminateEmployeeForm.classList.add('hidden');
              elements.terminateActions.classList.remove('hidden');
              elements.terminateEmployeeForm.reset();
@@ -1311,17 +1351,14 @@
             button.innerHTML = loadingSpinner;
             button.disabled = true;
 
-            const apiKey = "AIzaSyDGY_sja2mUqs4KlE7bCKmwOKoFz3sfMRg";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-            if (apiKey === "DÁN_API_KEY_CỦA_BẠN_VÀO_ĐÂY") {
-                const errorMsg = "Lỗi: Vui lòng thêm API Key của bạn để sử dụng tính năng AI.";
-                alert(errorMsg);
-                console.error(errorMsg);
+            if (!GEMINI_API_KEY) {
+                alert(translations[currentLang].api_key_missing);
                 button.innerHTML = originalButtonHTML;
                 button.disabled = false;
                 return translations[currentLang].ai_connection_error;
             }
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
             try {
                 const payload = { contents: [{ parts: [{ text: prompt }] }] };
@@ -1352,7 +1389,47 @@
             container.innerHTML = items.length ? items.map(renderItemFn).join('') : `<p class="text-gray-500 text-sm p-4 text-center">${emptyText}</p>`;
         }
         
-        // --- Order Lookup Logic ---
+        // --- Sales & Order Lookup Logic ---
+        elements.addSaleForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const dishId = parseInt(elements.saleDishSelect.value);
+            const quantity = parseInt(document.getElementById('sale-quantity').value);
+            const channelKey = elements.saleChannelSelect.value;
+            
+            const dish = findById(dishes, dishId);
+            if (!dish || !channelKey || !quantity) {
+                 alert('Vui lòng chọn đủ thông tin món ăn, số lượng và kênh bán.');
+                 return;
+            }
+            
+            const channel = salesChannels[channelKey];
+            const totalRevenue = dish.price * quantity;
+            const commissionFee = totalRevenue * channel.commission;
+            const netRevenue = totalRevenue - commissionFee;
+
+            const newSale = {
+                id: Date.now(),
+                date: todayISO(),
+                dishId: dish.id,
+                dishName: dish.name,
+                dishCost: dish.cost,
+                quantity: quantity,
+                channelKey: channelKey,
+                totalRevenue: totalRevenue,
+                commissionFee: commissionFee,
+                netRevenue: netRevenue
+            };
+            
+            salesRecords.unshift(newSale);
+            localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
+            
+            // Re-render today's orders
+            const todaySales = salesRecords.filter(s => s.date === todayISO());
+            renderOrderLookupResults(todaySales);
+            e.target.reset();
+            document.getElementById('sale-quantity').value = 1;
+        });
+
         elements.orderLookupBtn.addEventListener('click', () => {
             const startDate = elements.orderLookupStartDate.value;
             const endDate = elements.orderLookupEndDate.value;
@@ -1423,12 +1500,23 @@
             </div>`;
         };
         
-        function populateSelect(select, items, placeholderKey, valueField = 'id', textField = 'name') {
+        function populateSelect(select, items, placeholderKey, valueField = 'id', textField = 'name', selectedValue = null) {
             const placeholder = translations[currentLang][placeholderKey];
             select.innerHTML = `<option value="">-- ${placeholder} --</option>`;
             items.forEach(item => {
-                select.innerHTML += `<option value="${item[valueField]}">${item[textField]}</option>`;
+                const isSelected = selectedValue && item[valueField] == selectedValue;
+                select.innerHTML += `<option value="${item[valueField]}" ${isSelected ? 'selected' : ''}>${item[textField]}</option>`;
             });
+        }
+
+        function populateSalesChannelsSelect() {
+            const select = elements.saleChannelSelect;
+            const placeholder = translations[currentLang]['select_channel'];
+            select.innerHTML = `<option value="">-- ${placeholder} --</option>`;
+             for (const key in salesChannels) {
+                const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
+                select.innerHTML += `<option value="${key}">${name}</option>`;
+            }
         }
         
         function updateAllSelects() {
@@ -1436,6 +1524,8 @@
             populateSelect(elements.purchaseMaterialSelect, rawMaterials, 'select_material');
             populateSelect(elements.purchaseSupplierSelect, suppliers, 'select_supplier');
             populateSelect(elements.spoilageMaterialSelect, rawMaterials, 'select_material');
+            populateSelect(elements.saleDishSelect, dishes, 'select_dish');
+            populateSalesChannelsSelect();
         }
 
         elements.addMaterialForm.addEventListener('submit', e => {
@@ -1574,17 +1664,18 @@
                 const purchaseId = parseInt(e.target.dataset.id);
                 const purchase = findById(purchases, purchaseId);
                 const material = findById(rawMaterials, purchase.materialId);
-                if (purchase) {
+                if (purchase && material) {
                     document.getElementById('edit-purchase-id').value = purchase.id;
                     document.getElementById('edit-purchase-date').value = purchase.date;
                     document.getElementById('edit-purchase-material-name').textContent = `${material.name} (${material.unit})`;
                     document.getElementById('edit-purchase-quantity').value = purchase.quantity;
                     document.getElementById('edit-purchase-total-price').value = purchase.totalPrice;
-                    populateSelect(document.getElementById('edit-purchase-supplier-select'), suppliers, 'select_supplier', purchase.supplierId);
+                    populateSelect(document.getElementById('edit-purchase-supplier-select'), suppliers, 'select_supplier', 'id', 'name', purchase.supplierId);
                     elements.editPurchaseModal.classList.add('active');
                 }
             }
         });
+
 
         elements.editPurchaseForm.addEventListener('submit', e => {
             e.preventDefault();
@@ -1844,17 +1935,17 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
         `;
 
         function migrateCosts() {
-            const oldOnetime = JSON.parse(localStorage.getItem('initial-investment-s'));
-            const oldMonthly = JSON.parse(localStorage.getItem('monthly-expenses-s'));
+            const oldOnetime = loadFromStorage('initial-investment-s');
+            const oldMonthly = loadFromStorage('monthly-expenses-s');
             let migrated = false;
 
-            if(oldOnetime && oldOnetime.length > 0) {
+            if(oldOnetime.length > 0) {
                 const mapped = oldOnetime.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'onetime'}));
                 otherCosts.push(...mapped);
                 localStorage.removeItem('initial-investment-s');
                 migrated = true;
             }
-            if(oldMonthly && oldMonthly.length > 0) {
+            if(oldMonthly.length > 0) {
                 const mapped = oldMonthly.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'monthly'}));
                 otherCosts.push(...mapped);
                 localStorage.removeItem('monthly-expenses-s');
@@ -1863,8 +1954,6 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
 
             if (migrated) {
                 localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
-            } else {
-                otherCosts = JSON.parse(localStorage.getItem('otherCosts')) || [];
             }
         }
 
@@ -2138,35 +2227,23 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
             renderEmployees();
             renderList(elements.materialsList, rawMaterials, renderMaterial);
             renderList(elements.suppliersList, suppliers, renderSupplier);
-            renderList(elements.purchasesList, purchases, renderPurchase);
+            renderList(elements.purchasesList, purchases.slice(0, 20), renderPurchase); // Limit to recent 20
             renderList(elements.dishesList, dishes, renderDish);
             updateAllSelects();
             renderOtherCosts();
             renderSpoilageList();
             renderAdjustmentLogs();
             
-            const todaySales = salesRecords.filter(s => s.date === todayISO());
+            const todaySales = salesRecords.filter(s => {
+                const saleDate = new Date(s.date).toISOString().split('T')[0];
+                return saleDate === todayISO();
+            });
             renderOrderLookupResults(todaySales);
         }
-
-        function migrateCosts() {
-            const oldOnetime = JSON.parse(localStorage.getItem('initial-investment-s'));
-            const oldMonthly = JSON.parse(localStorage.getItem('monthly-expenses-s'));
-            if ((oldOnetime && oldOnetime.length > 0) || (oldMonthly && oldMonthly.length > 0)) {
-                const mappedOnetime = oldOnetime ? oldOnetime.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'onetime'})) : [];
-                const mappedMonthly = oldMonthly ? oldMonthly.map(c => ({...c, id: Date.now() + Math.random(), frequency: 'monthly'})) : [];
-                otherCosts.push(...mappedOnetime, ...mappedMonthly);
-                localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
-                localStorage.removeItem('initial-investment-s');
-                localStorage.removeItem('monthly-expenses-s');
-            } else {
-                otherCosts = JSON.parse(localStorage.getItem('otherCosts')) || [];
-            }
-        }
         
+        // Initial Load
         setLanguage(currentLang);
     });
     </script>
 </body>
 </html>
-
