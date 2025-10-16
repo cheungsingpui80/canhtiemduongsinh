@@ -322,17 +322,16 @@
             renderAll(user.role);
         }
 
-        async function generateOrderId() {
+        function previewNextOrderId() {
             const today = new Date();
             const yyyymmdd = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
             const key = `order_counter_${yyyymmdd}`;
             let lastCounter = parseInt(localStorage.getItem(key) || '0');
-            const newCounter = lastCounter + 1;
-            localStorage.setItem(key, newCounter);
-            return `${yyyymmdd}.${newCounter.toString().padStart(7, '0')}`;
+            const nextCounter = lastCounter + 1;
+            return `${yyyymmdd}.${nextCounter.toString().padStart(7, '0')}`;
         }
 
-        orderChannelSelect.addEventListener('change', async (e) => {
+        orderChannelSelect.addEventListener('change', (e) => {
             const channelKey = e.target.value;
             const channel = salesChannels[channelKey];
             if (channel && channel.externalId) {
@@ -343,7 +342,7 @@
             } else {
                 orderIdInput.readOnly = true;
                 orderIdInput.classList.add('bg-gray-100');
-                orderIdInput.value = await generateOrderId();
+                orderIdInput.value = previewNextOrderId();
             }
         });
 
@@ -664,5 +663,4 @@
     </script>
 </body>
 </html>
-
 
