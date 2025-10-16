@@ -16,8 +16,7 @@
         .kanban-column { min-height: 70vh; }
         .order-card, .role-card { transition: all 0.2s ease-in-out; }
         .order-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-        .modal { display: none; }
-        .modal.active { display: flex; }
+        .modal { transition: opacity 0.3s ease; }
         .login-bg {
             background-color: #f0f4ff;
             background-image:
@@ -154,6 +153,67 @@
         </main>
     </div>
 
+    <!-- Edit Order Modal -->
+    <div id="edit-order-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b">
+                 <h2 class="text-xl font-semibold" data-lang="edit_order">Chỉnh Sửa Đơn Hàng</h2>
+            </div>
+            <form id="edit-order-form" class="p-6 space-y-6 overflow-y-auto">
+                <!-- Customer Info -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-medium text-gray-900" data-lang="customer_details">Thông Tin Đơn Hàng</h3>
+                     <div>
+                        <label for="edit-order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
+                        <select id="edit-order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500" disabled></select>
+                    </div>
+                    <div>
+                        <label for="edit-order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã Đơn Hàng</label>
+                        <input type="text" id="edit-order-id" required class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 bg-gray-100" readonly>
+                    </div>
+                    <div>
+                        <label for="edit-order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên Khách Hàng</label>
+                        <input type="text" id="edit-order-customer-name" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="edit-order-customer-address" class="block text-sm font-medium text-gray-700" data-lang="delivery_address">Địa chỉ giao hàng</label>
+                        <input type="text" id="edit-order-customer-address" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="edit-order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="phone_number">Số Điện Thoại</label>
+                        <input type="tel" id="edit-order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-medium text-gray-900" data-lang="order_items">Các Món Ăn</h3>
+                    <div class="p-4 bg-gray-50 rounded-xl">
+                       <div class="flex gap-2 items-end">
+                            <div class="flex-grow">
+                                <label for="edit-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
+                                <select id="edit-dish-select" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500"></select>
+                            </div>
+                            <div class="w-20 flex-shrink-0">
+                                <label for="edit-dish-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity_short">SL</label>
+                                <input type="number" id="edit-dish-quantity" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <button type="button" id="add-dish-to-edit-order-btn" class="bg-blue-600 text-white rounded-lg h-[46px] w-12 flex-shrink-0 flex items-center justify-center hover:bg-blue-700 text-2xl font-bold">+</button>
+                        </div>
+                    </div>
+                    <div id="editing-order-items" class="space-y-2 min-h-[100px]">
+                        <!-- Editing items will be injected here -->
+                    </div>
+                </div>
+            </form>
+            <div class="p-6 border-t mt-auto flex gap-4">
+                 <button type="submit" form="edit-order-form" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-semibold" data-lang="save_changes">Lưu Thay Đổi</button>
+                 <button type="button" id="close-edit-modal-btn" class="w-full bg-gray-200 text-gray-700 py-2.5 rounded-lg hover:bg-gray-300 font-semibold" data-lang="cancel_edit">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const translations = {
@@ -174,7 +234,6 @@
                 dish: 'Món ăn',
                 quantity: 'Số lượng',
                 sales_channel: 'Kênh bán',
-                customer_info: 'Thông tin KH (SĐT/Mã ĐH)',
                 add_order_btn: 'Thêm Đơn Hàng',
                 new_orders: 'Đơn Hàng Mới',
                 preparing: 'Đang Chuẩn Bị',
@@ -199,7 +258,9 @@
                 customer_details: 'Thông Tin Đơn Hàng',
                 quantity_short: 'SL',
                 no_items_added: 'Chưa có món nào được thêm.',
-
+                edit_order: 'Chỉnh Sửa Đơn Hàng',
+                save_changes: 'Lưu Thay Đổi',
+                cancel_edit: 'Hủy'
             },
             zh: {
                 login_title: '登入',
@@ -218,7 +279,6 @@
                 dish: '菜式',
                 quantity: '數量',
                 sales_channel: '銷售渠道',
-                customer_info: '客戶資訊(電話/訂單號)',
                 add_order_btn: '新增訂單',
                 new_orders: '新訂單',
                 preparing: '準備中',
@@ -243,6 +303,9 @@
                 customer_details: '訂單詳情',
                 quantity_short: '數量',
                 no_items_added: '尚未加入任何菜式。',
+                edit_order: '編輯訂單',
+                save_changes: '儲存變更',
+                cancel_edit: '取消'
             }
         };
 
@@ -319,6 +382,7 @@
         let completedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
         let employees = JSON.parse(localStorage.getItem('employees')) || [];
         let currentOrderItems = [];
+        let editingOrderItems = [];
         
         const salesChannels = {
             'AtStore': { name: 'Tại quán', commission: 0, name_zh: '店內', externalId: false },
@@ -344,6 +408,8 @@
         const orderIdInput = document.getElementById('order-id');
         const addDishToOrderBtn = document.getElementById('add-dish-to-order-btn');
         const currentOrderItemsContainer = document.getElementById('current-order-items');
+        const editOrderModal = document.getElementById('edit-order-modal');
+        const editOrderForm = document.getElementById('edit-order-form');
 
 
         function initializeMainView(user) {
@@ -511,6 +577,17 @@
             if (order.status === 'new') {
                  if (role === 'kitchen') {
                     actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2 confirm-prepare-btn" data-id="${order.id}"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span>${translations[currentLang].confirm_prepare}</span></button>`;
+                 } else if (role === 'taker') {
+                    actionButton = `<div class="flex gap-2 mt-3">
+                        <button class="w-1/2 bg-yellow-400 text-yellow-900 text-xs py-1.5 rounded-lg hover:bg-yellow-500 flex items-center justify-center gap-1 font-semibold edit-order-btn" data-id="${order.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            <span>${translations[currentLang].edit_order}</span>
+                        </button>
+                        <button class="w-1/2 bg-red-400 text-red-900 text-xs py-1.5 rounded-lg hover:bg-red-500 flex items-center justify-center gap-1 font-semibold cancel-order-btn" data-id="${order.id}">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                            <span>${translations[currentLang].cancel_order}</span>
+                        </button>
+                    </div>`;
                  }
                  stageStartTime = order.timestamps.created;
             } else if (order.status === 'preparing') {
@@ -600,6 +677,10 @@
                 updateOrderStatus(orderId, 'delivering', 'confirmedByShipper', currentUser.role);
             } else if (button.classList.contains('complete-order-btn')) {
                 completeOrder(orderId, currentUser.role);
+            } else if (button.classList.contains('edit-order-btn')) {
+                openEditModal(orderId);
+            } else if (button.classList.contains('cancel-order-btn')) {
+                cancelOrder(orderId, currentUser.role);
             }
         });
 
@@ -652,19 +733,29 @@
         }
         
         function populateOrderFormSelects() {
-            const dishSelect = document.getElementById('add-dish-select');
-            const channelSelect = document.getElementById('order-channel-select');
-            
-            dishSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_dish} --</option>`;
-            dishes.forEach(item => {
-                dishSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
-            });
+            const selects = [
+                document.getElementById('add-dish-select'),
+                document.getElementById('edit-dish-select')
+            ];
+            const channelSelects = [
+                document.getElementById('order-channel-select'),
+                document.getElementById('edit-order-channel-select')
+            ];
 
-            channelSelect.innerHTML = `<option value="">-- ${translations[currentLang].select_channel} --</option>`;
-            for (const key in salesChannels) {
-                const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
-                channelSelect.innerHTML += `<option value="${key}">${name}</option>`;
-            }
+            selects.forEach(select => {
+                select.innerHTML = `<option value="">-- ${translations[currentLang].select_dish} --</option>`;
+                dishes.forEach(item => {
+                    select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                });
+            });
+            
+            channelSelects.forEach(select => {
+                 select.innerHTML = `<option value="">-- ${translations[currentLang].select_channel} --</option>`;
+                for (const key in salesChannels) {
+                    const name = salesChannels[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || salesChannels[key].name;
+                    select.innerHTML += `<option value="${key}">${name}</option>`;
+                }
+            });
         }
         
         function populateEmployeeSelect() {
@@ -699,7 +790,7 @@
             populateRoleSelect(employeeId);
         });
 
-        // --- Multi-dish logic ---
+        // --- Multi-dish logic for ADD FORM ---
         addDishToOrderBtn.addEventListener('click', () => {
             const dishSelect = document.getElementById('add-dish-select');
             const quantityInput = document.getElementById('add-dish-quantity');
@@ -720,8 +811,8 @@
         });
 
         currentOrderItemsContainer.addEventListener('click', e => {
-            if (e.target.classList.contains('remove-order-item-btn') || e.target.closest('.remove-order-item-btn')) {
-                const button = e.target.closest('.remove-order-item-btn');
+            const button = e.target.closest('.remove-order-item-btn');
+            if (button) {
                 const index = parseInt(button.dataset.index);
                 currentOrderItems.splice(index, 1);
                 renderCurrentOrderItems();
@@ -729,16 +820,119 @@
         });
 
         function renderCurrentOrderItems() {
-            if (currentOrderItems.length === 0) {
-                currentOrderItemsContainer.innerHTML = `<p class="text-center text-sm text-gray-500 pt-4" data-lang="no_items_added">${translations[currentLang].no_items_added}</p>`;
+            renderItemsList(currentOrderItems, currentOrderItemsContainer, 'no_items_added');
+        }
+
+        // --- EDIT MODAL LOGIC ---
+        function openEditModal(orderId) {
+            const orderToEdit = activeOrders.find(o => o.id === orderId);
+            if (!orderToEdit) return;
+
+            editOrderModal.dataset.editingId = orderId;
+
+            // Populate fields
+            document.getElementById('edit-order-channel-select').value = orderToEdit.channelKey;
+            document.getElementById('edit-order-id').value = orderToEdit.customer.orderId;
+            document.getElementById('edit-order-customer-name').value = orderToEdit.customer.name;
+            document.getElementById('edit-order-customer-address').value = orderToEdit.customer.address;
+            document.getElementById('edit-order-customer-phone').value = orderToEdit.customer.phone;
+
+            // Populate items
+            editingOrderItems = JSON.parse(JSON.stringify(orderToEdit.items)); // Deep copy
+            renderEditingOrderItems();
+            
+            editOrderModal.classList.remove('hidden');
+            editOrderModal.classList.add('flex');
+        }
+
+        function closeEditModal() {
+            editOrderModal.classList.add('hidden');
+            editOrderModal.classList.remove('flex');
+            editingOrderItems = [];
+            editOrderModal.dataset.editingId = '';
+        }
+
+        editOrderModal.querySelectorAll('#close-edit-modal-btn, #cancel-edit-modal-btn').forEach(btn => {
+            btn.addEventListener('click', closeEditModal);
+        });
+        
+        editOrderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const orderId = parseInt(editOrderModal.dataset.editingId);
+            const orderIndex = activeOrders.findIndex(o => o.id === orderId);
+            
+            if (orderIndex === -1) {
+                alert('Lỗi: Không tìm thấy đơn hàng!');
+                closeEditModal();
                 return;
             }
-            currentOrderItemsContainer.innerHTML = currentOrderItems.map((item, index) => {
+            if(editingOrderItems.length === 0){
+                alert('Đơn hàng phải có ít nhất một món ăn.');
+                return;
+            }
+
+            // Update order data
+            activeOrders[orderIndex].customer.name = document.getElementById('edit-order-customer-name').value;
+            activeOrders[orderIndex].customer.address = document.getElementById('edit-order-customer-address').value;
+            activeOrders[orderIndex].customer.phone = document.getElementById('edit-order-customer-phone').value;
+            activeOrders[orderIndex].items = editingOrderItems;
+
+            localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
+            
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            renderAll(currentUser.role);
+            closeEditModal();
+        });
+
+        document.getElementById('add-dish-to-edit-order-btn').addEventListener('click', () => {
+            const dishSelect = document.getElementById('edit-dish-select');
+            const quantityInput = document.getElementById('edit-dish-quantity');
+            const dishId = parseInt(dishSelect.value);
+            const quantity = parseInt(quantityInput.value);
+
+            if (dishId && quantity > 0) {
+                const existingItem = editingOrderItems.find(item => item.dishId === dishId);
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    editingOrderItems.push({ dishId, quantity });
+                }
+                renderEditingOrderItems();
+                quantityInput.value = 1;
+                dishSelect.value = '';
+            }
+        });
+        
+        document.getElementById('editing-order-items').addEventListener('click', e => {
+            const button = e.target.closest('.remove-editing-item-btn');
+            if(button) {
+                const index = parseInt(button.dataset.index);
+                editingOrderItems.splice(index, 1);
+                renderEditingOrderItems();
+            }
+        });
+
+        function renderEditingOrderItems() {
+            renderItemsList(editingOrderItems, document.getElementById('editing-order-items'), 'no_items_added', true);
+        }
+        
+        function cancelOrder(orderId, role) {
+            activeOrders = activeOrders.filter(order => order.id !== orderId);
+            localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
+            renderAll(role);
+        }
+        
+        function renderItemsList(items, container, emptyTextKey, isEditing = false) {
+             if (items.length === 0) {
+                container.innerHTML = `<p class="text-center text-sm text-gray-500 pt-4" data-lang="${emptyTextKey}">${translations[currentLang][emptyTextKey]}</p>`;
+                return;
+            }
+            container.innerHTML = items.map((item, index) => {
                 const dish = findById(dishes, item.dishId);
                 return `
                     <div class="flex justify-between items-center p-2 bg-blue-50 rounded-lg text-sm">
                         <span><strong>${dish.name}</strong> x ${item.quantity}</span>
-                        <button type="button" class="remove-order-item-btn text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
+                        <button type="button" class="${isEditing ? 'remove-editing-item-btn' : 'remove-order-item-btn'} text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
                     </div>
                 `;
             }).join('');
