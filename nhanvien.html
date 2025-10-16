@@ -7,31 +7,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .kanban-column { min-height: 70vh; }
-        .role-card { transition: all 0.2s ease-in-out; }
-        .role-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .order-card, .role-card { transition: all 0.2s ease-in-out; }
+        .order-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
         .modal { display: none; }
         .modal.active { display: flex; }
+        .login-bg {
+            background-color: #f0f4ff;
+            background-image:
+            radial-gradient(at 47% 33%, hsl(207.00, 75%, 88%) 0px, transparent 50%),
+            radial-gradient(at 82% 65%, hsl(218.00, 85%, 85%) 0px, transparent 50%);
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
 
     <!-- Login View -->
-    <div id="login-view" class="flex items-center justify-center h-screen">
-        <div class="w-full max-w-md text-center p-6 md:p-8 bg-white rounded-xl shadow-2xl mx-4 sm:mx-auto">
-             <h1 class="text-3xl font-bold text-gray-800 mb-2" data-lang="login_title">Đăng Nhập</h1>
+    <div id="login-view" class="flex items-center justify-center h-screen login-bg p-4">
+        <div class="w-full max-w-md text-center p-6 md:p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl">
+             <div class="flex items-center justify-center gap-3 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                <h1 class="text-3xl font-bold text-gray-800" data-lang="login_title">Đăng Nhập</h1>
+            </div>
             <p class="text-gray-500 mb-8" data-lang="login_subtitle">Chọn thông tin của bạn để bắt đầu làm việc.</p>
             <form id="login-form" class="space-y-4">
                 <div>
                     <label for="employee-select" class="block text-sm font-medium text-gray-700 text-left" data-lang="employee_name">Tên nhân viên</label>
-                    <select id="employee-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                    <select id="employee-select" required class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500"></select>
                 </div>
                 <div>
                      <label for="role-select" class="block text-sm font-medium text-gray-700 text-left" data-lang="role">Vai trò</label>
-                    <select id="role-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                    <select id="role-select" required class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500"></select>
                 </div>
-                 <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="start_working_btn">Bắt đầu làm việc</button>
+                 <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-semibold text-base" data-lang="start_working_btn">Bắt đầu làm việc</button>
             </form>
              <div class="mt-8 flex justify-center items-center gap-4">
                 <button class="lang-btn text-sm py-2 px-4 rounded-full" data-lang-code="vi">Tiếng Việt</button>
@@ -43,35 +54,63 @@
 
     <!-- Main Order Management View -->
     <div id="main-view" class="hidden">
-        <header class="bg-white shadow-md">
+        <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-10">
             <div class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold text-gray-800" data-lang="order_management">Quản Lý Đơn Hàng</h1>
                     <div id="user-info" class="text-sm text-gray-600"></div>
                 </div>
-                <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg" data-lang="logout">Đăng Xuất</button>
+                <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg>
+                    <span data-lang="logout">Đăng Xuất</span>
+                </button>
             </div>
         </header>
         
         <main class="container mx-auto px-4 py-6 sm:px-6 sm:py-8">
             <!-- New Order Form (for Order Takers only) -->
-            <div id="new-order-form-container" class="hidden bg-white p-6 rounded-lg shadow-md mb-8">
+            <div id="new-order-form-container" class="hidden bg-white p-6 rounded-2xl shadow-md mb-8">
                 <h2 class="text-xl font-semibold mb-4" data-lang="receive_new_order">Nhận Đơn Hàng Mới</h2>
-                <form id="add-order-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    <!-- Left Column: Order Items -->
+                <form id="add-order-form" class="grid grid-cols-1 gap-y-6">
+                    <!-- Customer Info -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-900" data-lang="customer_details">Thông Tin Đơn Hàng</h3>
+                         <div>
+                            <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
+                            <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500"></select>
+                        </div>
+                        <div>
+                            <label for="order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã Đơn Hàng</label>
+                            <input type="text" id="order-id" required class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 bg-gray-100" readonly>
+                        </div>
+                        <div>
+                            <label for="order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên Khách Hàng</label>
+                            <input type="text" id="order-customer-name" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label for="order-customer-address" class="block text-sm font-medium text-gray-700" data-lang="delivery_address">Địa chỉ giao hàng</label>
+                            <input type="text" id="order-customer-address" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label for="order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="phone_number">Số Điện Thoại</label>
+                            <input type="tel" id="order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
                     <div class="space-y-4">
                         <h3 class="text-lg font-medium text-gray-900" data-lang="order_items">Các Món Ăn</h3>
-                        <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="p-4 bg-gray-50 rounded-xl">
                            <div class="flex gap-2 items-end">
                                 <div class="flex-grow">
                                     <label for="add-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
-                                    <select id="add-dish-select" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
+                                    <select id="add-dish-select" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500"></select>
                                 </div>
                                 <div class="w-20 flex-shrink-0">
                                     <label for="add-dish-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity_short">SL</label>
-                                    <input type="number" id="add-dish-quantity" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                                    <input type="number" id="add-dish-quantity" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-lg py-2.5 px-3 focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
-                                <button type="button" id="add-dish-to-order-btn" class="bg-blue-600 text-white rounded-md h-10 w-10 flex-shrink-0 flex items-center justify-center hover:bg-blue-700 text-xl font-bold">+</button>
+                                <button type="button" id="add-dish-to-order-btn" class="bg-blue-600 text-white rounded-lg h-[46px] w-12 flex-shrink-0 flex items-center justify-center hover:bg-blue-700 text-2xl font-bold">+</button>
                             </div>
                         </div>
                         <div id="current-order-items" class="space-y-2 min-h-[100px]">
@@ -79,56 +118,31 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Customer Info -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium text-gray-900" data-lang="customer_details">Thông Tin Đơn Hàng</h3>
-                         <div>
-                            <label for="order-channel-select" class="block text-sm font-medium text-gray-700" data-lang="sales_channel">Kênh bán</label>
-                            <select id="order-channel-select" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
-                        </div>
-                        <div>
-                            <label for="order-id" class="block text-sm font-medium text-gray-700" data-lang="order_id">Mã Đơn Hàng</label>
-                            <input type="text" id="order-id" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3 bg-gray-100" readonly>
-                        </div>
-                        <div>
-                            <label for="order-customer-name" class="block text-sm font-medium text-gray-700" data-lang="customer_name">Tên Khách Hàng</label>
-                            <input type="text" id="order-customer-name" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                        </div>
-                        <div>
-                            <label for="order-customer-address" class="block text-sm font-medium text-gray-700" data-lang="delivery_address">Địa chỉ giao hàng</label>
-                            <input type="text" id="order-customer-address" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                        </div>
-                        <div>
-                            <label for="order-customer-phone" class="block text-sm font-medium text-gray-700" data-lang="phone_number">Số Điện Thoại</label>
-                            <input type="tel" id="order-customer-phone" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
-                        </div>
-                    </div>
-
                     <!-- Submit Button -->
-                    <div class="md:col-span-2">
-                        <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-md hover:bg-indigo-700" data-lang="add_order_btn">Thêm Đơn Hàng</button>
+                    <div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-semibold text-base" data-lang="add_order_btn">Thêm Đơn Hàng</button>
                     </div>
                 </form>
             </div>
 
             <!-- Kanban Board -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div id="col-new-container" class="bg-gray-200 rounded-lg p-4 hidden">
-                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="new_orders">Đơn Hàng Mới</h3>
+                <div id="col-new-container" class="bg-blue-50/50 rounded-2xl p-4 hidden">
+                    <h3 class="font-semibold text-lg mb-4 text-center text-blue-800" data-lang="new_orders">Đơn Hàng Mới</h3>
                     <div id="new-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
                 </div>
-                <div id="col-preparing-container" class="bg-gray-200 rounded-lg p-4 hidden">
-                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="preparing">Đang Chuẩn Bị</h3>
+                <div id="col-preparing-container" class="bg-amber-50/50 rounded-2xl p-4 hidden">
+                    <h3 class="font-semibold text-lg mb-4 text-center text-amber-800" data-lang="preparing">Đang Chuẩn Bị</h3>
                     <div id="preparing-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
                 </div>
-                <div id="col-delivering-container" class="bg-gray-200 rounded-lg p-4 hidden">
-                    <h3 class="font-semibold text-lg mb-4 text-center" data-lang="delivering">Đang Giao Hàng</h3>
+                <div id="col-delivering-container" class="bg-purple-50/50 rounded-2xl p-4 hidden">
+                    <h3 class="font-semibold text-lg mb-4 text-center text-purple-800" data-lang="delivering">Đang Giao Hàng</h3>
                     <div id="delivering-orders-col" class="kanban-column space-y-4 overflow-y-auto"></div>
                 </div>
             </div>
 
              <!-- Completed Orders List -->
-            <div id="completed-orders-container" class="hidden bg-white p-6 rounded-lg shadow-md mt-8">
+            <div id="completed-orders-container" class="hidden bg-white p-6 rounded-2xl shadow-md mt-8">
                 <h2 class="text-xl font-semibold mb-4" data-lang="completed_orders">Đơn Hàng Đã Hoàn Tất</h2>
                 <div id="completed-orders-list" class="space-y-3 max-h-[60vh] sm:max-h-96 overflow-y-auto"></div>
             </div>
@@ -491,40 +505,40 @@
 
             if (order.status === 'new') {
                  if (role === 'kitchen') {
-                    actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded hover:bg-blue-600 confirm-prepare-btn" data-id="${order.id}">${translations[currentLang].confirm_prepare}</button>`;
+                    actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2 confirm-prepare-btn" data-id="${order.id}"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span>${translations[currentLang].confirm_prepare}</span></button>`;
                  }
                  stageStartTime = order.timestamps.created;
             } else if (order.status === 'preparing') {
-                cardColorClass = 'border-red-500 bg-red-50';
+                cardColorClass = 'border-amber-500 bg-amber-50/50';
                 if (role === 'kitchen') {
-                    actionButton = `<button class="w-full mt-3 bg-yellow-500 text-white text-sm py-1.5 rounded hover:bg-yellow-600 confirm-deliver-btn" data-id="${order.id}">${translations[currentLang].confirm_deliver}</button>`;
+                    actionButton = `<button class="w-full mt-3 bg-amber-500 text-white text-sm py-1.5 rounded-lg hover:bg-amber-600 flex items-center justify-center gap-2 confirm-deliver-btn" data-id="${order.id}"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg><span>${translations[currentLang].confirm_deliver}</span></button>`;
                 }
                 stageStartTime = order.timestamps.confirmedByKitchen;
             } else if (order.status === 'delivering') {
-                cardColorClass = 'border-red-500 bg-red-50';
+                cardColorClass = 'border-purple-500 bg-purple-50/50';
                 if (role === 'shipper') {
-                    actionButton = `<button class="w-full mt-3 bg-green-500 text-white text-sm py-1.5 rounded hover:bg-green-600 complete-order-btn" data-id="${order.id}">${translations[currentLang].complete_order}</button>`;
+                    actionButton = `<button class="w-full mt-3 bg-green-500 text-white text-sm py-1.5 rounded-lg hover:bg-green-600 flex items-center justify-center gap-2 complete-order-btn" data-id="${order.id}"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /><path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v5a1 1 0 001 1h2.05a2.5 2.5 0 014.9 0H21a1 1 0 001-1V8a1 1 0 00-1-1h-7z" /></svg><span>${translations[currentLang].complete_order}</span></button>`;
                 }
                 stageStartTime = order.timestamps.confirmedByShipper;
             }
 
             return `
-                <div class="order-card bg-white p-3 rounded-md shadow-sm border-l-4 ${cardColorClass}" data-stage-start-time="${stageStartTime}">
+                <div class="order-card bg-white p-4 rounded-xl shadow-sm border-l-4 ${cardColorClass}" data-stage-start-time="${stageStartTime}">
                     <div class="flex justify-between items-start">
                          <div>
                             <p class="font-bold text-gray-800">${order.customer.orderId}</p>
                             <p class="text-xs text-gray-500">${translations[currentLang].order_from}: <span class="font-semibold">${channelName}</span></p>
                          </div>
                          <div class="text-right">
-                            <div class="font-semibold text-sm timer">00:00</div>
+                            <div class="font-semibold text-sm timer flex items-center gap-1 text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.415L11 9.586V6z" clip-rule="evenodd" /></svg><span>00:00</span></div>
                             <div class="text-xs text-gray-400">${translations[currentLang].time_in_stage}</div>
                          </div>
                     </div>
-                    <ul class="list-disc list-inside ml-4 mt-2">${itemsHtml}</ul>
-                     <div class="text-xs text-gray-700 mt-2 pt-2 border-t border-dashed">
-                        ${order.customer.name ? `<p><strong>KH:</strong> ${order.customer.name}</p>` : ''}
-                        ${order.customer.phone ? `<p><strong>SĐT:</strong> ${order.customer.phone}</p>` : ''}
-                        ${order.customer.address ? `<p><strong>Đ/C:</strong> ${order.customer.address}</p>` : ''}
+                    <ul class="list-disc list-inside ml-4 my-3 space-y-1">${itemsHtml}</ul>
+                     <div class="text-xs text-gray-700 mt-2 pt-2 border-t border-dashed space-y-1">
+                        ${order.customer.name ? `<p class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg> ${order.customer.name}</p>` : ''}
+                        ${order.customer.phone ? `<p class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg> ${order.customer.phone}</p>` : ''}
+                        ${order.customer.address ? `<p class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg> ${order.customer.address}</p>` : ''}
                      </div>
                     ${actionButton}
                 </div>
@@ -545,14 +559,14 @@
                 const totalTime = formatTime(order.timestamps.completed - order.timestamps.created);
                 const completedTime = new Date(order.timestamps.completed).toLocaleTimeString('vi-VN');
                 return `
-                    <div class="p-3 bg-gray-50 rounded-md border text-sm">
+                    <div class="p-3 bg-green-50 rounded-lg border-l-4 border-green-400 text-sm">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="font-semibold">${dishName} - <span class="font-mono">${order.customer.orderId}</span></p>
+                                <p class="font-semibold text-gray-800">${dishName} - <span class="font-mono">${order.customer.orderId}</span></p>
                                 <p class="text-xs text-gray-500">${order.customer.name || ''} - ${order.customer.phone || ''}</p>
                             </div>
                             <div class="text-right">
-                                <p class="font-semibold text-green-700">${totalTime}</p>
+                                <p class="font-semibold text-green-700 flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>${totalTime}</p>
                                 <p class="text-xs text-gray-500">${translations[currentLang].completed_at} ${completedTime}</p>
                             </div>
                         </div>
@@ -717,7 +731,7 @@
             currentOrderItemsContainer.innerHTML = currentOrderItems.map((item, index) => {
                 const dish = findById(dishes, item.dishId);
                 return `
-                    <div class="flex justify-between items-center p-2 bg-blue-50 rounded-md text-sm">
+                    <div class="flex justify-between items-center p-2 bg-blue-50 rounded-lg text-sm">
                         <span><strong>${dish.name}</strong> x ${item.quantity}</span>
                         <button type="button" class="remove-order-item-btn text-red-500 hover:text-red-700 font-bold text-lg leading-none p-1" data-index="${index}">&times;</button>
                     </div>
@@ -732,7 +746,10 @@
                 const startTime = parseInt(card.dataset.stageStartTime);
                 if (startTime) {
                     const elapsedTime = Date.now() - startTime;
-                    card.querySelector('.timer').textContent = formatTime(elapsedTime);
+                    const timerSpan = card.querySelector('.timer span');
+                    if (timerSpan) {
+                       timerSpan.textContent = formatTime(elapsedTime);
+                    }
                 }
             });
         }, 1000);
