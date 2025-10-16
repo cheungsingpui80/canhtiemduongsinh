@@ -162,7 +162,7 @@
                 delivering: 'Đang Giao Hàng',
                 confirm_prepare: 'Nhận đơn hàng',
                 confirm_deliver: 'Chế biến xong',
-                complete_order: 'Hoàn tất giao hàng',
+                complete_order: 'Đã giao hàng',
                 order_from: 'Từ',
                 cancel_order: 'Hủy đơn',
                 empty_data: 'Chưa có dữ liệu.',
@@ -206,7 +206,7 @@
                 delivering: '配送中',
                 confirm_prepare: '接收訂單',
                 confirm_deliver: '製作完成',
-                complete_order: '完成配送',
+                complete_order: '已送達',
                 order_from: '來自',
                 cancel_order: '取消訂單',
                 empty_data: '暫無數據。',
@@ -272,13 +272,13 @@
             kitchen: {
                 name: 'Bếp',
                 name_zh: '廚房',
-                canSee: ['new', 'preparing'],
+                canSee: ['new', 'preparing', 'completed'],
                 canCreate: false
             },
             shipper: {
                 name: 'Giao Hàng',
                 name_zh: '配送員',
-                canSee: ['preparing', 'delivering'],
+                canSee: ['preparing', 'delivering', 'completed'],
                 canCreate: false
             }
         };
@@ -437,10 +437,13 @@
                 localStorage.setItem('activeOrders', JSON.stringify(activeOrders));
                 const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
                 
+                // Clear form and temporary items list first
                 currentOrderItems = [];
-                renderAll(currentUser.role);
-                e.target.reset();
+                addOrderForm.reset();
                 orderChannelSelect.dispatchEvent(new Event('change')); // Reset order ID
+                
+                // Then, re-render the whole UI
+                renderAll(currentUser.role);
             } else {
                 alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
             }
@@ -448,9 +451,7 @@
         
         function renderAll(role) {
             renderOrderKanban(role);
-            if (rolesConfig[role].canSee.includes('completed')) {
-                renderCompletedOrders();
-            }
+            renderCompletedOrders();
             renderCurrentOrderItems();
         }
 
@@ -489,19 +490,19 @@
             }).join('');
 
             if (order.status === 'new') {
-                 if (role === 'taker' || role === 'kitchen') {
+                 if (role === 'kitchen') {
                     actionButton = `<button class="w-full mt-3 bg-blue-500 text-white text-sm py-1.5 rounded hover:bg-blue-600 confirm-prepare-btn" data-id="${order.id}">${translations[currentLang].confirm_prepare}</button>`;
                  }
                  stageStartTime = order.timestamps.created;
             } else if (order.status === 'preparing') {
                 cardColorClass = 'border-red-500 bg-red-50';
-                if (role === 'taker' || role === 'shipper' || role === 'kitchen') {
+                if (role === 'kitchen') {
                     actionButton = `<button class="w-full mt-3 bg-yellow-500 text-white text-sm py-1.5 rounded hover:bg-yellow-600 confirm-deliver-btn" data-id="${order.id}">${translations[currentLang].confirm_deliver}</button>`;
                 }
                 stageStartTime = order.timestamps.confirmedByKitchen;
             } else if (order.status === 'delivering') {
                 cardColorClass = 'border-red-500 bg-red-50';
-                if (role === 'taker' || role === 'shipper') {
+                if (role === 'shipper') {
                     actionButton = `<button class="w-full mt-3 bg-green-500 text-white text-sm py-1.5 rounded hover:bg-green-600 complete-order-btn" data-id="${order.id}">${translations[currentLang].complete_order}</button>`;
                 }
                 stageStartTime = order.timestamps.confirmedByShipper;
@@ -531,7 +532,15 @@
         }
         
         function renderCompletedOrders() {
-            renderList(completedOrders, completedOrdersList, (order) => {
+            const todayDateString = new Date().toDateString();
+
+            const todaysCompletedOrders = completedOrders.filter(order => {
+                if (!order.timestamps.completed) return false;
+                const completedDateString = new Date(order.timestamps.completed).toDateString();
+                return completedDateString === todayDateString;
+            });
+
+            renderList(todaysCompletedOrders, completedOrdersList, (order) => {
                 const dishName = order.items.map(i => findById(dishes, i.dishId)?.name || '').join(', ');
                 const totalTime = formatTime(order.timestamps.completed - order.timestamps.created);
                 const completedTime = new Date(order.timestamps.completed).toLocaleTimeString('vi-VN');
