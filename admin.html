@@ -23,6 +23,14 @@
             background-color: #4f46e5;
             color: white;
         }
+        .stat-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -190,6 +198,15 @@
                  </div>
                  <div class="bg-white p-6 rounded-lg shadow-md">
                     <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
+                         <div>
+                            <label for="order-lookup-preset-filter" class="block text-sm font-medium text-gray-700" data-lang="view_by">Xem theo</label>
+                            <select id="order-lookup-preset-filter" class="mt-1 block w-full md:w-auto border-gray-300 rounded-md shadow-sm">
+                                <option value="custom" data-lang="custom_option">Tùy chọn</option>
+                                <option value="this_month" data-lang="this_month">Tháng này</option>
+                                <option value="this_quarter" data-lang="this_quarter">Quí này</option>
+                                <option value="this_year" data-lang="this_year">Năm này</option>
+                            </select>
+                        </div>
                         <div>
                             <label for="order-lookup-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
                             <input type="date" id="order-lookup-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
@@ -202,8 +219,37 @@
                             <button id="order-lookup-btn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700" data-lang="search_btn">Tra cứu</button>
                         </div>
                     </div>
+                    
+                    <!-- Order Stats -->
+                    <div id="order-stats-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                        <div class="stat-card bg-green-100 p-4 rounded-lg text-center" data-status="completed">
+                            <p class="text-sm font-medium text-green-800" data-lang="stat_completed">Giao thành công</p>
+                            <p id="stat-completed" class="text-3xl font-bold text-green-600">0</p>
+                        </div>
+                        <div class="stat-card bg-red-100 p-4 rounded-lg text-center" data-status="cancelled">
+                            <p class="text-sm font-medium text-red-800" data-lang="stat_cancelled">Đã hủy</p>
+                            <p id="stat-cancelled" class="text-3xl font-bold text-red-600">0</p>
+                        </div>
+                         <div class="stat-card bg-blue-100 p-4 rounded-lg text-center" data-status="new">
+                            <p class="text-sm font-medium text-blue-800" data-lang="stat_new">Mới nhận</p>
+                            <p id="stat-new" class="text-3xl font-bold text-blue-600">0</p>
+                        </div>
+                        <div class="stat-card bg-yellow-100 p-4 rounded-lg text-center" data-status="preparing">
+                            <p class="text-sm font-medium text-yellow-800" data-lang="stat_preparing">Đang chế biến</p>
+                            <p id="stat-preparing" class="text-3xl font-bold text-yellow-600">0</p>
+                        </div>
+                         <div class="stat-card bg-indigo-100 p-4 rounded-lg text-center" data-status="delivering">
+                            <p class="text-sm font-medium text-indigo-800" data-lang="stat_delivering">Đang giao</p>
+                            <p id="stat-delivering" class="text-3xl font-bold text-indigo-600">0</p>
+                        </div>
+                        <div class="stat-card bg-gray-200 p-4 rounded-lg text-center" data-status="total">
+                            <p class="text-sm font-medium text-gray-800" data-lang="stat_total_sales">Tổng Doanh Thu</p>
+                            <p id="stat-total-sales" class="text-xl font-bold text-gray-600">0đ</p>
+                        </div>
+                    </div>
+
                     <h2 class="text-xl font-semibold mb-4" data-lang="order_history">Lịch Sử Đơn Hàng</h2>
-                    <div id="order-lookup-results" class="space-y-3 max-h-[60vh] overflow-y-auto"></div>
+                    <div id="order-lookup-results" class="space-y-3 max-h-[45vh] overflow-y-auto"></div>
                 </div>
             </div>
 
@@ -607,6 +653,19 @@
         </div>
     </div>
 
+    <!-- Order Details Modal -->
+    <div id="order-details-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl">
+            <div class="flex justify-between items-center mb-4 pb-4 border-b">
+                <h2 id="order-details-modal-title" class="text-2xl font-bold">Chi Tiết Đơn Hàng</h2>
+                <button id="close-order-details-modal-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="order-details-modal-content" class="space-y-3 max-h-[60vh] overflow-y-auto">
+                <!-- Order items will be injected here by JS -->
+            </div>
+        </div>
+    </div>
+
 
     <!-- Edit Supplier Modal -->
     <div id="edit-supplier-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
@@ -853,6 +912,19 @@
                 analyze_spoilage: '✨ Phân tích & Đề xuất',
                 spoilage_analysis_title: 'Phân Tích Hư Hao & Đề Xuất Giải Pháp',
                 dish_name_suggestions: 'Gợi Ý Tên Món Ăn',
+                // New translations for sales stats
+                stat_completed: 'Giao thành công',
+                stat_cancelled: 'Đã hủy',
+                stat_new: 'Mới nhận',
+                stat_preparing: 'Đang chế biến',
+                stat_delivering: 'Đang giao',
+                stat_total_sales: 'Tổng Doanh Thu',
+                order_status_new: 'Mới nhận',
+                order_status_preparing: 'Đang chế biến',
+                order_status_delivering: 'Đang giao',
+                order_status_completed: 'Hoàn thành',
+                order_status_cancelled: 'Đã hủy',
+                order_details_modal_title_prefix: 'Chi tiết đơn hàng'
             },
             zh: {
                 dashboard_title: '儀表板',
@@ -1014,10 +1086,24 @@
                 analyze_spoilage: '✨ 分析與建議',
                 spoilage_analysis_title: '損耗分析與解決方案建議',
                 dish_name_suggestions: '菜名建議',
+                 // New translations for sales stats
+                stat_completed: '成功交付',
+                stat_cancelled: '已取消',
+                stat_new: '新訂單',
+                stat_preparing: '準備中',
+                stat_delivering: '配送中',
+                stat_total_sales: '總銷售額',
+                order_status_new: '新訂單',
+                order_status_preparing: '準備中',
+                order_status_delivering: '配送中',
+                order_status_completed: '已完成',
+                order_status_cancelled: '已取消',
+                order_details_modal_title_prefix: '訂單詳情'
             }
         };
 
         let currentLang = localStorage.getItem('language') || 'vi';
+        let currentlyDisplayedOrders = []; // To store orders filtered by date range
 
         const setLanguage = (lang) => {
             currentLang = lang;
@@ -1097,6 +1183,14 @@
             'contract': {name: 'Hợp đồng lao động', name_zh: '勞動合約'}
         };
 
+        const orderStatuses = {
+            'new': { text: 'order_status_new', color: 'blue' },
+            'preparing': { text: 'order_status_preparing', color: 'yellow' },
+            'delivering': { text: 'order_status_delivering', color: 'indigo' },
+            'completed': { text: 'order_status_completed', color: 'green' },
+            'cancelled': { text: 'order_status_cancelled', color: 'red' }
+        };
+
         // --- DOM Elements ---
         const elements = {
             // Employee
@@ -1114,10 +1208,14 @@
             addSaleForm: document.getElementById('add-sale-form'),
             saleDishSelect: document.getElementById('sale-dish-select'),
             saleChannelSelect: document.getElementById('sale-channel-select'),
+            orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
             orderLookupEndDate: document.getElementById('order-lookup-end-date'),
             orderLookupBtn: document.getElementById('order-lookup-btn'),
             orderLookupResults: document.getElementById('order-lookup-results'),
+            orderStatsContainer: document.getElementById('order-stats-container'),
+            orderDetailsModal: document.getElementById('order-details-modal'),
+            closeOrderDetailsModalBtn: document.getElementById('close-order-details-modal-btn'),
             // Menu
             addDishForm: document.getElementById('add-dish-form'),
             dishesList: document.getElementById('dishes-list'),
@@ -1417,21 +1515,20 @@
                 channelKey: channelKey,
                 totalRevenue: totalRevenue,
                 commissionFee: commissionFee,
-                netRevenue: netRevenue
+                netRevenue: netRevenue,
+                status: 'new' // Default status for new orders
             };
             
             salesRecords.unshift(newSale);
             localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
             
-            // Re-render today's orders
-            const todaySales = salesRecords.filter(s => s.date === todayISO());
-            renderOrderLookupResults(todaySales);
+            runOrderLookup(); // Refresh stats and list for today
             e.target.reset();
             document.getElementById('sale-quantity').value = 1;
         });
 
-        elements.orderLookupBtn.addEventListener('click', () => {
-            const startDate = elements.orderLookupStartDate.value;
+        function runOrderLookup() {
+             const startDate = elements.orderLookupStartDate.value;
             const endDate = elements.orderLookupEndDate.value;
             if (!startDate || !endDate) {
                 alert(currentLang === 'vi' ? 'Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.' : '請選擇開始和結束日期。');
@@ -1447,18 +1544,115 @@
             const end = new Date(endDate);
             end.setHours(23, 59, 59, 999);
 
-            const filteredSales = salesRecords.filter(sale => {
+            currentlyDisplayedOrders = salesRecords.filter(sale => {
                 const saleDate = new Date(sale.date);
                 return saleDate >= start && saleDate <= end;
             });
             
-            renderOrderLookupResults(filteredSales);
-        });
+            renderOrderLookupResults(currentlyDisplayedOrders);
+            calculateAndRenderOrderStats(currentlyDisplayedOrders);
+        }
+
+        elements.orderLookupBtn.addEventListener('click', runOrderLookup);
+
+        function calculateAndRenderOrderStats(salesData) {
+            const stats = {
+                completed: 0,
+                cancelled: 0,
+                new: 0,
+                preparing: 0,
+                delivering: 0,
+                totalSales: 0
+            };
+
+            salesData.forEach(sale => {
+                if (stats.hasOwnProperty(sale.status)) {
+                    stats[sale.status]++;
+                }
+                stats.totalSales += sale.netRevenue;
+            });
+
+            document.getElementById('stat-completed').textContent = stats.completed;
+            document.getElementById('stat-cancelled').textContent = stats.cancelled;
+            document.getElementById('stat-new').textContent = stats.new;
+            document.getElementById('stat-preparing').textContent = stats.preparing;
+            document.getElementById('stat-delivering').textContent = stats.delivering;
+            document.getElementById('stat-total-sales').textContent = formatCurrency(stats.totalSales);
+        }
 
         function renderOrderLookupResults(data) {
             renderList(elements.orderLookupResults, data, (sale) => {
                 const channelName = salesChannels[sale.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || sale.channelKey;
+                
+                const statusOptions = Object.keys(orderStatuses).map(key => {
+                    const statusText = translations[currentLang][orderStatuses[key].text];
+                    return `<option value="${key}" ${sale.status === key ? 'selected' : ''}>${statusText}</option>`;
+                }).join('');
+                
+                const statusColor = orderStatuses[sale.status]?.color || 'gray';
+
                 return `
+                    <div class="p-3 bg-white rounded-md border text-sm shadow-sm">
+                        <div class="grid grid-cols-3 gap-4 items-center">
+                            <div class="col-span-2">
+                                <p class="font-semibold">${sale.dishName} (x${sale.quantity})</p>
+                                <p class="text-xs text-gray-500">${new Date(sale.date).toLocaleDateString('vi-VN')} - ${channelName}</p>
+                                <div class="text-right">
+                                    <p class="font-semibold text-green-600">${formatCurrency(sale.netRevenue)}</p>
+                                    ${sale.commissionFee > 0 ? `<p class="text-xs text-gray-500 line-through">${formatCurrency(sale.totalRevenue)}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <label for="status-select-${sale.id}" class="sr-only">Order Status</label>
+                                <select data-id="${sale.id}" id="status-select-${sale.id}" class="order-status-select text-xs p-1 rounded-md border-gray-300 w-full bg-${statusColor}-100 text-${statusColor}-800 border-transparent focus:ring-2 focus:ring-${statusColor}-500">
+                                    ${statusOptions}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        elements.orderLookupResults.addEventListener('change', e => {
+            if (e.target.classList.contains('order-status-select')) {
+                const saleId = parseInt(e.target.dataset.id);
+                const newStatus = e.target.value;
+                
+                salesRecords = salesRecords.map(sale => {
+                    if (sale.id === saleId) {
+                        return { ...sale, status: newStatus };
+                    }
+                    return sale;
+                });
+                
+                localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
+                runOrderLookup(); // Refresh view
+            }
+        });
+
+        elements.orderStatsContainer.addEventListener('click', e => {
+            const card = e.target.closest('.stat-card');
+            if (!card) return;
+
+            const status = card.dataset.status;
+            let ordersToShow = currentlyDisplayedOrders;
+            let modalTitle = translations[currentLang].order_history;
+
+            if (status !== 'total') {
+                ordersToShow = currentlyDisplayedOrders.filter(o => o.status === status);
+                modalTitle = `${translations[currentLang].order_details_modal_title_prefix} - ${translations[currentLang]['stat_' + status]}`;
+            }
+
+            document.getElementById('order-details-modal-title').textContent = modalTitle;
+            const modalContent = document.getElementById('order-details-modal-content');
+            
+            // Using the same rendering function for consistency
+            renderList(modalContent, ordersToShow, (sale) => {
+                 const channelName = salesChannels[sale.channelKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || sale.channelKey;
+                 const statusInfo = orderStatuses[sale.status];
+                 const statusText = translations[currentLang][statusInfo.text];
+                 return `
                     <div class="p-3 bg-gray-50 rounded-md border text-sm">
                         <div class="flex justify-between items-start">
                             <div>
@@ -1467,13 +1661,45 @@
                             </div>
                             <div class="text-right">
                                 <p class="font-semibold text-green-600">${formatCurrency(sale.netRevenue)}</p>
-                                <p class="text-xs text-gray-500 line-through">${formatCurrency(sale.totalRevenue)}</p>
+                                <span class="text-xs font-semibold py-1 px-2 rounded-full bg-${statusInfo.color}-100 text-${statusInfo.color}-800">${statusText}</span>
                             </div>
                         </div>
                     </div>
-                `;
+                 `;
             });
+            elements.orderDetailsModal.classList.add('active');
+        });
+        
+        elements.closeOrderDetailsModalBtn.addEventListener('click', () => {
+             elements.orderDetailsModal.classList.remove('active');
+        });
+
+        function setOrderLookupDatesFromPreset() {
+            const preset = elements.orderLookupPresetFilter.value;
+            const now = new Date();
+            let startDate, endDate = new Date(now);
+
+            now.setHours(0, 0, 0, 0);
+            endDate.setHours(23, 59, 59, 999);
+
+            if (preset === 'this_month') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            } else if (preset === 'this_quarter') {
+                const quarter = Math.floor(now.getMonth() / 3);
+                startDate = new Date(now.getFullYear(), quarter * 3, 1);
+            } else if (preset === 'this_year') {
+                startDate = new Date(now.getFullYear(), 0, 1);
+            } else { // custom
+                 elements.orderLookupStartDate.value = todayISO();
+                 elements.orderLookupEndDate.value = todayISO();
+                return; 
+            }
+
+            elements.orderLookupStartDate.value = startDate.toISOString().split('T')[0];
+            elements.orderLookupEndDate.value = endDate.toISOString().split('T')[0];
+            runOrderLookup();
         }
+        elements.orderLookupPresetFilter.addEventListener('change', setOrderLookupDatesFromPreset);
 
 
         // --- Material & Supplier Logic ---
@@ -2234,11 +2460,7 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
             renderSpoilageList();
             renderAdjustmentLogs();
             
-            const todaySales = salesRecords.filter(s => {
-                const saleDate = new Date(s.date).toISOString().split('T')[0];
-                return saleDate === todayISO();
-            });
-            renderOrderLookupResults(todaySales);
+            runOrderLookup(); // Initial run for today
         }
         
         // Initial Load
@@ -2247,3 +2469,4 @@ Hãy trả lời bằng tiếng Việt, định dạng markdown đơn giản.`;
     </script>
 </body>
 </html>
+
