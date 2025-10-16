@@ -19,7 +19,7 @@
 
     <!-- Login View -->
     <div id="login-view" class="flex items-center justify-center h-screen">
-        <div class="text-center p-8 bg-white rounded-xl shadow-2xl max-w-md mx-auto">
+        <div class="w-full max-w-md text-center p-6 md:p-8 bg-white rounded-xl shadow-2xl mx-4 sm:mx-auto">
              <h1 class="text-3xl font-bold text-gray-800 mb-2" data-lang="login_title">Đăng Nhập</h1>
             <p class="text-gray-500 mb-8" data-lang="login_subtitle">Chọn thông tin của bạn để bắt đầu làm việc.</p>
             <form id="login-form" class="space-y-4">
@@ -44,16 +44,16 @@
     <!-- Main Order Management View -->
     <div id="main-view" class="hidden">
         <header class="bg-white shadow-md">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800" data-lang="order_management">Quản Lý Đơn Hàng</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-800" data-lang="order_management">Quản Lý Đơn Hàng</h1>
                     <div id="user-info" class="text-sm text-gray-600"></div>
                 </div>
                 <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg" data-lang="logout">Đăng Xuất</button>
             </div>
         </header>
         
-        <main class="container mx-auto px-6 py-8">
+        <main class="container mx-auto px-4 py-6 sm:px-6 sm:py-8">
             <!-- New Order Form (for Order Takers only) -->
             <div id="new-order-form-container" class="hidden bg-white p-6 rounded-lg shadow-md mb-8">
                 <h2 class="text-xl font-semibold mb-4" data-lang="receive_new_order">Nhận Đơn Hàng Mới</h2>
@@ -62,16 +62,16 @@
                     <div class="space-y-4">
                         <h3 class="text-lg font-medium text-gray-900" data-lang="order_items">Các Món Ăn</h3>
                         <div class="p-4 bg-gray-50 rounded-lg">
-                            <div class="grid grid-cols-5 gap-2 items-end">
-                                <div class="col-span-3">
+                           <div class="flex gap-2 items-end">
+                                <div class="flex-grow">
                                     <label for="add-dish-select" class="block text-sm font-medium text-gray-700" data-lang="dish">Món ăn</label>
                                     <select id="add-dish-select" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3"></select>
                                 </div>
-                                <div>
+                                <div class="w-20 flex-shrink-0">
                                     <label for="add-dish-quantity" class="block text-sm font-medium text-gray-700" data-lang="quantity_short">SL</label>
                                     <input type="number" id="add-dish-quantity" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
                                 </div>
-                                <button type="button" id="add-dish-to-order-btn" class="bg-blue-600 text-white rounded-md h-10 flex items-center justify-center hover:bg-blue-700 text-xl font-bold">+</button>
+                                <button type="button" id="add-dish-to-order-btn" class="bg-blue-600 text-white rounded-md h-10 w-10 flex-shrink-0 flex items-center justify-center hover:bg-blue-700 text-xl font-bold">+</button>
                             </div>
                         </div>
                         <div id="current-order-items" class="space-y-2 min-h-[100px]">
@@ -127,10 +127,10 @@
                 </div>
             </div>
 
-             <!-- Completed Orders List (for Takers only) -->
+             <!-- Completed Orders List -->
             <div id="completed-orders-container" class="hidden bg-white p-6 rounded-lg shadow-md mt-8">
                 <h2 class="text-xl font-semibold mb-4" data-lang="completed_orders">Đơn Hàng Đã Hoàn Tất</h2>
-                <div id="completed-orders-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+                <div id="completed-orders-list" class="space-y-3 max-h-[60vh] sm:max-h-96 overflow-y-auto"></div>
             </div>
         </main>
     </div>
