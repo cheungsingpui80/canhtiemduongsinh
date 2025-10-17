@@ -295,65 +295,75 @@
 
             <!-- Tab: Nguyên Vật Liệu Mua Vào -->
             <div id="purchase-management" class="tab-content">
-                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="purchase_management_title">Nguyên Vật Liệu Mua Vào</h1>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Column 1: Define new materials & List -->
-                        <div class="space-y-6">
-                             <div>
-                                 <h3 class="text-lg font-medium mb-2" data-lang="define_material">Định Nghĩa Nguyên Vật Liệu</h3>
-                                 <form id="add-material-form" class="flex gap-2">
-                                     <input type="text" id="material-name" data-lang-placeholder="material_name" placeholder="Tên nguyên liệu" required class="flex-grow border border-gray-300 rounded-md py-2 px-3">
-                                     <input type="text" id="material-unit" data-lang-placeholder="unit_placeholder" placeholder="Đơn vị (kg, gr, cái)" required class="w-36 border border-gray-300 rounded-md py-2 px-3">
-                                     <button type="submit" class="bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700" data-lang="add_btn">Thêm</button>
-                                 </form>
-                             </div>
-                             <div>
-                                 <h3 class="text-lg font-medium mb-2" data-lang="materials_list_title">Danh Sách Nguyên Vật Liệu</h3>
-                                 <div id="materials-list" class="space-y-2 max-h-[450px] overflow-y-auto"></div>
-                             </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="purchase_management_title">Nguyên Vật Liệu & Nhập Kho</h1>
+                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Column 1: Category Management -->
+                    <div class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                        <div>
+                            <h3 class="text-lg font-medium mb-2" data-lang="material_categories">Phân loại Nguyên vật liệu</h3>
+                            <form id="add-category-form" class="flex gap-2 mb-4">
+                                <input type="text" id="category-name" data-lang-placeholder="category_name_placeholder" placeholder="Tên phân loại mới" required class="flex-grow border border-gray-300 rounded-md py-2 px-3">
+                                <button type="submit" class="bg-indigo-600 text-white px-4 rounded-md hover:bg-indigo-700" data-lang="add_btn">Thêm</button>
+                            </form>
+                            <div id="material-categories-list" class="space-y-2 max-h-[200px] overflow-y-auto"></div>
                         </div>
+                        <div class="border-t pt-4">
+                            <h3 class="text-lg font-medium mb-2" data-lang="define_material">Định Nghĩa Nguyên Vật Liệu</h3>
+                            <form id="add-material-form" class="space-y-4">
+                                <input type="text" id="material-name" data-lang-placeholder="material_name" placeholder="Tên nguyên liệu" required class="w-full border border-gray-300 rounded-md py-2 px-3">
+                                <input type="text" id="material-unit" data-lang-placeholder="unit_placeholder" placeholder="Đơn vị (kg, gr, cái)" required class="w-full border border-gray-300 rounded-md py-2 px-3">
+                                <select id="material-category-select" class="w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" data-lang="add_btn">Thêm Nguyên Liệu</button>
+                            </form>
+                        </div>
+                    </div>
 
-                        <!-- Column 2: Record Purchases -->
-                        <div class="space-y-6">
-                            <div>
-                                <h3 class="text-lg font-medium mb-2" data-lang="record_purchase">Nhập Kho</h3>
-                                <form id="add-purchase-form" class="space-y-4 p-4 border rounded-md">
+                    <!-- Column 2: Materials List & Purchase History -->
+                     <div class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-medium mb-2" data-lang="materials_list_title">Danh Sách Nguyên Vật Liệu</h3>
+                        <input type="text" id="search-material-input" data-lang-placeholder="search_material_placeholder" placeholder="Tìm kiếm nguyên vật liệu..." class="w-full border border-gray-300 rounded-md py-2 px-3 mb-4">
+                        <div id="materials-list" class="space-y-4 max-h-[65vh] overflow-y-auto"></div>
+                    </div>
+
+                    <!-- Column 3: Record Purchases -->
+                    <div class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                        <div>
+                            <h3 class="text-lg font-medium mb-2" data-lang="record_purchase">Nhập Kho</h3>
+                            <form id="add-purchase-form" class="space-y-4 p-4 border rounded-md">
+                                <div>
+                                    <label class="block text-sm font-medium" data-lang="purchase_date">Ngày nhập hàng</label>
+                                    <input type="date" id="purchase-date" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium" data-lang="material">Nguyên liệu</label>
+                                    <select id="purchase-material-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium" data-lang="purchase_date">Ngày nhập hàng</label>
-                                        <input type="date" id="purchase-date" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                        <label class="block text-sm font-medium" data-lang="quantity">Số lượng</label>
+                                        <input type="number" id="purchase-quantity" min="0" step="any" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium" data-lang="material">Nguyên liệu</label>
-                                        <select id="purchase-material-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                                        <label class="block text-sm font-medium" data-lang="unit">Đơn vị</label>
+                                        <input type="text" id="purchase-unit" readonly class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3">
                                     </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium" data-lang="quantity">Số lượng</label>
-                                            <input type="number" id="purchase-quantity" min="0" step="any" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium" data-lang="unit">Đơn vị</label>
-                                            <input type="text" id="purchase-unit" readonly class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3">
-                                        </div>
-                                    </div>
-                                     <div>
-                                        <label class="block text-sm font-medium" data-lang="total_price">Tổng tiền (VND)</label>
-                                        <input type="number" id="purchase-total-price" min="0" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
-                                    </div>
-                                     <div>
-                                        <label class="block text-sm font-medium" data-lang="supplier">Nhà cung cấp</label>
-                                        <select id="purchase-supplier-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
-                                    </div>
-                                    <p class="text-right"><span data-lang="new_unit_price_label">Đơn giá mới sẽ là</span>: <span id="new-unit-price" class="font-semibold">0 VND</span></p>
-                                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700" data-lang="confirm_purchase_btn">Xác Nhận Nhập Kho</button>
-                                </form>
-                            </div>
-                             <div>
-                                 <h3 class="text-lg font-semibold mb-2" data-lang="purchase_history_title">Lịch Sử Nhập Kho</h3>
-                                 <div id="purchases-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
-                             </div>
+                                </div>
+                                 <div>
+                                    <label class="block text-sm font-medium" data-lang="total_price">Tổng tiền (VND)</label>
+                                    <input type="number" id="purchase-total-price" min="0" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3">
+                                </div>
+                                 <div>
+                                    <label class="block text-sm font-medium" data-lang="supplier">Nhà cung cấp</label>
+                                    <select id="purchase-supplier-select" required class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                                </div>
+                                <p class="text-right"><span data-lang="new_unit_price_label">Đơn giá mới sẽ là</span>: <span id="new-unit-price" class="font-semibold">0 VND</span></p>
+                                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700" data-lang="confirm_purchase_btn">Xác Nhận Nhập Kho</button>
+                            </form>
                         </div>
+                         <div class="border-t pt-4">
+                             <h3 class="text-lg font-semibold mb-2" data-lang="purchase_history_title">Lịch Sử Nhập Kho</h3>
+                             <div id="purchases-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -640,6 +650,10 @@
                     <label class="block text-sm font-medium" data-lang="unit">Đơn vị</label>
                     <input type="text" id="edit-material-unit" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium" data-lang="category">Phân loại</label>
+                    <select id="edit-material-category-select" class="w-full border border-gray-300 rounded-md py-2 px-3"></select>
+                </div>
                  <div>
                     <label class="block text-sm font-medium" data-lang="adjustment_reason">Lý do điều chỉnh</label>
                     <textarea id="edit-material-reason" required rows="2" class="mt-1 w-full border-gray-300 rounded-md py-2 px-3"></textarea>
@@ -647,6 +661,24 @@
                 <div class="flex justify-end gap-4 mt-6">
                     <button type="button" id="cancel-edit-material" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" data-lang="cancel_btn">Hủy</button>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md" data-lang="save_changes_btn">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- Edit Category Modal -->
+    <div id="edit-category-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 class="text-2xl font-bold mb-4" data-lang="edit_category_title">Chỉnh Sửa Phân Loại</h2>
+            <form id="edit-category-form" class="space-y-4">
+                <input type="hidden" id="edit-category-id">
+                <div>
+                    <label class="block text-sm font-medium" data-lang="category_name">Tên phân loại</label>
+                    <input type="text" id="edit-category-name" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
+                </div>
+                <div class="flex justify-end gap-4 mt-6">
+                    <button type="button" id="cancel-edit-category" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" data-lang="cancel_btn">Hủy</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md" data-lang="save_changes_btn">Lưu</button>
                 </div>
             </form>
         </div>
@@ -737,7 +769,7 @@
                 tax_code: 'Mã số thuế (nếu có)',
                 add_supplier_btn: 'Thêm NCC',
                 suppliers_list_title: 'Danh Sách Nhà Cung Cấp',
-                purchase_management_title: 'Nguyên Vật Liệu Mua Vào',
+                purchase_management_title: 'Nguyên Vật Liệu & Nhập Kho',
                 define_material: 'Định Nghĩa Nguyên Vật Liệu',
                 material_name: 'Tên nguyên liệu',
                 unit_placeholder: 'Đơn vị (kg, gr, cái)',
@@ -818,6 +850,14 @@
                 edit_material_title: 'Điều Chỉnh Thông Tin Nguyên Vật Liệu',
                 total_time: 'Tổng thời gian',
                 duration: 'Thời gian trôi qua',
+                material_categories: 'Phân loại Nguyên vật liệu',
+                category_name_placeholder: 'Tên phân loại mới',
+                search_material_placeholder: 'Tìm kiếm nguyên vật liệu...',
+                edit_category_title: 'Chỉnh Sửa Phân Loại',
+                category_name: 'Tên phân loại',
+                category: 'Phân loại',
+                uncategorized: 'Chưa phân loại',
+                select_category: 'Chọn phân loại',
             },
             zh: { /* ... (Chinese translations) ... */ 
                 total_time: '總時間',
@@ -863,6 +903,7 @@
         let adjustmentLogs = loadFromStorage('adjustmentLogs');
         let employees = loadFromStorage('employees');
         let otherCosts = loadFromStorage('otherCosts');
+        let materialCategories = loadFromStorage('materialCategories');
         let currentBomItems = [];
 
         const orderStatuses = {
@@ -893,10 +934,13 @@
             editMaterialModal: document.getElementById('edit-material-modal'),
             editMaterialForm: document.getElementById('edit-material-form'),
             cancelEditMaterialBtn: document.getElementById('cancel-edit-material'),
+            editCategoryModal: document.getElementById('edit-category-modal'),
             // Menu
             dishesList: document.getElementById('dishes-list'),
             // Materials
             materialsList: document.getElementById('materials-list'),
+            materialCategoriesList: document.getElementById('material-categories-list'),
+            searchMaterialInput: document.getElementById('search-material-input'),
             // Sales
             orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
@@ -1180,7 +1224,7 @@
             modal.querySelector('#edit-dish-price-effective-date').value = '';
 
             editingBomItems = JSON.parse(JSON.stringify(dish.bom || []));
-            populateSelect(modal.querySelector('#edit-bom-material-select'), rawMaterials, 'select_material');
+            populateMaterialSelects(modal.querySelector('#edit-bom-material-select'));
             renderEditingBomItems();
             modal.classList.add('active');
         }
@@ -1252,26 +1296,158 @@
             renderApp();
         });
 
-        // --- Material Management ---
-        const renderMaterial = (m) => `
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-md">
-                <span>${m.name} (${m.unit})</span>
-                <div class="flex items-center gap-2">
-                    <span class="font-mono text-sm">${formatCurrency(m.price)}</span>
-                    <button class="edit-material-btn text-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-1 px-2 rounded" data-id="${m.id}">${translations[currentLang].edit}</button>
+        // --- Material & Category Management ---
+        function renderMaterialCategories() {
+            const listEl = elements.materialCategoriesList;
+            listEl.innerHTML = materialCategories.map(cat => `
+                <div class="flex justify-between items-center p-2 bg-gray-100 rounded-md">
+                    <span>${cat.name}</span>
+                    <div class="flex gap-2">
+                         <button class="edit-category-btn text-xs text-yellow-700 hover:text-yellow-900" data-id="${cat.id}">Sửa</button>
+                        <button class="delete-category-btn text-xs text-red-500 hover:text-red-700" data-id="${cat.id}">Xóa</button>
+                    </div>
                 </div>
-            </div>
-        `;
+            `).join('');
+            populateSelect(document.getElementById('material-category-select'), materialCategories, 'select_category');
+        }
+
+        document.getElementById('add-category-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const nameInput = document.getElementById('category-name');
+            const name = nameInput.value.trim();
+            if (name) {
+                materialCategories.push({ id: Date.now(), name });
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                renderMaterialCategories();
+                nameInput.value = '';
+            }
+        });
+
+        elements.materialCategoriesList.addEventListener('click', e => {
+            if (e.target.matches('.edit-category-btn')) {
+                const category = findById(materialCategories, e.target.dataset.id);
+                if (category) openEditCategoryModal(category);
+            }
+            if (e.target.matches('.delete-category-btn')) {
+                handleDeleteCategory(parseInt(e.target.dataset.id));
+            }
+        });
+
+        function openEditCategoryModal(category) {
+            const modal = elements.editCategoryModal;
+            modal.querySelector('#edit-category-id').value = category.id;
+            modal.querySelector('#edit-category-name').value = category.name;
+            modal.classList.add('active');
+        }
+
+        document.getElementById('cancel-edit-category').addEventListener('click', () => elements.editCategoryModal.classList.remove('active'));
+        
+        document.getElementById('edit-category-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const catId = parseInt(document.getElementById('edit-category-id').value);
+            const newName = document.getElementById('edit-category-name').value.trim();
+            if(newName) {
+                materialCategories = materialCategories.map(c => c.id === catId ? {...c, name: newName} : c);
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                elements.editCategoryModal.classList.remove('active');
+                renderApp();
+            }
+        });
+
+        function handleDeleteCategory(categoryId) {
+            if (confirm('Bạn có chắc muốn xóa phân loại này? Tất cả nguyên vật liệu trong nhóm sẽ trở thành "Chưa phân loại".')) {
+                materialCategories = materialCategories.filter(c => c.id !== categoryId);
+                rawMaterials.forEach(m => {
+                    if (m.categoryId === categoryId) {
+                        m.categoryId = null;
+                    }
+                });
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderApp();
+            }
+        }
+        
+        document.getElementById('add-material-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('material-name').value.trim();
+            const unit = document.getElementById('material-unit').value.trim();
+            const categoryId = parseInt(document.getElementById('material-category-select').value) || null;
+            if (name && unit) {
+                rawMaterials.push({ id: Date.now(), name, unit, price: 0, categoryId });
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderMaterialsList();
+                e.target.reset();
+            }
+        });
+
+        elements.searchMaterialInput.addEventListener('input', () => renderMaterialsList());
+
+        function renderMaterialsList() {
+            const searchTerm = elements.searchMaterialInput.value.toLowerCase();
+            const listEl = elements.materialsList;
+
+            const filteredMaterials = rawMaterials.filter(m => m.name.toLowerCase().includes(searchTerm));
+            const grouped = filteredMaterials.reduce((acc, m) => {
+                const catId = m.categoryId || 'uncategorized';
+                if (!acc[catId]) acc[catId] = [];
+                acc[catId].push(m);
+                return acc;
+            }, {});
+
+            const categoryOrder = materialCategories.map(c => c.id);
+            if (grouped.uncategorized) categoryOrder.push('uncategorized');
+
+            listEl.innerHTML = categoryOrder.map(catId => {
+                if (!grouped[catId]) return '';
+                const category = catId === 'uncategorized' ? { name: translations[currentLang].uncategorized } : findById(materialCategories, catId);
+                if (!category) return '';
+
+                const materialsHtml = grouped[catId].map(m => `
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-md">
+                        <div>
+                            <p class="font-medium text-sm">${m.name} (${m.unit})</p>
+                            <p class="font-mono text-xs text-gray-600">${formatCurrency(m.price)}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="edit-material-btn text-xs text-yellow-700 hover:text-yellow-900" data-id="${m.id}">${translations[currentLang].edit}</button>
+                            <button class="delete-material-btn text-xs text-red-500 hover:text-red-700" data-id="${m.id}">${translations[currentLang].delete}</button>
+                        </div>
+                    </div>`).join('');
+
+                return `<div>
+                            <h4 class="font-semibold text-gray-700 text-md mt-2 mb-1 pb-1 border-b">${category.name}</h4>
+                            <div class="space-y-2">${materialsHtml}</div>
+                        </div>`;
+            }).join('') || `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
+        }
         
         elements.materialsList.addEventListener('click', e => {
             if (e.target.matches('.edit-material-btn')) {
                 const material = findById(rawMaterials, e.target.dataset.id);
                 if (material) openEditMaterialModal(material);
             }
+            if (e.target.matches('.delete-material-btn')) {
+                handleDeleteMaterial(parseInt(e.target.dataset.id));
+            }
         });
+
+        function handleDeleteMaterial(materialId) {
+            const isUsed = dishes.some(d => d.bom && d.bom.some(item => item.materialId === materialId));
+            if (isUsed) {
+                alert('Không thể xóa nguyên vật liệu này vì nó đang được sử dụng trong định lượng của một món ăn.');
+                return;
+            }
+            if (confirm('Bạn có chắc muốn xóa nguyên vật liệu này?')) {
+                rawMaterials = rawMaterials.filter(m => m.id !== materialId);
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderApp();
+            }
+        }
 
         function openEditMaterialModal(material) {
             const modal = elements.editMaterialModal;
+            populateSelect(modal.querySelector('#edit-material-category-select'), materialCategories, 'select_category', 'id', 'name', material.categoryId);
             modal.querySelector('#edit-material-id').value = material.id;
             modal.querySelector('#edit-material-name').value = material.name;
             modal.querySelector('#edit-material-unit').value = material.unit;
@@ -1284,12 +1460,12 @@
             e.preventDefault();
             const materialId = parseInt(document.getElementById('edit-material-id').value);
             const reason = document.getElementById('edit-material-reason').value;
-            const originalMaterial = findById(rawMaterials, materialId);
 
             const updatedMaterial = {
-                ...originalMaterial,
+                ...findById(rawMaterials, materialId),
                 name: document.getElementById('edit-material-name').value,
                 unit: document.getElementById('edit-material-unit').value,
+                categoryId: parseInt(document.getElementById('edit-material-category-select').value) || null,
             };
 
             logAdjustment('log_type_material', materialId, reason, {});
@@ -1342,10 +1518,48 @@
             localStorage.setItem('dishes', JSON.stringify(dishes));
         }
         
+        function populateMaterialSelects(selectElement) {
+            const placeholder = translations[currentLang].select_material;
+            selectElement.innerHTML = `<option value="">-- ${placeholder} --</option>`;
+
+            const grouped = rawMaterials.reduce((acc, m) => {
+                const catId = m.categoryId || 'uncategorized';
+                if (!acc[catId]) acc[catId] = [];
+                acc[catId].push(m);
+                return acc;
+            }, {});
+
+             materialCategories.forEach(cat => {
+                if (grouped[cat.id]) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = cat.name;
+                    grouped[cat.id].forEach(m => {
+                        const option = document.createElement('option');
+                        option.value = m.id;
+                        option.textContent = m.name;
+                        optgroup.appendChild(option);
+                    });
+                    selectElement.appendChild(optgroup);
+                }
+            });
+
+            if (grouped.uncategorized) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = translations[currentLang].uncategorized;
+                grouped.uncategorized.forEach(m => {
+                     const option = document.createElement('option');
+                     option.value = m.id;
+                     option.textContent = m.name;
+                     optgroup.appendChild(option);
+                });
+                selectElement.appendChild(optgroup);
+            }
+        }
+
         function renderApp() {
-            // ... all other render functions ...
             updateAllMaterialPrices();
             recalculateAllDishCosts();
+            
             // Employee role checkboxes
             const rolesContainer = document.getElementById('employee-roles-checkboxes');
             if(rolesContainer) {
@@ -1356,8 +1570,16 @@
                     </label>
                 `).join('');
             }
+            
+            // Populate all material dropdowns
+            populateMaterialSelects(document.getElementById('bom-material-select'));
+            populateMaterialSelects(document.getElementById('purchase-material-select'));
+            populateMaterialSelects(document.getElementById('spoilage-material-select'));
+
+            // Render lists
             elements.dishesList.innerHTML = dishes.map(renderDish).join('');
-            elements.materialsList.innerHTML = rawMaterials.map(renderMaterial).join('');
+            renderMaterialCategories();
+            renderMaterialsList();
         }
         
         // --- Live Timer Update ---
@@ -1381,4 +1603,3 @@
     </script>
 </body>
 </html>
-
