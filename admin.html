@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Quản Trị - Canh Tiềm Dưỡng Sinh</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -28,6 +29,9 @@
              transform: translateY(-2px);
              transition: all 0.2s ease-in-out;
         }
+        .sidebar-link.active {
+            background-color: #4a5568; /* a shade of gray */
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -46,7 +50,11 @@
                 </div>
             </div>
             <nav class="flex-1 px-4 py-2 space-y-2 overflow-y-auto">
-                 <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="employee-management">
+                <a href="#" class="tab-link active:bg-gray-700 bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="dashboard">
+                    <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+                    <span data-lang="dashboard_overview">Tổng Quan</span>
+                </a>
+                 <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="employee-management">
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.663M12 12A3 3 0 1012 6a3 3 0 000 6z" /></svg>
                     <span data-lang="employee_management">Quản Lý Nhân Viên</span>
                 </a>
@@ -100,8 +108,54 @@
         <!-- Main Content -->
         <main class="flex-1 p-6 md:p-10 overflow-y-auto">
             
+            <!-- Tab: Dashboard -->
+            <div id="dashboard" class="tab-content active">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="dashboard_overview">Tổng Quan Hôm Nay</h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Dashboard cards will be injected here -->
+                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4"><svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01"></path></svg></div>
+                        <div>
+                            <p class="text-sm text-gray-500" data-lang="today_revenue">Doanh thu hôm nay</p>
+                            <p id="dashboard-revenue" class="text-2xl font-bold">0 VND</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full mr-4"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg></div>
+                        <div>
+                            <p class="text-sm text-gray-500" data-lang="today_orders">Đơn hàng mới</p>
+                            <p id="dashboard-orders" class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-yellow-100 p-3 rounded-full mr-4"><svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg></div>
+                        <div>
+                            <p class="text-sm text-gray-500" data-lang="best_selling_dish">Món bán chạy nhất</p>
+                            <p id="dashboard-best-seller" class="text-lg font-bold">N/A</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-red-100 p-3 rounded-full mr-4"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+                        <div>
+                            <p class="text-sm text-gray-500" data-lang="low_stock_alert">Cảnh báo tồn kho</p>
+                            <p id="dashboard-low-stock" class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold mb-4" data-lang="order_status_distribution">Phân bổ Trạng thái Đơn hàng</h3>
+                        <canvas id="orderStatusChart"></canvas>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold mb-4" data-lang="recent_activity">Hoạt động Gần đây</h3>
+                        <div id="dashboard-recent-activity" class="space-y-3 max-h-60 overflow-y-auto"></div>
+                    </div>
+                </div>
+            </div>
+
              <!-- Tab: Quản Lý Nhân Viên -->
-            <div id="employee-management" class="tab-content active">
+            <div id="employee-management" class="tab-content">
                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="employee_management_title">Quản Lý Nhân Viên</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1">
@@ -223,8 +277,8 @@
                             <div>
                                 <div class="flex justify-between items-center">
                                      <label for="dish-name" class="block text-sm font-medium text-gray-700" data-lang="dish_name">Tên món</label>
-                                     <button type="button" id="suggest-name-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center disabled:opacity-50">
-                                        <span data-lang="suggest_dish_name">✨ Gợi ý tên</span>
+                                     <button type="button" id="suggest-name-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center">
+                                        <span data-lang="suggest_dish_name_template">💡 Gợi ý (Mẫu)</span>
                                     </button>
                                 </div>
                                 <input type="text" id="dish-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
@@ -233,8 +287,8 @@
                             <div>
                                 <div class="flex justify-between items-center">
                                     <label for="dish-description" class="block text-sm font-medium text-gray-700" data-lang="description">Mô tả</label>
-                                    <button type="button" id="suggest-description-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center disabled:opacity-50">
-                                        <span data-lang="suggest_description">✨ Gợi ý mô tả</span>
+                                    <button type="button" id="suggest-description-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center">
+                                        <span data-lang="suggest_description_template">💡 Gợi ý (Mẫu)</span>
                                     </button>
                                 </div>
                                 <textarea id="dish-description" rows="4" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"></textarea>
@@ -405,12 +459,12 @@
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-semibold" data-lang="spoilage_history_title">Lịch Sử Hư Hao</h2>
-                             <button id="analyze-spoilage-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm hover:bg-indigo-700 flex items-center disabled:opacity-50">
-                                <span data-lang="analyze_spoilage">✨ Phân tích & Đề xuất</span>
+                             <button id="analyze-spoilage-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm hover:bg-indigo-700 flex items-center">
+                                <span data-lang="analyze_spoilage_simple">📈 Phân tích Đơn giản</span>
                             </button>
                         </div>
                         <div id="spoilage-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
-                        <div id="spoilage-analysis-result" class="mt-4 hidden"></div>
+                        <div id="spoilage-analysis-result" class="mt-4 hidden p-4 bg-indigo-50 rounded-md"></div>
                     </div>
                 </div>
             </div>
@@ -496,20 +550,29 @@
                         </div>
                     </div>
                     <div id="profit-results" class="mt-8 pt-6 border-t hidden">
-                        <h3 class="text-2xl font-semibold mb-4 text-center" data-lang="business_results_period">Kết Quả Kinh Doanh Trong Kỳ</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
-                            <div class="bg-blue-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_revenue">Tổng Doanh Thu:</p><p id="result-revenue" class="font-bold text-2xl text-blue-700">0 VND</p></div>
-                            <div class="bg-orange-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_cogs">Tổng Giá Vốn Hàng Bán:</p><p id="result-cogs" class="font-bold text-2xl text-orange-700">0 VND</p></div>
-                             <div class="bg-red-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_commission_fees">Tổng Phí Chiết Khấu:</p><p id="result-commission-fees" class="font-bold text-2xl text-red-700">0 VND</p></div>
-                            <div class="bg-yellow-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_operating_expenses">Tổng Chi Phí Hoạt Động (Tháng):</p><p id="result-monthly-expense" class="font-bold text-2xl text-yellow-700">0 VND</p></div>
-                            <div class="bg-red-100 p-4 rounded-md"><p class="text-gray-600" data-lang="spoilage_cost">Chi Phí Hư Hao (Ước Tính):</p><p id="result-spoilage-cost" class="font-bold text-2xl text-red-800">0 VND</p></div>
-                            <div class="bg-green-100 p-4 rounded-md col-span-1 md:col-span-2"><p class="text-gray-600" data-lang="net_profit">Lợi Nhuận Ròng (Trước Thuế):</p><p id="result-net-profit" class="font-bold text-3xl text-green-800">0 VND</p></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2">
+                                <h3 class="text-2xl font-semibold mb-4 text-center" data-lang="business_results_period">Kết Quả Kinh Doanh Trong Kỳ</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                                    <div class="bg-blue-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_revenue">Tổng Doanh Thu:</p><p id="result-revenue" class="font-bold text-2xl text-blue-700">0 VND</p></div>
+                                    <div class="bg-orange-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_cogs">Tổng Giá Vốn Hàng Bán:</p><p id="result-cogs" class="font-bold text-2xl text-orange-700">0 VND</p></div>
+                                     <div class="bg-red-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_commission_fees">Tổng Phí Chiết Khấu:</p><p id="result-commission-fees" class="font-bold text-2xl text-red-700">0 VND</p></div>
+                                    <div class="bg-yellow-50 p-4 rounded-md"><p class="text-gray-600" data-lang="total_operating_expenses">Tổng Chi Phí Hoạt Động (Tháng):</p><p id="result-monthly-expense" class="font-bold text-2xl text-yellow-700">0 VND</p></div>
+                                    <div class="bg-red-100 p-4 rounded-md"><p class="text-gray-600" data-lang="spoilage_cost">Chi Phí Hư Hao (Ước Tính):</p><p id="result-spoilage-cost" class="font-bold text-2xl text-red-800">0 VND</p></div>
+                                    <div class="bg-green-100 p-4 rounded-md"><p class="text-gray-600" data-lang="net_profit">Lợi Nhuận Ròng (Trước Thuế):</p><p id="result-net-profit" class="font-bold text-3xl text-green-800">0 VND</p></div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-4" data-lang="revenue_structure">Cơ cấu doanh thu</h3>
+                                <canvas id="revenueStructureChart"></canvas>
+                            </div>
                         </div>
+
                         <div class="mt-8 text-center">
-                            <button id="suggest-marketing-btn" class="bg-indigo-600 text-white py-2 px-5 rounded-md hover:bg-indigo-700 flex items-center justify-center mx-auto disabled:opacity-50">
-                                <span data-lang="suggest_marketing_plan">✨ Gợi ý kế hoạch marketing</span>
+                            <button id="suggest-marketing-btn" class="bg-indigo-600 text-white py-2 px-5 rounded-md hover:bg-indigo-700 flex items-center justify-center mx-auto">
+                                <span data-lang="view_marketing_suggestions">💡 Xem Gợi ý Marketing</span>
                             </button>
-                            <div id="marketing-suggestions" class="mt-4 text-left hidden"></div>
+                            <div id="marketing-suggestions" class="mt-4 text-left hidden p-4 bg-indigo-50 rounded-lg"></div>
                         </div>
                     </div>
                 </div>
@@ -683,15 +746,41 @@
             </form>
         </div>
     </div>
+    
+    <!-- Generic Confirmation Modal -->
+    <div id="confirmation-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+            <h2 id="confirmation-title" class="text-xl font-bold mb-4">Xác nhận</h2>
+            <p id="confirmation-message" class="mb-6">Bạn có chắc chắn muốn thực hiện hành động này?</p>
+            <div class="flex justify-end gap-4">
+                <button id="confirm-cancel-btn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md">Hủy</button>
+                <button id="confirm-ok-btn" class="bg-red-600 text-white px-4 py-2 rounded-md">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- IMPORTANT: API KEY ---
-        const GEMINI_API_KEY = ""; 
+        // --- IMPORTANT: Firebase Integration Placeholder ---
+        // To make this a professional, real-world application, replace localStorage
+        // with a real-time database like Google Firebase. The code below is structured
+        // to make this transition easier. You would need to:
+        // 1. Create a Firebase project at https://firebase.google.com/
+        // 2. Enable Firestore Database and Authentication.
+        // 3. Copy your Firebase config object here.
+        // 4. Replace all `localStorage.getItem/setItem` calls with Firestore `getDoc/setDoc/onSnapshot` calls.
         
         const translations = {
             vi: {
                 dashboard_title: 'Bảng Điều Khiển',
+                dashboard_overview: 'Tổng Quan',
+                today_revenue: 'Doanh thu hôm nay',
+                today_orders: 'Đơn hàng mới',
+                best_selling_dish: 'Món bán chạy nhất',
+                low_stock_alert: 'Cảnh báo tồn kho',
+                order_status_distribution: 'Phân bổ Trạng thái Đơn hàng',
+                recent_activity: 'Hoạt động Gần đây',
                 employee_management: 'Quản Lý Nhân Viên',
                 order_lookup: 'Tra Cứu Đơn Hàng',
                 menu_management: 'Quản Lý Thực Đơn',
@@ -750,9 +839,9 @@
                 menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
                 add_new_dish: 'Thêm Món Mới',
                 dish_name: 'Tên món',
-                suggest_dish_name: '✨ Gợi ý tên',
+                suggest_dish_name_template: '💡 Gợi ý (Mẫu)',
                 description: 'Mô tả',
-                suggest_description: '✨ Gợi ý mô tả',
+                suggest_description_template: '💡 Gợi ý (Mẫu)',
                 selling_price: 'Giá Bán (VND)',
                 image_url: 'URL Hình ảnh',
                 bom_title: 'Định Lượng Nguyên Liệu (BOM)',
@@ -792,7 +881,7 @@
                 spoilage_reason_placeholder: 'VD: Hết hạn, hỏng...',
                 record_btn: 'Ghi Nhận',
                 spoilage_history_title: 'Lịch Sử Hư Hao',
-                analyze_spoilage: '✨ Phân tích & Đề xuất',
+                analyze_spoilage_simple: '📈 Phân tích Đơn giản',
                 other_costs_title: 'Quản Lý Chi Phí Khác',
                 add_new_cost: 'Thêm Chi Phí Mới',
                 cost_name: 'Tên chi phí',
@@ -817,7 +906,8 @@
                 total_operating_expenses: 'Tổng Chi Phí Hoạt Động (Tháng):',
                 spoilage_cost: 'Chi Phí Hư Hao (Ước Tính):',
                 net_profit: 'Lợi Nhuận Ròng (Trước Thuế):',
-                suggest_marketing_plan: '✨ Gợi ý kế hoạch marketing',
+                view_marketing_suggestions: '💡 Xem Gợi ý Marketing',
+                revenue_structure: 'Cơ cấu doanh thu',
                 inventory_report_title: 'Báo Cáo Xuất Nhập Tồn Nguyên Liệu',
                 view_report_btn: 'Xem Báo Cáo',
                 material_name_header: 'Tên Nguyên Liệu',
@@ -869,6 +959,7 @@
         
         let salesDataInPeriod = []; // Store filtered sales data globally for this tab
         let editingBomItems = []; // For edit dish modal
+        let chartInstances = {}; // To hold chart objects
 
         // --- Helper Functions ---
         const formatCurrency = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
@@ -935,6 +1026,7 @@
             editMaterialForm: document.getElementById('edit-material-form'),
             cancelEditMaterialBtn: document.getElementById('cancel-edit-material'),
             editCategoryModal: document.getElementById('edit-category-modal'),
+            confirmationModal: document.getElementById('confirmation-modal'),
             // Menu
             dishesList: document.getElementById('dishes-list'),
             // Materials
@@ -1204,11 +1296,11 @@
                 if (dish) openEditDishModal(dish);
             }
             if (e.target.matches('.delete-dish-btn')) {
-                if(confirm('Bạn có chắc muốn xóa món ăn này?')) {
+                showConfirmation('Xác nhận xóa', 'Bạn có chắc muốn xóa món ăn này?', () => {
                     dishes = dishes.filter(d => d.id !== parseInt(e.target.dataset.id));
                     localStorage.setItem('dishes', JSON.stringify(dishes));
                     renderApp();
-                }
+                });
             }
         });
 
@@ -1355,7 +1447,7 @@
         });
 
         function handleDeleteCategory(categoryId) {
-            if (confirm('Bạn có chắc muốn xóa phân loại này? Tất cả nguyên vật liệu trong nhóm sẽ trở thành "Chưa phân loại".')) {
+            showConfirmation('Xóa phân loại?', 'Bạn có chắc muốn xóa phân loại này? Các nguyên vật liệu trong nhóm sẽ trở thành "Chưa phân loại".', () => {
                 materialCategories = materialCategories.filter(c => c.id !== categoryId);
                 rawMaterials.forEach(m => {
                     if (m.categoryId === categoryId) {
@@ -1365,7 +1457,7 @@
                 localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
                 localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
                 renderApp();
-            }
+            });
         }
         
         document.getElementById('add-material-form').addEventListener('submit', e => {
@@ -1438,11 +1530,11 @@
                 alert('Không thể xóa nguyên vật liệu này vì nó đang được sử dụng trong định lượng của một món ăn.');
                 return;
             }
-            if (confirm('Bạn có chắc muốn xóa nguyên vật liệu này?')) {
-                rawMaterials = rawMaterials.filter(m => m.id !== materialId);
+            showConfirmation('Xóa nguyên liệu?', 'Bạn có chắc muốn xóa nguyên vật liệu này?', () => {
+                 rawMaterials = rawMaterials.filter(m => m.id !== materialId);
                 localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
                 renderApp();
-            }
+            });
         }
 
         function openEditMaterialModal(material) {
@@ -1555,6 +1647,106 @@
                 selectElement.appendChild(optgroup);
             }
         }
+        
+        // --- API-Free "AI" Replacements ---
+        document.getElementById('suggest-name-btn').addEventListener('click', () => {
+            const mainIngredient = prompt("Nhập nguyên liệu chính (vd: Gà, Bò, Nấm):", "");
+            if(!mainIngredient) return;
+            
+            const styles = ["hầm", "tiềm", "nấu", "xào", "chưng"];
+            const additions = ["thuốc bắc", "hạt sen", "táo đỏ", "đông trùng hạ thảo", "sâm"];
+            const chosenStyle = styles[Math.floor(Math.random() * styles.length)];
+            const chosenAddition = additions[Math.floor(Math.random() * additions.length)];
+            
+            document.getElementById('dish-name').value = `Canh ${mainIngredient} ${chosenStyle} ${chosenAddition}`;
+        });
+
+        document.getElementById('suggest-description-btn').addEventListener('click', () => {
+            const dishName = document.getElementById('dish-name').value;
+            if(!dishName) { alert("Vui lòng nhập tên món ăn trước."); return; }
+
+            const templates = [
+                `Một sự kết hợp tinh tế của các loại thảo mộc quý, ${dishName} không chỉ là một món ăn ngon mà còn là một bài thuốc bồi bổ sức khỏe, giúp tăng cường sinh lực và an thần.`,
+                `${dishName} mang đến hương vị đậm đà, ngọt thanh tự nhiên từ các nguyên liệu được hầm kỹ trong nhiều giờ, là lựa chọn hoàn hảo cho một bữa ăn dưỡng sinh.`,
+                `Thưởng thức ${dishName} để cảm nhận sự hòa quyện tuyệt vời giữa vị ngon của nguyên liệu và công dụng tuyệt vời cho sức khỏe, giúp cơ thể khỏe mạnh từ bên trong.`
+            ];
+            document.getElementById('dish-description').value = templates[Math.floor(Math.random() * templates.length)];
+        });
+
+        document.getElementById('analyze-spoilage-btn').addEventListener('click', () => {
+            const resultDiv = document.getElementById('spoilage-analysis-result');
+            if (spoilageRecords.length === 0) {
+                resultDiv.innerHTML = `<p>Chưa có dữ liệu hư hao để phân tích.</p>`;
+                resultDiv.classList.remove('hidden');
+                return;
+            }
+
+            const analysis = spoilageRecords.reduce((acc, record) => {
+                const material = findById(rawMaterials, record.materialId);
+                if (material) {
+                    const value = (acc[material.name] || 0) + (record.quantity * material.price);
+                    acc[material.name] = value;
+                }
+                return acc;
+            }, {});
+
+            const sorted = Object.entries(analysis).sort((a, b) => b[1] - a[1]);
+
+            let html = `
+                <h4 class="font-bold text-md mb-2">Phân tích chi phí hư hao hàng đầu:</h4>
+                <ul class="list-disc pl-5 space-y-1 text-sm">
+            `;
+            sorted.slice(0, 3).forEach(([name, value]) => {
+                html += `<li><strong>${name}</strong>: Thất thoát khoảng ${formatCurrency(value)}</li>`;
+            });
+            html += `</ul><p class="text-xs mt-3"><i>Gợi ý: Cân nhắc giảm lượng nhập hàng hoặc kiểm tra lại quy trình bảo quản cho các nguyên liệu này.</i></p>`;
+            
+            resultDiv.innerHTML = html;
+            resultDiv.classList.remove('hidden');
+        });
+
+         document.getElementById('suggest-marketing-btn').addEventListener('click', () => {
+            const suggestionsDiv = document.getElementById('marketing-suggestions');
+            const bestSeller = "Món bán chạy nhất của bạn"; // Placeholder
+            const suggestionsHTML = `
+                <h4 class="font-bold text-md mb-2">Gợi ý chiến lược Marketing:</h4>
+                <ul class="list-disc pl-5 space-y-2 text-sm">
+                    <li><strong>Tập trung vào món chủ lực:</strong> Chạy các chiến dịch quảng cáo trên mạng xã hội (Facebook, Instagram) cho "${bestSeller}".</li>
+                    <li><strong>Tạo Combo hấp dẫn:</strong> Kết hợp các món bán chạy với các món ít phổ biến hơn để tạo thành combo với giá ưu đãi.</li>
+                    <li><strong>Chương trình khách hàng thân thiết:</strong> Tích điểm cho khách hàng sau mỗi lần mua để đổi lấy ưu đãi hoặc sản phẩm miễn phí.</li>
+                    <li><strong>Hợp tác với người có ảnh hưởng (KOLs):</strong> Mời các food blogger đến trải nghiệm và review nhà hàng của bạn.</li>
+                    <li><strong>Tối ưu hóa trên các ứng dụng giao hàng:</strong> Sử dụng các gói quảng cáo, Freeship Xtra, hoặc tạo các deal độc quyền trên GrabFood, ShopeeFood.</li>
+                </ul>
+            `;
+            suggestionsDiv.innerHTML = suggestionsHTML;
+            suggestionsDiv.classList.toggle('hidden');
+        });
+
+        // --- Confirmation Modal Logic ---
+        function showConfirmation(title, message, onConfirm) {
+            const modal = elements.confirmationModal;
+            modal.querySelector('#confirmation-title').textContent = title;
+            modal.querySelector('#confirmation-message').textContent = message;
+            
+            const confirmBtn = modal.querySelector('#confirm-ok-btn');
+            const cancelBtn = modal.querySelector('#confirm-cancel-btn');
+
+            const confirmHandler = () => {
+                onConfirm();
+                closeModal();
+            };
+            
+            const closeModal = () => {
+                modal.classList.remove('active');
+                confirmBtn.removeEventListener('click', confirmHandler);
+            };
+
+            confirmBtn.addEventListener('click', confirmHandler, { once: true });
+            cancelBtn.addEventListener('click', closeModal, { once: true });
+            
+            modal.classList.add('active');
+        }
+
 
         function renderApp() {
             updateAllMaterialPrices();
@@ -1580,8 +1772,73 @@
             elements.dishesList.innerHTML = dishes.map(renderDish).join('');
             renderMaterialCategories();
             renderMaterialsList();
+            renderDashboard();
         }
         
+         // --- Dashboard Logic ---
+        function renderDashboard() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const completedToday = loadFromStorage('completedOrders').filter(o => new Date(o.timestamps.completed) >= today);
+            const activeToday = loadFromStorage('activeOrders').filter(o => new Date(o.timestamps.created) >= today);
+            
+            const revenueToday = completedToday.reduce((sum, order) => sum + order.totalPrice, 0);
+            document.getElementById('dashboard-revenue').textContent = formatCurrency(revenueToday);
+            document.getElementById('dashboard-orders').textContent = activeToday.length + completedToday.length;
+            
+            // Best seller logic
+            const dishCounts = completedToday.flatMap(o => o.items).reduce((acc, item) => {
+                acc[item.dishId] = (acc[item.dishId] || 0) + item.quantity;
+                return acc;
+            }, {});
+            const bestSellerId = Object.keys(dishCounts).sort((a,b) => dishCounts[b] - dishCounts[a])[0];
+            const bestSellerDish = findById(dishes, bestSellerId);
+            document.getElementById('dashboard-best-seller').textContent = bestSellerDish ? bestSellerDish.name : 'N/A';
+
+            // Chart
+            const statusCounts = [...activeToday, ...completedToday].reduce((acc, order) => {
+                const status = order.finalStatus || order.status;
+                acc[status] = (acc[status] || 0) + 1;
+                return acc;
+            }, {});
+
+            renderPieChart('orderStatusChart', {
+                labels: Object.keys(statusCounts).map(key => orderStatuses[key]?.name || key),
+                data: Object.values(statusCounts),
+                colors: Object.keys(statusCounts).map(key => orderStatuses[key]?.color || '#ccc')
+            });
+        }
+        
+        // --- Charting Function ---
+        function renderPieChart(canvasId, { labels, data, colors }) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if (chartInstances[canvasId]) {
+                chartInstances[canvasId].destroy();
+            }
+            chartInstances[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+
         // --- Live Timer Update ---
         setInterval(() => {
             document.querySelectorAll('.live-timer').forEach(timerEl => {
@@ -1603,3 +1860,4 @@
     </script>
 </body>
 </html>
+
