@@ -465,6 +465,15 @@
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <div class="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
                          <div>
+                            <label for="profit-report-preset-filter" class="block text-sm font-medium text-gray-700" data-lang="view_by">Xem theo</label>
+                            <select id="profit-report-preset-filter" class="mt-1 block w-full md:w-auto border-gray-300 rounded-md shadow-sm">
+                                <option value="this_month" data-lang="this_month">Tháng này</option>
+                                <option value="this_quarter" data-lang="this_quarter">Quí này</option>
+                                <option value="this_year" data-lang="this_year">Năm này</option>
+                                <option value="custom" data-lang="custom_option">Tùy chọn</option>
+                            </select>
+                        </div>
+                        <div>
                             <label for="profit-report-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
                             <input type="date" id="profit-report-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
@@ -473,7 +482,7 @@
                             <input type="date" id="profit-report-end-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="self-end">
-                            <button id="calculate-profit-btn" class="w-full bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700" data-lang="calculate_profit_btn">Xem Báo Cáo Lợi Nhuận</button>
+                            <button id="calculate-profit-btn" class="w-full bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700" data-lang="calculate_profit_btn">Xem Báo Cáo</button>
                         </div>
                     </div>
                     <div id="profit-results" class="mt-8 pt-6 border-t hidden">
@@ -504,10 +513,10 @@
                         <div>
                             <label for="report-preset-filter" class="block text-sm font-medium text-gray-700" data-lang="view_by">Xem theo</label>
                             <select id="report-preset-filter" class="mt-1 block w-full md:w-auto border-gray-300 rounded-md shadow-sm">
-                                <option value="custom" data-lang="custom_option">Tùy chọn</option>
                                 <option value="this_month" data-lang="this_month">Tháng này</option>
                                 <option value="this_quarter" data-lang="this_quarter">Quí này</option>
                                 <option value="this_year" data-lang="this_year">Năm này</option>
+                                <option value="custom" data-lang="custom_option">Tùy chọn</option>
                             </select>
                         </div>
                         <div>
@@ -768,7 +777,7 @@
                 onetime_costs: 'Chi phí một lần (Đầu tư)',
                 total: 'Tổng cộng:',
                 profit_report_title: 'Báo Cáo Lợi Nhuận',
-                calculate_profit_btn: 'Xem Báo Cáo Lợi Nhuận',
+                calculate_profit_btn: 'Xem Báo Cáo',
                 business_results_period: 'Kết Quả Kinh Doanh Trong Kỳ',
                 total_revenue: 'Tổng Doanh Thu:',
                 total_cogs: 'Tổng Giá Vốn Hàng Bán:',
@@ -807,8 +816,13 @@
                 edit_dish_title: 'Điều Chỉnh Thông Tin Món Ăn',
                 price_effective_date: 'Ngày Áp Dụng Giá Mới',
                 edit_material_title: 'Điều Chỉnh Thông Tin Nguyên Vật Liệu',
+                total_time: 'Tổng thời gian',
+                duration: 'Thời gian trôi qua',
             },
-            zh: { /* ... (Chinese translations) ... */ }
+            zh: { /* ... (Chinese translations) ... */ 
+                total_time: '總時間',
+                duration: '經過時間',
+            }
         };
 
         let currentLang = localStorage.getItem('language') || 'vi';
@@ -829,6 +843,15 @@
                 console.error(`Error parsing ${key} from localStorage`, e);
                 return defaultValue;
             }
+        };
+
+        const formatDuration = (ms) => {
+            if (!ms || ms < 0) return '00:00:00';
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
         };
 
         // --- Data Initialization from localStorage ---
@@ -875,16 +898,42 @@
             // Materials
             materialsList: document.getElementById('materials-list'),
             // Sales
+            orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
             orderLookupEndDate: document.getElementById('order-lookup-end-date'),
             orderLookupBtn: document.getElementById('order-lookup-btn'),
             orderStats: document.getElementById('order-stats'),
             orderDetailsList: document.getElementById('order-details-list'),
             orderDetailsTitle: document.getElementById('order-details-title'),
+            // Inventory Report
+            inventoryReportPresetFilter: document.getElementById('report-preset-filter'),
+            inventoryReportStartDate: document.getElementById('report-start-date'),
+            inventoryReportEndDate: document.getElementById('report-end-date'),
+            // Profit Report
+            profitReportPresetFilter: document.getElementById('profit-report-preset-filter'),
+            profitReportStartDate: document.getElementById('profit-report-start-date'),
+            profitReportEndDate: document.getElementById('profit-report-end-date'),
         };
 
         const setLanguage = (lang) => {
-            // ... (language setting logic unchanged) ...
+             currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+             document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                const key = el.dataset.langPlaceholder;
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                 btn.classList.toggle('active', btn.dataset.langCode === lang);
+            });
+            renderApp(); // Re-render the application to update dynamic content
         };
         document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.langCode)));
         
@@ -922,12 +971,51 @@
             localStorage.setItem('adjustmentLogs', JSON.stringify(adjustmentLogs));
         }
 
+        function handleDatePresetChange(presetValue, startDateInput, endDateInput) {
+            const today = new Date();
+            let startDate, endDate = today;
+
+            startDateInput.disabled = true;
+            endDateInput.disabled = true;
+
+            switch (presetValue) {
+                case 'this_month':
+                    startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    break;
+                case 'this_quarter':
+                    const quarter = Math.floor(today.getMonth() / 3);
+                    startDate = new Date(today.getFullYear(), quarter * 3, 1);
+                    break;
+                case 'this_year':
+                    startDate = new Date(today.getFullYear(), 0, 1);
+                    break;
+                case 'custom':
+                    startDateInput.disabled = false;
+                    endDateInput.disabled = false;
+                    startDateInput.value = '';
+                    endDateInput.value = '';
+                    return; // Exit here for custom
+            }
+
+            startDateInput.value = startDate.toISOString().split('T')[0];
+            endDateInput.value = endDate.toISOString().split('T')[0];
+        }
+
         // --- Sales & Order Lookup Logic ---
+        elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
+        elements.inventoryReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.inventoryReportStartDate, elements.inventoryReportEndDate));
+        elements.profitReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.profitReportStartDate, elements.profitReportEndDate));
+
         elements.orderLookupBtn.addEventListener('click', () => {
             const startDate = new Date(elements.orderLookupStartDate.value);
             startDate.setHours(0, 0, 0, 0);
             const endDate = new Date(elements.orderLookupEndDate.value);
             endDate.setHours(23, 59, 59, 999);
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                alert("Vui lòng chọn ngày hợp lệ.");
+                return;
+            }
 
             const activeOrders = loadFromStorage('activeOrders');
             const completedOrders = loadFromStorage('completedOrders');
@@ -952,7 +1040,12 @@
             cancelledOrders.forEach(record => {
                 const orderDate = new Date(record.timestamp);
                 if (orderDate >= startDate && orderDate <= endDate) {
-                    allOrdersInPeriod.push({ ...record.order, finalStatus: 'cancelled', cancellationReason: record.reason });
+                    allOrdersInPeriod.push({ 
+                        ...record.order, 
+                        finalStatus: 'cancelled', 
+                        cancellationReason: record.reason,
+                        cancellationTimestamp: record.timestamp
+                    });
                 }
             });
             
@@ -1001,17 +1094,42 @@
              elements.orderDetailsList.innerHTML = data.length ? data.map(order => {
                 const statusInfo = orderStatuses[order.finalStatus];
                 const dishNames = order.items.map(i => findById(dishes, i.dishId)?.name || 'N/A').join(', ');
+
+                const timeInfoHtml = (() => {
+                    if (order.finalStatus === 'completed') {
+                        const duration = order.timestamps.completed - order.timestamps.created;
+                        return `<div class="text-right">
+                                    <p class="font-semibold text-green-600">${formatDuration(duration)}</p>
+                                    <p class="text-xs text-gray-500" data-lang="total_time">${translations[currentLang].total_time}</p>
+                                </div>`;
+                    } else if (order.finalStatus === 'cancelled') {
+                        const duration = order.cancellationTimestamp - order.timestamps.created;
+                        return `<div class="text-right">
+                                    <p class="font-semibold text-red-600">${formatDuration(duration)}</p>
+                                    <p class="text-xs text-gray-500" data-lang="total_time">${translations[currentLang].total_time}</p>
+                                </div>`;
+                    } else { // new, preparing, delivering
+                        return `<div class="text-right">
+                                    <p class="font-semibold text-blue-600 live-timer" data-timestamp="${order.timestamps.created}">00:00:00</p>
+                                    <p class="text-xs text-gray-500" data-lang="duration">${translations[currentLang].duration}</p>
+                                </div>`;
+                    }
+                })();
+
                  return `
-                    <div class="p-4 bg-white rounded-lg border-l-4" style="border-color: ${statusInfo.color};">
+                    <div class="p-4 bg-gray-50 rounded-lg border-l-4" style="border-color: ${statusInfo.color};">
                         <div class="flex flex-wrap justify-between items-center gap-2">
                             <div>
                                 <p class="font-bold text-gray-800">${order.customer.orderId}</p>
                                 <p class="text-sm text-gray-600">${dishNames}</p>
                                 <p class="text-xs text-gray-500">${new Date(order.timestamps.created).toLocaleString('vi-VN')}</p>
                             </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-gray-800">${order.customer.name}</p>
-                                <p class="text-xs text-gray-500">${order.customer.phone}</p>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right">
+                                    <p class="font-semibold text-gray-800">${order.customer.name}</p>
+                                    <p class="text-xs text-gray-500">${order.customer.phone}</p>
+                                </div>
+                                ${timeInfoHtml}
                             </div>
                         </div>
                         ${order.finalStatus === 'cancelled' ? `<p class="text-xs text-red-600 mt-1">Lý do hủy: ${order.cancellationReason}</p>` : ''}
@@ -1031,7 +1149,7 @@
                 </div>
                 <div class="flex gap-2">
                     <button class="edit-dish-btn text-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-1 px-2 rounded" data-id="${d.id}">${translations[currentLang].edit}</button>
-                    <button class="delete-dish-btn text-red-500 hover:text-red-700" data-id="${d.id}">X</button>
+                    <button class="delete-dish-btn text-xs bg-red-400 hover:bg-red-500 text-red-900 font-semibold py-1 px-2 rounded" data-id="${d.id}">${translations[currentLang].delete}</button>
                 </div>
             </div>
         `};
@@ -1108,9 +1226,8 @@
             const newPrice = parseFloat(document.getElementById('edit-dish-price').value);
             const effectiveDate = document.getElementById('edit-dish-price-effective-date').value;
             const priceHistory = originalDish.priceHistory || [{ price: originalDish.price, effectiveDate: '1970-01-01'}];
-            const lastPriceEntry = priceHistory[priceHistory.length-1];
-
-            if (newPrice !== lastPriceEntry.price) {
+            
+            if (newPrice !== getPriceForDate(originalDish, new Date(effectiveDate || todayISO()))) {
                 if(!effectiveDate) { alert('Vui lòng chọn ngày áp dụng giá mới.'); return; }
                  priceHistory.push({ price: newPrice, effectiveDate });
             }
@@ -1227,12 +1344,37 @@
         
         function renderApp() {
             // ... all other render functions ...
+            updateAllMaterialPrices();
             recalculateAllDishCosts();
+            // Employee role checkboxes
+            const rolesContainer = document.getElementById('employee-roles-checkboxes');
+            if(rolesContainer) {
+                rolesContainer.innerHTML = Object.keys(employeeRoles).map(key => `
+                    <label class="flex items-center">
+                        <input type="checkbox" name="employee-roles" value="${key}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                        <span class="ml-2 text-gray-700">${employeeRoles[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || employeeRoles[key].name}</span>
+                    </label>
+                `).join('');
+            }
             elements.dishesList.innerHTML = dishes.map(renderDish).join('');
             elements.materialsList.innerHTML = rawMaterials.map(renderMaterial).join('');
         }
         
+        // --- Live Timer Update ---
+        setInterval(() => {
+            document.querySelectorAll('.live-timer').forEach(timerEl => {
+                const timestamp = parseInt(timerEl.dataset.timestamp, 10);
+                if (!isNaN(timestamp)) {
+                    const duration = Date.now() - timestamp;
+                    timerEl.textContent = formatDuration(duration);
+                }
+            });
+        }, 1000);
+        
         // --- INITIAL LOAD ---
+        handleDatePresetChange('this_month', elements.orderLookupStartDate, elements.orderLookupEndDate);
+        handleDatePresetChange('this_month', elements.inventoryReportStartDate, elements.inventoryReportEndDate);
+        handleDatePresetChange('this_month', elements.profitReportStartDate, elements.profitReportEndDate);
         renderApp();
         setLanguage(currentLang);
     });
