@@ -1407,12 +1407,13 @@
         function renderSuppliersList() {
             const listEl = elements.suppliersList;
             listEl.innerHTML = suppliers.length ? suppliers.map(s => `
-                <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-center">
+                <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-start">
                     <div>
                         <p class="font-semibold text-gray-800">${s.name}</p>
                         <p class="text-sm text-gray-500">${s.contact || ''} - ${s.phone || ''}</p>
+                        <p class="text-xs text-gray-400 mt-1">${s.address || ''} ${s.taxcode ? `(MST: ${s.taxcode})` : ''}</p>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 flex-shrink-0">
                         <button class="edit-supplier-btn text-sm text-blue-600 hover:underline" data-id="${s.id}">${translations[currentLang].edit}</button>
                         <button class="delete-supplier-btn text-sm text-red-600 hover:underline" data-id="${s.id}">${translations[currentLang].delete}</button>
                     </div>
@@ -1432,7 +1433,7 @@
             };
             suppliers.push(newSupplier);
             localStorage.setItem('suppliers', JSON.stringify(suppliers));
-            renderApp(); // Use renderApp to ensure a full and correct re-render
+            renderApp(); 
             elements.addSupplierForm.reset();
         });
 
@@ -2050,9 +2051,197 @@
             renderDashboard();
             renderEmployeesList();
             renderSuppliersList();
+            renderPurchasesList();
+            renderSpoilageList();
+            renderOtherCostsLists();
+        }
+
+        // --- Purchase Logic ---
+        function renderPurchasesList() {
+            const listEl = document.getElementById('purchases-list');
+            const sortedPurchases = [...purchases].sort((a,b) => new Date(b.date) - new Date(a.date));
+            listEl.innerHTML = sortedPurchases.length ? sortedPurchases.slice(0, 20).map(p => { // Show recent 20
+                const material = findById(rawMaterials, p.materialId);
+                return `
+                <div class="text-xs p-2 bg-gray-50 rounded">
+                    <p>${p.date}: <span class="font-semibold">${material?.name || 'N/A'}</span></p>
+                    <p>SL: ${p.quantity} ${material?.unit || ''} - Tổng: ${formatCurrency(p.totalPrice)}</p>
+                </div>
+                `;
+            }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
         }
         
-         // --- Dashboard Logic ---
+        document.getElementById('add-purchase-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const materialId = parseInt(document.getElementById('purchase-material-select').value);
+            const quantity = parseFloat(document.getElementById('purchase-quantity').value);
+            const totalPrice = parseFloat(document.getElementById('purchase-total-price').value);
+
+            const newPurchase = {
+                id: Date.now(),
+                date: document.getElementById('purchase-date').value,
+                materialId: materialId,
+                quantity: quantity,
+                totalPrice: totalPrice,
+                unitPrice: (quantity > 0) ? totalPrice / quantity : 0,
+                supplierId: parseInt(document.getElementById('purchase-supplier-select').value)
+            };
+
+            if(!newPurchase.date || isNaN(newPurchase.materialId) || isNaN(newPurchase.quantity) || isNaN(newPurchase.totalPrice) || isNaN(newPurchase.supplierId)) {
+                alert('Vui lòng điền đầy đủ thông tin nhập kho.');
+                return;
+            }
+
+            purchases.push(newPurchase);
+            localStorage.setItem('purchases', JSON.stringify(purchases));
+            
+            renderApp();
+            
+            e.target.reset();
+            document.getElementById('new-unit-price').textContent = formatCurrency(0);
+            document.getElementById('purchase-unit').value = '';
+        });
+
+        document.getElementById('purchase-material-select').addEventListener('change', (e) => {
+            const material = findById(rawMaterials, e.target.value);
+            document.getElementById('purchase-unit').value = material ? material.unit : '';
+        });
+        
+        const purchaseQuantityInput = document.getElementById('purchase-quantity');
+        const purchaseTotalPriceInput = document.getElementById('purchase-total-price');
+        const newUnitPriceEl = document.getElementById('new-unit-price');
+
+        function updateNewUnitPrice() {
+            const quantity = parseFloat(purchaseQuantityInput.value);
+            const totalPrice = parseFloat(purchaseTotalPriceInput.value);
+            if (quantity > 0 && totalPrice > 0) {
+                const unitPrice = totalPrice / quantity;
+                newUnitPriceEl.textContent = formatCurrency(unitPrice);
+            } else {
+                newUnitPriceEl.textContent = formatCurrency(0);
+            }
+        }
+        purchaseQuantityInput.addEventListener('input', updateNewUnitPrice);
+        purchaseTotalPriceInput.addEventListener('input', updateNewUnitPrice);
+        
+
+        // --- Spoilage Logic ---
+        function renderSpoilageList() {
+            const listEl = document.getElementById('spoilage-list');
+            const sortedRecords = [...spoilageRecords].sort((a,b) => new Date(b.date) - new Date(a.date));
+            listEl.innerHTML = sortedRecords.length ? sortedRecords.map(r => {
+                const material = findById(rawMaterials, r.materialId);
+                return `
+                <div class="p-2 bg-red-50 rounded text-sm flex justify-between">
+                    <span>${r.date}: ${material?.name || 'N/A'} - ${r.quantity} ${material?.unit || ''} (${r.reason})</span>
+                    <button class="delete-spoilage-btn text-red-500 hover:text-red-700 font-bold" data-id="${r.id}">X</button>
+                </div>`;
+            }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
+        }
+
+        document.getElementById('spoilage-list').addEventListener('click', e => {
+            if(e.target.matches('.delete-spoilage-btn')) {
+                const recordId = parseInt(e.target.dataset.id);
+                showConfirmation('Xóa hư hao?', 'Bạn có chắc muốn xóa ghi nhận hư hao này?', () => {
+                     spoilageRecords = spoilageRecords.filter(r => r.id !== recordId);
+                     localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
+                     renderSpoilageList();
+                });
+            }
+        });
+
+        document.getElementById('spoilage-material-select').addEventListener('change', (e) => {
+            const material = findById(rawMaterials, e.target.value);
+            document.getElementById('spoilage-unit').value = material ? material.unit : '';
+        });
+        
+        document.getElementById('add-spoilage-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const newSpoilage = {
+                id: Date.now(),
+                date: document.getElementById('spoilage-date').value,
+                materialId: parseInt(document.getElementById('spoilage-material-select').value),
+                quantity: parseFloat(document.getElementById('spoilage-quantity').value),
+                reason: document.getElementById('spoilage-reason').value
+            };
+            if (!newSpoilage.date || isNaN(newSpoilage.materialId) || isNaN(newSpoilage.quantity) || !newSpoilage.reason) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return;
+            }
+            spoilageRecords.push(newSpoilage);
+            localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
+            renderSpoilageList();
+            e.target.reset();
+            document.getElementById('spoilage-unit').value = '';
+        });
+
+        // --- Other Costs Logic ---
+        function renderOtherCostsLists() {
+            const monthlyList = document.getElementById('monthly-costs-list');
+            const yearlyList = document.getElementById('yearly-costs-list');
+            const onetimeList = document.getElementById('onetime-costs-list');
+            let totalMonthly = 0, totalYearly = 0, totalOnetime = 0;
+
+            const renderList = (items) => items.map(c => `
+                <div class="flex justify-between items-center text-sm p-2 bg-gray-50 rounded">
+                    <span>${c.name}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="font-semibold">${formatCurrency(c.amount)}</span>
+                        <button class="delete-cost-btn text-red-500 hover:text-red-700 font-bold" data-id="${c.id}">X</button>
+                    </div>
+                </div>`).join('');
+            
+            const monthlyCosts = otherCosts.filter(c => c.frequency === 'monthly');
+            monthlyList.innerHTML = monthlyCosts.length ? renderList(monthlyCosts) : `<p class="text-gray-500 text-center text-sm">${translations[currentLang].empty_data}</p>`;
+            totalMonthly = monthlyCosts.reduce((sum, c) => sum + c.amount, 0);
+
+            const yearlyCosts = otherCosts.filter(c => c.frequency === 'yearly');
+            yearlyList.innerHTML = yearlyCosts.length ? renderList(yearlyCosts) : `<p class="text-gray-500 text-center text-sm">${translations[currentLang].empty_data}</p>`;
+            totalYearly = yearlyCosts.reduce((sum, c) => sum + c.amount, 0);
+            
+            const onetimeCosts = otherCosts.filter(c => c.frequency === 'onetime');
+            onetimeList.innerHTML = onetimeCosts.length ? renderList(onetimeCosts) : `<p class="text-gray-500 text-center text-sm">${translations[currentLang].empty_data}</p>`;
+            totalOnetime = onetimeCosts.reduce((sum, c) => sum + c.amount, 0);
+
+            document.getElementById('total-monthly-costs').textContent = formatCurrency(totalMonthly);
+            document.getElementById('total-yearly-costs').textContent = formatCurrency(totalYearly);
+            document.getElementById('total-onetime-costs').textContent = formatCurrency(totalOnetime);
+        }
+
+        function handleDeleteCost(e) {
+            if(e.target.matches('.delete-cost-btn')) {
+                const costId = parseInt(e.target.dataset.id);
+                 showConfirmation('Xóa chi phí?', 'Bạn có chắc muốn xóa chi phí này?', () => {
+                     otherCosts = otherCosts.filter(c => c.id !== costId);
+                     localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+                     renderOtherCostsLists();
+                });
+            }
+        }
+        document.getElementById('monthly-costs-list').addEventListener('click', handleDeleteCost);
+        document.getElementById('yearly-costs-list').addEventListener('click', handleDeleteCost);
+        document.getElementById('onetime-costs-list').addEventListener('click', handleDeleteCost);
+
+        document.getElementById('add-other-cost-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const newCost = {
+                id: Date.now(),
+                name: document.getElementById('other-cost-name').value,
+                amount: parseFloat(document.getElementById('other-cost-amount').value),
+                frequency: document.getElementById('other-cost-frequency').value
+            };
+             if (!newCost.name || isNaN(newCost.amount)) {
+                alert('Vui lòng điền đầy đủ thông tin chi phí.');
+                return;
+            }
+            otherCosts.push(newCost);
+            localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+            renderOtherCostsLists();
+            e.target.reset();
+        });
+
+
+        // --- Dashboard Logic ---
         function renderDashboard() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
