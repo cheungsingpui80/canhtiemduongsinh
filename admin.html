@@ -32,18 +32,6 @@
         .sidebar-link.active {
             background-color: #4a5568; /* a shade of gray */
         }
-        .spinner {
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border-left-color: #fff;
-            animation: spin 1s ease infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -287,24 +275,11 @@
                         <form id="add-dish-form" class="space-y-4">
                             <!-- Basic Info -->
                             <div>
-                                <div class="flex justify-between items-center">
-                                     <label for="dish-name" class="block text-sm font-medium text-gray-700" data-lang="dish_name">Tên món</label>
-                                     <button type="button" id="suggest-name-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center gap-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
-                                        <span data-lang="suggest_dish_name_ai">Gợi ý bằng AI</span>
-                                    </button>
-                                </div>
+                                <label for="dish-name" class="block text-sm font-medium text-gray-700" data-lang="dish_name">Tên món</label>
                                 <input type="text" id="dish-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
-                                <div id="dish-name-suggestions" class="mt-2 text-sm"></div>
                             </div>
                             <div>
-                                <div class="flex justify-between items-center">
-                                    <label for="dish-description" class="block text-sm font-medium text-gray-700" data-lang="description">Mô tả</label>
-                                    <button type="button" id="suggest-description-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center gap-1">
-                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
-                                        <span data-lang="suggest_description_ai">Gợi ý bằng AI</span>
-                                    </button>
-                                </div>
+                                <label for="dish-description" class="block text-sm font-medium text-gray-700" data-lang="description">Mô tả</label>
                                 <textarea id="dish-description" rows="4" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"></textarea>
                             </div>
                             <div>
@@ -471,15 +446,8 @@
                     </div>
                     <!-- List of spoilage records -->
                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold" data-lang="spoilage_history_title">Lịch Sử Hư Hao</h2>
-                             <button id="analyze-spoilage-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm hover:bg-indigo-700 flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
-                                <span data-lang="analyze_spoilage_ai">Phân tích bằng AI</span>
-                            </button>
-                        </div>
+                        <h2 class="text-xl font-semibold mb-4" data-lang="spoilage_history_title">Lịch Sử Hư Hao</h2>
                         <div id="spoilage-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
-                        <div id="spoilage-analysis-result" class="mt-4 hidden p-4 bg-indigo-50 rounded-md"></div>
                     </div>
                 </div>
             </div>
@@ -581,14 +549,6 @@
                                 <h3 class="text-lg font-semibold mb-4" data-lang="revenue_structure">Cơ cấu doanh thu</h3>
                                 <canvas id="revenueStructureChart"></canvas>
                             </div>
-                        </div>
-
-                        <div class="mt-8 text-center">
-                            <button id="suggest-marketing-btn" class="bg-indigo-600 text-white py-2 px-5 rounded-md hover:bg-indigo-700 flex items-center justify-center mx-auto gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
-                                <span data-lang="view_marketing_suggestions_ai">Xem Gợi ý Marketing từ AI</span>
-                            </button>
-                            <div id="marketing-suggestions" class="mt-4 text-left hidden p-4 bg-indigo-50 rounded-lg"></div>
                         </div>
                     </div>
                 </div>
@@ -869,9 +829,7 @@
                 menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
                 add_new_dish: 'Thêm Món Mới',
                 dish_name: 'Tên món',
-                suggest_dish_name_ai: 'Gợi ý bằng AI',
                 description: 'Mô tả',
-                suggest_description_ai: 'Gợi ý bằng AI',
                 selling_price: 'Giá Bán (VND)',
                 image_url: 'URL Hình ảnh',
                 bom_title: 'Định Lượng Nguyên Liệu (BOM)',
@@ -911,7 +869,6 @@
                 spoilage_reason_placeholder: 'VD: Hết hạn, hỏng...',
                 record_btn: 'Ghi Nhận',
                 spoilage_history_title: 'Lịch Sử Hư Hao',
-                analyze_spoilage_ai: 'Phân tích bằng AI',
                 other_costs_title: 'Quản Lý Chi Phí Khác',
                 add_new_cost: 'Thêm Chi Phí Mới',
                 cost_name: 'Tên chi phí',
@@ -936,7 +893,6 @@
                 total_operating_expenses: 'Tổng Chi Phí Hoạt Động (Tháng):',
                 spoilage_cost: 'Chi Phí Hư Hao (Ước Tính):',
                 net_profit: 'Lợi Nhuận Ròng (Trước Thuế):',
-                view_marketing_suggestions_ai: 'Xem Gợi ý Marketing từ AI',
                 revenue_structure: 'Cơ cấu doanh thu',
                 inventory_report_title: 'Báo Cáo Xuất Nhập Tồn Nguyên Liệu',
                 view_report_btn: 'Xem Báo Cáo',
@@ -978,7 +934,6 @@
                 category: 'Phân loại',
                 uncategorized: 'Chưa phân loại',
                 select_category: 'Chọn phân loại',
-                processing_ai: 'AI đang xử lý...'
             },
             zh: {
                 dashboard_title: '儀表板',
@@ -1047,9 +1002,7 @@
                 menu_management_title: '菜單與物料清單(BOM)管理',
                 add_new_dish: '新增菜色',
                 dish_name: '菜色名稱',
-                suggest_dish_name_ai: 'AI 建議',
                 description: '描述',
-                suggest_description_ai: 'AI 建議',
                 selling_price: '售價 (VND)',
                 image_url: '圖片網址',
                 bom_title: '原料物料清單 (BOM)',
@@ -1089,7 +1042,6 @@
                 spoilage_reason_placeholder: '例如：過期、損壞...',
                 record_btn: '記錄',
                 spoilage_history_title: '損耗歷史',
-                analyze_spoilage_ai: 'AI 分析',
                 other_costs_title: '其他費用管理',
                 add_new_cost: '新增費用',
                 cost_name: '費用名稱',
@@ -1114,7 +1066,6 @@
                 total_operating_expenses: '總營運費用 (月):',
                 spoilage_cost: '損耗成本 (預估):',
                 net_profit: '淨利 (稅前):',
-                view_marketing_suggestions_ai: '查看 AI 行銷建議',
                 revenue_structure: '收入結構',
                 inventory_report_title: '原料進銷存報告',
                 view_report_btn: '查看報告',
@@ -1156,7 +1107,6 @@
                 category: '分類',
                 uncategorized: '未分類',
                 select_category: '選擇分類',
-                processing_ai: 'AI 處理中...'
             }
         };
 
@@ -1482,7 +1432,7 @@
             };
             suppliers.push(newSupplier);
             localStorage.setItem('suppliers', JSON.stringify(suppliers));
-            renderSuppliersList();
+            renderApp(); // Use renderApp to ensure a full and correct re-render
             elements.addSupplierForm.reset();
         });
 
@@ -2044,105 +1994,6 @@
             }
         }
         
-        // --- Gemini AI Integration ---
-        const apiKey = ""; // Canvas will provide this
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-        async function callGenerativeAI(prompt, buttonEl) {
-            const originalText = buttonEl.innerHTML;
-            buttonEl.disabled = true;
-            buttonEl.innerHTML = `<div class="spinner"></div> <span>${translations[currentLang].processing_ai}</span>`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-            };
-            
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API call failed with status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                return text || "";
-
-            } catch (error) {
-                console.error("AI call error:", error);
-                alert("Đã có lỗi xảy ra khi kết nối với AI. Vui lòng thử lại.");
-                return null;
-            } finally {
-                buttonEl.disabled = false;
-                buttonEl.innerHTML = originalText;
-            }
-        }
-
-        document.getElementById('suggest-name-btn').addEventListener('click', async (e) => {
-            const mainIngredient = prompt("Nhập nguyên liệu chính (vd: Gà, Bò, Nấm):", "");
-            if(!mainIngredient) return;
-            
-            const prompt = `Gợi ý 1 tên món canh tiềm dưỡng sinh hấp dẫn bằng tiếng Việt, với nguyên liệu chính là "${mainIngredient}". Chỉ trả về tên món ăn, không có gì khác.`;
-            const result = await callGenerativeAI(prompt, e.currentTarget);
-            if(result) {
-                document.getElementById('dish-name').value = result.trim();
-            }
-        });
-
-        document.getElementById('suggest-description-btn').addEventListener('click', async (e) => {
-            const dishName = document.getElementById('dish-name').value;
-            if(!dishName) { alert("Vui lòng nhập tên món ăn trước."); return; }
-            
-            const prompt = `Viết một đoạn mô tả marketing ngắn gọn (2-3 câu) bằng tiếng Việt cho món ăn có tên "${dishName}". Nhấn mạnh lợi ích sức khỏe và hương vị thơm ngon. Chỉ trả về đoạn mô tả.`;
-            const result = await callGenerativeAI(prompt, e.currentTarget);
-            if(result) {
-                 document.getElementById('dish-description').value = result.trim();
-            }
-        });
-
-        document.getElementById('analyze-spoilage-btn').addEventListener('click', async (e) => {
-            const resultDiv = document.getElementById('spoilage-analysis-result');
-            if (spoilageRecords.length === 0) {
-                resultDiv.innerHTML = `<p>Chưa có dữ liệu hư hao để phân tích.</p>`;
-                resultDiv.classList.remove('hidden');
-                return;
-            }
-
-            const analysisData = spoilageRecords.map(record => {
-                const material = findById(rawMaterials, record.materialId);
-                return {
-                    name: material?.name || 'Không rõ',
-                    cost: (record.quantity * (material?.price || 0)).toFixed(0)
-                };
-            });
-            
-            const prompt = `Phân tích dữ liệu hư hao sau đây của một nhà hàng canh tiềm (đơn vị VND): ${JSON.stringify(analysisData)}. Xác định 2-3 nguyên liệu có giá trị thất thoát cao nhất và đưa ra 1-2 gợi ý hành động cụ thể, ngắn gọn bằng tiếng Việt để giảm thiểu hư hao cho các nguyên liệu đó. Định dạng câu trả lời rõ ràng.`;
-            
-            const result = await callGenerativeAI(prompt, e.currentTarget);
-            if(result) {
-                 resultDiv.innerHTML = result.replace(/\n/g, '<br>');
-                 resultDiv.classList.remove('hidden');
-            }
-        });
-
-         document.getElementById('suggest-marketing-btn').addEventListener('click', async (e) => {
-            const suggestionsDiv = document.getElementById('marketing-suggestions');
-            const revenue = document.getElementById('result-revenue').textContent;
-            const netProfit = document.getElementById('result-net-profit').textContent;
-
-            const prompt = `Cho một nhà hàng canh tiềm dưỡng sinh với doanh thu trong kỳ là ${revenue} và lợi nhuận ròng là ${netProfit}. Hãy đưa ra 3 gợi ý chiến lược marketing sáng tạo, khả thi bằng tiếng Việt để tăng doanh thu. Trình bày dưới dạng danh sách gạch đầu dòng.`;
-            
-            const result = await callGenerativeAI(prompt, e.currentTarget);
-            if(result) {
-                suggestionsDiv.innerHTML = result.replace(/\n/g, '<br>');
-                suggestionsDiv.classList.remove('hidden');
-            }
-        });
-
         // --- Confirmation Modal Logic ---
         function showConfirmation(title, message, onConfirm) {
             const modal = elements.confirmationModal;
