@@ -637,7 +637,15 @@
 
     <!-- Modals -->
     <div id="employee-details-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center overflow-y-auto p-4">
-        <!-- ... (Modal content unchanged) ... -->
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <h2 class="text-2xl font-bold mb-4" data-lang="employee_details_title">Thông Tin Chi Tiết Nhân Viên</h2>
+            <div id="employee-modal-content" class="overflow-y-auto pr-2">
+                <!-- Details will be injected here -->
+            </div>
+             <div class="flex justify-end gap-4 mt-6 pt-4 border-t">
+                <button type="button" id="close-employee-modal-btn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" data-lang="cancel_btn">Đóng</button>
+            </div>
+        </div>
     </div>
     <div id="edit-supplier-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
         <!-- ... (Modal content unchanged) ... -->
@@ -1027,12 +1035,16 @@
             cancelEditMaterialBtn: document.getElementById('cancel-edit-material'),
             editCategoryModal: document.getElementById('edit-category-modal'),
             confirmationModal: document.getElementById('confirmation-modal'),
+            employeeDetailsModal: document.getElementById('employee-details-modal'),
             // Menu
             dishesList: document.getElementById('dishes-list'),
             // Materials
             materialsList: document.getElementById('materials-list'),
             materialCategoriesList: document.getElementById('material-categories-list'),
             searchMaterialInput: document.getElementById('search-material-input'),
+             // Employees
+            addEmployeeForm: document.getElementById('add-employee-form'),
+            employeesList: document.getElementById('employees-list'),
             // Sales
             orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
@@ -1136,6 +1148,105 @@
             startDateInput.value = startDate.toISOString().split('T')[0];
             endDateInput.value = endDate.toISOString().split('T')[0];
         }
+        // --- Employee Management ---
+        function renderEmployeesList() {
+            const listEl = elements.employeesList;
+            listEl.innerHTML = employees.length ? employees.map(emp => {
+                const statusClass = emp.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                const statusText = emp.status === 'active' ? translations[currentLang].status_active : translations[currentLang].status_terminated;
+                return `
+                    <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <img src="${emp.photoUrl || 'https://placehold.co/40x40/E2E8F0/4A5568?text=NV'}" alt="photo" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <p class="font-semibold text-gray-800">${emp.name}</p>
+                                <p class="text-sm text-gray-500">${emp.idCode}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                             <span class="text-xs font-medium px-2 py-1 rounded-full ${statusClass}">${statusText}</span>
+                             <button class="view-employee-btn text-sm text-blue-600 hover:underline" data-id="${emp.id}">${translations[currentLang].view_details}</button>
+                             ${emp.status === 'active' ? `<button class="terminate-employee-btn text-sm text-red-600 hover:underline" data-id="${emp.id}">${translations[currentLang].terminate_employee_btn}</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('') : `<p class="text-center text-gray-500">${translations[currentLang].empty_data}</p>`;
+        }
+
+        elements.addEmployeeForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const selectedRoles = Array.from(document.querySelectorAll('#employee-roles-checkboxes input:checked')).map(cb => cb.value);
+            const newEmployee = {
+                id: Date.now(),
+                name: document.getElementById('employee-name').value,
+                idCode: document.getElementById('employee-id-code').value,
+                dob: document.getElementById('employee-dob').value,
+                nid: document.getElementById('employee-nid').value,
+                photoUrl: document.getElementById('employee-photo-url').value,
+                permanentAddress: document.getElementById('employee-permanent-address').value,
+                currentAddress: document.getElementById('employee-current-address').value,
+                startDate: document.getElementById('employee-start-date').value,
+                employmentType: document.getElementById('employee-type').value,
+                roles: selectedRoles,
+                status: 'active'
+            };
+            employees.push(newEmployee);
+            localStorage.setItem('employees', JSON.stringify(employees));
+            renderEmployeesList();
+            elements.addEmployeeForm.reset();
+        });
+
+        elements.employeesList.addEventListener('click', (e) => {
+            if (e.target.matches('.view-employee-btn')) {
+                const employee = findById(employees, e.target.dataset.id);
+                if (employee) openEmployeeDetailsModal(employee);
+            }
+             if (e.target.matches('.terminate-employee-btn')) {
+                const employeeId = parseInt(e.target.dataset.id);
+                const reason = prompt(translations[currentLang].termination_reason);
+                if(reason) {
+                    showConfirmation(translations[currentLang].terminate_employee_title, `Bạn có chắc muốn cho nhân viên này thôi việc?`, () => {
+                        employees = employees.map(emp => emp.id === employeeId ? { ...emp, status: 'terminated', terminationDate: todayISO(), terminationReason: reason } : emp);
+                        localStorage.setItem('employees', JSON.stringify(employees));
+                        renderEmployeesList();
+                    });
+                }
+            }
+        });
+
+        function openEmployeeDetailsModal(emp) {
+            const contentEl = document.getElementById('employee-modal-content');
+            const rolesText = emp.roles.map(r => employeeRoles[r]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || r).join(', ');
+            const empTypeText = employmentTypes[emp.employmentType]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || emp.employmentType;
+            contentEl.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 text-center">
+                         <img src="${emp.photoUrl || 'https://placehold.co/128x128/E2E8F0/4A5568?text=NV'}" alt="photo" class="w-32 h-32 rounded-full object-cover mx-auto mb-4">
+                    </div>
+                    <div class="md:col-span-2 space-y-3">
+                         <p><strong>${translations[currentLang].employee_name}:</strong> ${emp.name}</p>
+                         <p><strong>${translations[currentLang].employee_id_code}:</strong> ${emp.idCode}</p>
+                         <p><strong>${translations[currentLang].employee_dob}:</strong> ${emp.dob}</p>
+                         <p><strong>${translations[currentLang].employee_nid}:</strong> ${emp.nid}</p>
+                         <p><strong>${translations[currentLang].employee_start_date}:</strong> ${emp.startDate}</p>
+                         <p><strong>${translations[currentLang].employee_type}:</strong> ${empTypeText}</p>
+                         <p><strong>${translations[currentLang].roles}:</strong> ${rolesText}</p>
+                         <p><strong>${translations[currentLang].employee_permanent_address}:</strong> ${emp.permanentAddress}</p>
+                         <p><strong>${translations[currentLang].employee_current_address}:</strong> ${emp.currentAddress}</p>
+                         ${emp.status === 'terminated' ? `
+                             <div class="mt-4 p-3 bg-red-50 border-l-4 border-red-400 rounded">
+                                 <p><strong>${translations[currentLang].termination_date}:</strong> ${emp.terminationDate}</p>
+                                 <p><strong>${translations[currentLang].termination_reason}:</strong> ${emp.terminationReason}</p>
+                             </div>` : ''}
+                    </div>
+                </div>
+            `;
+            elements.employeeDetailsModal.classList.add('active');
+        }
+
+        document.getElementById('close-employee-modal-btn').addEventListener('click', () => {
+            elements.employeeDetailsModal.classList.remove('active');
+        });
 
         // --- Sales & Order Lookup Logic ---
         elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
@@ -1773,6 +1884,7 @@
             renderMaterialCategories();
             renderMaterialsList();
             renderDashboard();
+            renderEmployeesList(); // <-- FIX: Add this call
         }
         
          // --- Dashboard Logic ---
