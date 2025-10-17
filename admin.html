@@ -32,6 +32,18 @@
         .sidebar-link.active {
             background-color: #4a5568; /* a shade of gray */
         }
+        .spinner {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border-left-color: #fff;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -277,8 +289,9 @@
                             <div>
                                 <div class="flex justify-between items-center">
                                      <label for="dish-name" class="block text-sm font-medium text-gray-700" data-lang="dish_name">Tên món</label>
-                                     <button type="button" id="suggest-name-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center">
-                                        <span data-lang="suggest_dish_name_template">💡 Gợi ý (Mẫu)</span>
+                                     <button type="button" id="suggest-name-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
+                                        <span data-lang="suggest_dish_name_ai">Gợi ý bằng AI</span>
                                     </button>
                                 </div>
                                 <input type="text" id="dish-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
@@ -287,8 +300,9 @@
                             <div>
                                 <div class="flex justify-between items-center">
                                     <label for="dish-description" class="block text-sm font-medium text-gray-700" data-lang="description">Mô tả</label>
-                                    <button type="button" id="suggest-description-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center">
-                                        <span data-lang="suggest_description_template">💡 Gợi ý (Mẫu)</span>
+                                    <button type="button" id="suggest-description-btn" class="text-xs text-indigo-700 font-semibold py-1 hover:text-indigo-900 flex items-center gap-1">
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
+                                        <span data-lang="suggest_description_ai">Gợi ý bằng AI</span>
                                     </button>
                                 </div>
                                 <textarea id="dish-description" rows="4" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"></textarea>
@@ -459,8 +473,9 @@
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-semibold" data-lang="spoilage_history_title">Lịch Sử Hư Hao</h2>
-                             <button id="analyze-spoilage-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm hover:bg-indigo-700 flex items-center">
-                                <span data-lang="analyze_spoilage_simple">📈 Phân tích Đơn giản</span>
+                             <button id="analyze-spoilage-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm hover:bg-indigo-700 flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
+                                <span data-lang="analyze_spoilage_ai">Phân tích bằng AI</span>
                             </button>
                         </div>
                         <div id="spoilage-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
@@ -569,8 +584,9 @@
                         </div>
 
                         <div class="mt-8 text-center">
-                            <button id="suggest-marketing-btn" class="bg-indigo-600 text-white py-2 px-5 rounded-md hover:bg-indigo-700 flex items-center justify-center mx-auto">
-                                <span data-lang="view_marketing_suggestions">💡 Xem Gợi ý Marketing</span>
+                            <button id="suggest-marketing-btn" class="bg-indigo-600 text-white py-2 px-5 rounded-md hover:bg-indigo-700 flex items-center justify-center mx-auto gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16"><path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707ZM2.672 9.5a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1H2.672Zm10.656 0a.5.5 0 1 0 0 1h1.829a.5.5 0 1 0 0-1h-1.829ZM10 16a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm1.657-1.293a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707a.5.5 0 0 0 .707 0ZM8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
+                                <span data-lang="view_marketing_suggestions_ai">Xem Gợi ý Marketing từ AI</span>
                             </button>
                             <div id="marketing-suggestions" class="mt-4 text-left hidden p-4 bg-indigo-50 rounded-lg"></div>
                         </div>
@@ -647,8 +663,22 @@
             </div>
         </div>
     </div>
-    <div id="edit-supplier-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
-        <!-- ... (Modal content unchanged) ... -->
+     <div id="edit-supplier-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 class="text-2xl font-bold mb-4" data-lang="edit_supplier_title">Điều Chỉnh Thông Tin Nhà Cung Cấp</h2>
+            <form id="edit-supplier-form" class="space-y-4">
+                <input type="hidden" id="edit-supplier-id">
+                <input type="text" id="edit-supplier-name" data-lang-placeholder="supplier_name" required class="block w-full border-gray-300 rounded-md py-2 px-3">
+                <input type="text" id="edit-supplier-contact" data-lang-placeholder="contact_person" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                <input type="tel" id="edit-supplier-phone" data-lang-placeholder="phone_number" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                <input type="text" id="edit-supplier-address" data-lang-placeholder="address" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                <input type="text" id="edit-supplier-taxcode" data-lang-placeholder="tax_code" class="block w-full border-gray-300 rounded-md py-2 px-3">
+                <div class="flex justify-end gap-4 mt-6">
+                    <button type="button" id="cancel-edit-supplier-btn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" data-lang="cancel_btn">Hủy</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md" data-lang="save_changes_btn">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
     </div>
     <div id="edit-purchase-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
         <!-- ... (Modal content unchanged) ... -->
@@ -770,14 +800,6 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- IMPORTANT: Firebase Integration Placeholder ---
-        // To make this a professional, real-world application, replace localStorage
-        // with a real-time database like Google Firebase. The code below is structured
-        // to make this transition easier. You would need to:
-        // 1. Create a Firebase project at https://firebase.google.com/
-        // 2. Enable Firestore Database and Authentication.
-        // 3. Copy your Firebase config object here.
-        // 4. Replace all `localStorage.getItem/setItem` calls with Firestore `getDoc/setDoc/onSnapshot` calls.
         
         const translations = {
             vi: {
@@ -847,9 +869,9 @@
                 menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
                 add_new_dish: 'Thêm Món Mới',
                 dish_name: 'Tên món',
-                suggest_dish_name_template: '💡 Gợi ý (Mẫu)',
+                suggest_dish_name_ai: 'Gợi ý bằng AI',
                 description: 'Mô tả',
-                suggest_description_template: '💡 Gợi ý (Mẫu)',
+                suggest_description_ai: 'Gợi ý bằng AI',
                 selling_price: 'Giá Bán (VND)',
                 image_url: 'URL Hình ảnh',
                 bom_title: 'Định Lượng Nguyên Liệu (BOM)',
@@ -889,7 +911,7 @@
                 spoilage_reason_placeholder: 'VD: Hết hạn, hỏng...',
                 record_btn: 'Ghi Nhận',
                 spoilage_history_title: 'Lịch Sử Hư Hao',
-                analyze_spoilage_simple: '📈 Phân tích Đơn giản',
+                analyze_spoilage_ai: 'Phân tích bằng AI',
                 other_costs_title: 'Quản Lý Chi Phí Khác',
                 add_new_cost: 'Thêm Chi Phí Mới',
                 cost_name: 'Tên chi phí',
@@ -914,7 +936,7 @@
                 total_operating_expenses: 'Tổng Chi Phí Hoạt Động (Tháng):',
                 spoilage_cost: 'Chi Phí Hư Hao (Ước Tính):',
                 net_profit: 'Lợi Nhuận Ròng (Trước Thuế):',
-                view_marketing_suggestions: '💡 Xem Gợi ý Marketing',
+                view_marketing_suggestions_ai: 'Xem Gợi ý Marketing từ AI',
                 revenue_structure: 'Cơ cấu doanh thu',
                 inventory_report_title: 'Báo Cáo Xuất Nhập Tồn Nguyên Liệu',
                 view_report_btn: 'Xem Báo Cáo',
@@ -956,10 +978,185 @@
                 category: 'Phân loại',
                 uncategorized: 'Chưa phân loại',
                 select_category: 'Chọn phân loại',
+                processing_ai: 'AI đang xử lý...'
             },
-            zh: { /* ... (Chinese translations) ... */ 
+            zh: {
+                dashboard_title: '儀表板',
+                dashboard_overview: '總覽',
+                today_revenue: '今日收入',
+                today_orders: '新訂單',
+                best_selling_dish: '最暢銷菜色',
+                low_stock_alert: '低庫存警告',
+                order_status_distribution: '訂單狀態分佈',
+                recent_activity: '最近活動',
+                employee_management: '員工管理',
+                order_lookup: '訂單查詢',
+                menu_management: '菜單管理',
+                supplier_management: '供應商管理',
+                material_management: '原料管理',
+                spoilage_management: '損耗管理',
+                other_costs: '其他費用',
+                profit_report: '利潤報告',
+                inventory_report: '庫存報告',
+                adjustment_logs: '調整日誌',
+                employee_management_title: '員工管理',
+                add_new_employee: '新增員工',
+                employee_id_code: '員工編號',
+                employee_name: '姓名',
+                employee_dob: '出生日期',
+                employee_nid: '身份證號碼',
+                employee_photo_url: '照片網址',
+                employee_photo_url_placeholder: 'https://example.com/photo.jpg',
+                employee_permanent_address: '戶籍地址',
+                employee_current_address: '目前地址',
+                employee_start_date: '到職日期',
+                employee_type: '工作類型',
+                employee_type_part_time: '兼職',
+                employee_type_contract: '合約',
+                roles: '職位',
+                add_employee_btn: '新增員工',
+                employee_list: '員工列表',
+                employee_details_title: '員工詳細資訊',
+                terminate_employee_btn: '解僱',
+                terminate_employee_title: '終止合約',
+                termination_date: '離職日期',
+                termination_reason: '離職原因',
+                confirm_termination_btn: '確認解僱',
+                employee_status: '狀態',
+                status_active: '在職',
+                status_terminated: '已離職',
+                view_details: '查看詳情',
+                role_taker: '接單員',
+                role_kitchen: '廚房',
+                role_shipper: '外送員',
+                order_lookup_title: '訂單查詢',
+                view_by: '查看方式',
+                this_month: '本月',
+                this_quarter: '本季',
+                this_year: '本年',
+                custom_option: '自訂',
+                from_date: '從日期',
+                to_date: '到日期',
+                search_btn: '查詢',
+                order_list: '訂單列表',
+                status_new: '新訂單',
+                status_preparing: '準備中',
+                status_delivering: '配送中',
+                status_completed: '已完成',
+                status_cancelled: '已取消',
+                menu_management_title: '菜單與物料清單(BOM)管理',
+                add_new_dish: '新增菜色',
+                dish_name: '菜色名稱',
+                suggest_dish_name_ai: 'AI 建議',
+                description: '描述',
+                suggest_description_ai: 'AI 建議',
+                selling_price: '售價 (VND)',
+                image_url: '圖片網址',
+                bom_title: '原料物料清單 (BOM)',
+                quantity_short: '數量',
+                estimated_cost: '預估成本',
+                add_dish_btn: '新增菜色',
+                current_dishes_list: '現有菜色列表',
+                supplier_management_title: '供應商管理',
+                add_new_supplier: '新增供應商',
+                supplier_name: '供應商名稱',
+                contact_person: '聯絡人',
+                phone_number: '電話號碼',
+                address: '地址',
+                tax_code: '稅號',
+                add_supplier_btn: '新增供應商',
+                suppliers_list_title: '供應商列表',
+                purchase_management_title: '原料與進貨管理',
+                define_material: '定義原料',
+                material_name: '原料名稱',
+                unit_placeholder: '單位 (公斤, 克, 個)',
+                add_btn: '新增',
+                materials_list_title: '原料列表',
+                record_purchase: '進貨登錄',
+                purchase_date: '進貨日期',
+                material: '原料',
+                quantity: '數量',
+                unit: '單位',
+                total_price: '總價 (VND)',
+                supplier: '供應商',
+                new_unit_price_label: '新單價將是',
+                confirm_purchase_btn: '確認進貨',
+                purchase_history_title: '進貨歷史',
+                spoilage_management_title: '損耗管理',
+                record_spoilage: '記錄損耗',
+                spoilage_date: '報廢日期',
+                spoilage_reason: '報廢原因',
+                spoilage_reason_placeholder: '例如：過期、損壞...',
+                record_btn: '記錄',
+                spoilage_history_title: '損耗歷史',
+                analyze_spoilage_ai: 'AI 分析',
+                other_costs_title: '其他費用管理',
+                add_new_cost: '新增費用',
+                cost_name: '費用名稱',
+                amount: '金額 (VND)',
+                cost_type: '費用類型',
+                monthly: '每月',
+                yearly: '每年',
+                onetime: '一次性 (投資)',
+                add_cost_btn: '新增費用',
+                monthly_costs: '每月費用',
+                total_monthly: '本月總計:',
+                yearly_costs: '每年費用',
+                total_yearly: '本年總計:',
+                onetime_costs: '一次性費用 (投資)',
+                total: '總計:',
+                profit_report_title: '利潤報告',
+                calculate_profit_btn: '查看報告',
+                business_results_period: '期間經營成果',
+                total_revenue: '總收入:',
+                total_cogs: '總銷貨成本:',
+                total_commission_fees: '總佣金費用:',
+                total_operating_expenses: '總營運費用 (月):',
+                spoilage_cost: '損耗成本 (預估):',
+                net_profit: '淨利 (稅前):',
+                view_marketing_suggestions_ai: '查看 AI 行銷建議',
+                revenue_structure: '收入結構',
+                inventory_report_title: '原料進銷存報告',
+                view_report_btn: '查看報告',
+                material_name_header: '原料名稱',
+                unit_header: '單位',
+                opening_stock: '期初庫存',
+                purchased_in_period: '期間進貨',
+                used_in_period: '期間銷貨',
+                spoiled_in_period: '期間損耗',
+                closing_stock: '期末庫存',
+                adjustment_logs_title: '資料調整日誌',
+                cancel_btn: '取消',
+                save_changes_btn: '儲存變更',
+                edit: '編輯',
+                delete: '刪除',
+                empty_data: '尚無資料。',
+                empty_adjustment_logs: '尚無調整日誌。',
+                select_material: '選擇原料',
+                select_supplier: '選擇供應商',
+                log_type_supplier: '供應商',
+                log_type_purchase: '進貨',
+                log_type_dish: '菜色',
+                log_type_material: '原料',
+                edit_supplier_title: '編輯供應商資訊',
+                supplier_name_label: '供應商名稱',
+                tax_code_label: '稅號',
+                adjustment_reason: '調整原因',
+                edit_purchase_title: '編輯進貨資料',
+                edit_dish_title: '編輯菜色資訊',
+                price_effective_date: '新價格生效日期',
+                edit_material_title: '編輯原料資訊',
                 total_time: '總時間',
                 duration: '經過時間',
+                material_categories: '原料分類',
+                category_name_placeholder: '新分類名稱',
+                search_material_placeholder: '搜尋原料...',
+                edit_category_title: '編輯分類',
+                category_name: '分類名稱',
+                category: '分類',
+                uncategorized: '未分類',
+                select_category: '選擇分類',
+                processing_ai: 'AI 處理中...'
             }
         };
 
@@ -1036,6 +1233,7 @@
             editCategoryModal: document.getElementById('edit-category-modal'),
             confirmationModal: document.getElementById('confirmation-modal'),
             employeeDetailsModal: document.getElementById('employee-details-modal'),
+            editSupplierModal: document.getElementById('edit-supplier-modal'),
             // Menu
             dishesList: document.getElementById('dishes-list'),
             // Materials
@@ -1045,6 +1243,9 @@
              // Employees
             addEmployeeForm: document.getElementById('add-employee-form'),
             employeesList: document.getElementById('employees-list'),
+             // Suppliers
+            addSupplierForm: document.getElementById('add-supplier-form'),
+            suppliersList: document.getElementById('suppliers-list'),
             // Sales
             orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
             orderLookupStartDate: document.getElementById('order-lookup-start-date'),
@@ -1070,12 +1271,16 @@
                 const key = el.dataset.lang;
                 if (translations[lang] && translations[lang][key]) {
                     el.textContent = translations[lang][key];
+                } else if (translations['vi'][key]) { // Fallback to Vietnamese
+                    el.textContent = translations['vi'][key];
                 }
             });
              document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
                 const key = el.dataset.langPlaceholder;
                 if (translations[lang] && translations[lang][key]) {
                     el.placeholder = translations[lang][key];
+                } else if (translations['vi'][key]) {
+                    el.placeholder = translations['vi'][key];
                 }
             });
             document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -1153,7 +1358,7 @@
             const listEl = elements.employeesList;
             listEl.innerHTML = employees.length ? employees.map(emp => {
                 const statusClass = emp.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                const statusText = emp.status === 'active' ? translations[currentLang].status_active : translations[currentLang].status_terminated;
+                const statusText = emp.status === 'active' ? (translations[currentLang].status_active || 'Đang làm việc') : (translations[currentLang].status_terminated || 'Đã thôi việc');
                 return `
                     <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-center">
                         <div class="flex items-center gap-3">
@@ -1247,6 +1452,86 @@
         document.getElementById('close-employee-modal-btn').addEventListener('click', () => {
             elements.employeeDetailsModal.classList.remove('active');
         });
+
+        // --- Supplier Management ---
+        function renderSuppliersList() {
+            const listEl = elements.suppliersList;
+            listEl.innerHTML = suppliers.length ? suppliers.map(s => `
+                <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-center">
+                    <div>
+                        <p class="font-semibold text-gray-800">${s.name}</p>
+                        <p class="text-sm text-gray-500">${s.contact || ''} - ${s.phone || ''}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="edit-supplier-btn text-sm text-blue-600 hover:underline" data-id="${s.id}">${translations[currentLang].edit}</button>
+                        <button class="delete-supplier-btn text-sm text-red-600 hover:underline" data-id="${s.id}">${translations[currentLang].delete}</button>
+                    </div>
+                </div>
+            `).join('') : `<p class="text-center text-gray-500">${translations[currentLang].empty_data}</p>`;
+        }
+
+        elements.addSupplierForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newSupplier = {
+                id: Date.now(),
+                name: document.getElementById('supplier-name').value,
+                contact: document.getElementById('supplier-contact').value,
+                phone: document.getElementById('supplier-phone').value,
+                address: document.getElementById('supplier-address').value,
+                taxcode: document.getElementById('supplier-taxcode').value,
+            };
+            suppliers.push(newSupplier);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            renderSuppliersList();
+            elements.addSupplierForm.reset();
+        });
+
+        elements.suppliersList.addEventListener('click', (e) => {
+            if (e.target.matches('.edit-supplier-btn')) {
+                const supplier = findById(suppliers, e.target.dataset.id);
+                if (supplier) openEditSupplierModal(supplier);
+            }
+             if (e.target.matches('.delete-supplier-btn')) {
+                showConfirmation('Xóa nhà cung cấp?', 'Bạn có chắc muốn xóa nhà cung cấp này?', () => {
+                    suppliers = suppliers.filter(s => s.id !== parseInt(e.target.dataset.id));
+                    localStorage.setItem('suppliers', JSON.stringify(suppliers));
+                    renderSuppliersList();
+                });
+            }
+        });
+        
+        function openEditSupplierModal(supplier) {
+            const modal = elements.editSupplierModal;
+            modal.querySelector('#edit-supplier-id').value = supplier.id;
+            modal.querySelector('#edit-supplier-name').value = supplier.name;
+            modal.querySelector('#edit-supplier-contact').value = supplier.contact;
+            modal.querySelector('#edit-supplier-phone').value = supplier.phone;
+            modal.querySelector('#edit-supplier-address').value = supplier.address;
+            modal.querySelector('#edit-supplier-taxcode').value = supplier.taxcode;
+            modal.classList.add('active');
+        }
+
+        document.getElementById('cancel-edit-supplier-btn').addEventListener('click', () => {
+             elements.editSupplierModal.classList.remove('active');
+        });
+
+        document.getElementById('edit-supplier-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const supplierId = parseInt(document.getElementById('edit-supplier-id').value);
+            const updatedSupplier = {
+                id: supplierId,
+                name: document.getElementById('edit-supplier-name').value,
+                contact: document.getElementById('edit-supplier-contact').value,
+                phone: document.getElementById('edit-supplier-phone').value,
+                address: document.getElementById('edit-supplier-address').value,
+                taxcode: document.getElementById('edit-supplier-taxcode').value,
+            };
+            suppliers = suppliers.map(s => s.id === supplierId ? updatedSupplier : s);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            renderSuppliersList();
+            elements.editSupplierModal.classList.remove('active');
+        });
+
 
         // --- Sales & Order Lookup Logic ---
         elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
@@ -1759,32 +2044,67 @@
             }
         }
         
-        // --- API-Free "AI" Replacements ---
-        document.getElementById('suggest-name-btn').addEventListener('click', () => {
+        // --- Gemini AI Integration ---
+        const apiKey = ""; // Canvas will provide this
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        async function callGenerativeAI(prompt, buttonEl) {
+            const originalText = buttonEl.innerHTML;
+            buttonEl.disabled = true;
+            buttonEl.innerHTML = `<div class="spinner"></div> <span>${translations[currentLang].processing_ai}</span>`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                return text || "";
+
+            } catch (error) {
+                console.error("AI call error:", error);
+                alert("Đã có lỗi xảy ra khi kết nối với AI. Vui lòng thử lại.");
+                return null;
+            } finally {
+                buttonEl.disabled = false;
+                buttonEl.innerHTML = originalText;
+            }
+        }
+
+        document.getElementById('suggest-name-btn').addEventListener('click', async (e) => {
             const mainIngredient = prompt("Nhập nguyên liệu chính (vd: Gà, Bò, Nấm):", "");
             if(!mainIngredient) return;
             
-            const styles = ["hầm", "tiềm", "nấu", "xào", "chưng"];
-            const additions = ["thuốc bắc", "hạt sen", "táo đỏ", "đông trùng hạ thảo", "sâm"];
-            const chosenStyle = styles[Math.floor(Math.random() * styles.length)];
-            const chosenAddition = additions[Math.floor(Math.random() * additions.length)];
-            
-            document.getElementById('dish-name').value = `Canh ${mainIngredient} ${chosenStyle} ${chosenAddition}`;
+            const prompt = `Gợi ý 1 tên món canh tiềm dưỡng sinh hấp dẫn bằng tiếng Việt, với nguyên liệu chính là "${mainIngredient}". Chỉ trả về tên món ăn, không có gì khác.`;
+            const result = await callGenerativeAI(prompt, e.currentTarget);
+            if(result) {
+                document.getElementById('dish-name').value = result.trim();
+            }
         });
 
-        document.getElementById('suggest-description-btn').addEventListener('click', () => {
+        document.getElementById('suggest-description-btn').addEventListener('click', async (e) => {
             const dishName = document.getElementById('dish-name').value;
             if(!dishName) { alert("Vui lòng nhập tên món ăn trước."); return; }
-
-            const templates = [
-                `Một sự kết hợp tinh tế của các loại thảo mộc quý, ${dishName} không chỉ là một món ăn ngon mà còn là một bài thuốc bồi bổ sức khỏe, giúp tăng cường sinh lực và an thần.`,
-                `${dishName} mang đến hương vị đậm đà, ngọt thanh tự nhiên từ các nguyên liệu được hầm kỹ trong nhiều giờ, là lựa chọn hoàn hảo cho một bữa ăn dưỡng sinh.`,
-                `Thưởng thức ${dishName} để cảm nhận sự hòa quyện tuyệt vời giữa vị ngon của nguyên liệu và công dụng tuyệt vời cho sức khỏe, giúp cơ thể khỏe mạnh từ bên trong.`
-            ];
-            document.getElementById('dish-description').value = templates[Math.floor(Math.random() * templates.length)];
+            
+            const prompt = `Viết một đoạn mô tả marketing ngắn gọn (2-3 câu) bằng tiếng Việt cho món ăn có tên "${dishName}". Nhấn mạnh lợi ích sức khỏe và hương vị thơm ngon. Chỉ trả về đoạn mô tả.`;
+            const result = await callGenerativeAI(prompt, e.currentTarget);
+            if(result) {
+                 document.getElementById('dish-description').value = result.trim();
+            }
         });
 
-        document.getElementById('analyze-spoilage-btn').addEventListener('click', () => {
+        document.getElementById('analyze-spoilage-btn').addEventListener('click', async (e) => {
             const resultDiv = document.getElementById('spoilage-analysis-result');
             if (spoilageRecords.length === 0) {
                 resultDiv.innerHTML = `<p>Chưa có dữ liệu hư hao để phân tích.</p>`;
@@ -1792,45 +2112,35 @@
                 return;
             }
 
-            const analysis = spoilageRecords.reduce((acc, record) => {
+            const analysisData = spoilageRecords.map(record => {
                 const material = findById(rawMaterials, record.materialId);
-                if (material) {
-                    const value = (acc[material.name] || 0) + (record.quantity * material.price);
-                    acc[material.name] = value;
-                }
-                return acc;
-            }, {});
-
-            const sorted = Object.entries(analysis).sort((a, b) => b[1] - a[1]);
-
-            let html = `
-                <h4 class="font-bold text-md mb-2">Phân tích chi phí hư hao hàng đầu:</h4>
-                <ul class="list-disc pl-5 space-y-1 text-sm">
-            `;
-            sorted.slice(0, 3).forEach(([name, value]) => {
-                html += `<li><strong>${name}</strong>: Thất thoát khoảng ${formatCurrency(value)}</li>`;
+                return {
+                    name: material?.name || 'Không rõ',
+                    cost: (record.quantity * (material?.price || 0)).toFixed(0)
+                };
             });
-            html += `</ul><p class="text-xs mt-3"><i>Gợi ý: Cân nhắc giảm lượng nhập hàng hoặc kiểm tra lại quy trình bảo quản cho các nguyên liệu này.</i></p>`;
             
-            resultDiv.innerHTML = html;
-            resultDiv.classList.remove('hidden');
+            const prompt = `Phân tích dữ liệu hư hao sau đây của một nhà hàng canh tiềm (đơn vị VND): ${JSON.stringify(analysisData)}. Xác định 2-3 nguyên liệu có giá trị thất thoát cao nhất và đưa ra 1-2 gợi ý hành động cụ thể, ngắn gọn bằng tiếng Việt để giảm thiểu hư hao cho các nguyên liệu đó. Định dạng câu trả lời rõ ràng.`;
+            
+            const result = await callGenerativeAI(prompt, e.currentTarget);
+            if(result) {
+                 resultDiv.innerHTML = result.replace(/\n/g, '<br>');
+                 resultDiv.classList.remove('hidden');
+            }
         });
 
-         document.getElementById('suggest-marketing-btn').addEventListener('click', () => {
+         document.getElementById('suggest-marketing-btn').addEventListener('click', async (e) => {
             const suggestionsDiv = document.getElementById('marketing-suggestions');
-            const bestSeller = "Món bán chạy nhất của bạn"; // Placeholder
-            const suggestionsHTML = `
-                <h4 class="font-bold text-md mb-2">Gợi ý chiến lược Marketing:</h4>
-                <ul class="list-disc pl-5 space-y-2 text-sm">
-                    <li><strong>Tập trung vào món chủ lực:</strong> Chạy các chiến dịch quảng cáo trên mạng xã hội (Facebook, Instagram) cho "${bestSeller}".</li>
-                    <li><strong>Tạo Combo hấp dẫn:</strong> Kết hợp các món bán chạy với các món ít phổ biến hơn để tạo thành combo với giá ưu đãi.</li>
-                    <li><strong>Chương trình khách hàng thân thiết:</strong> Tích điểm cho khách hàng sau mỗi lần mua để đổi lấy ưu đãi hoặc sản phẩm miễn phí.</li>
-                    <li><strong>Hợp tác với người có ảnh hưởng (KOLs):</strong> Mời các food blogger đến trải nghiệm và review nhà hàng của bạn.</li>
-                    <li><strong>Tối ưu hóa trên các ứng dụng giao hàng:</strong> Sử dụng các gói quảng cáo, Freeship Xtra, hoặc tạo các deal độc quyền trên GrabFood, ShopeeFood.</li>
-                </ul>
-            `;
-            suggestionsDiv.innerHTML = suggestionsHTML;
-            suggestionsDiv.classList.toggle('hidden');
+            const revenue = document.getElementById('result-revenue').textContent;
+            const netProfit = document.getElementById('result-net-profit').textContent;
+
+            const prompt = `Cho một nhà hàng canh tiềm dưỡng sinh với doanh thu trong kỳ là ${revenue} và lợi nhuận ròng là ${netProfit}. Hãy đưa ra 3 gợi ý chiến lược marketing sáng tạo, khả thi bằng tiếng Việt để tăng doanh thu. Trình bày dưới dạng danh sách gạch đầu dòng.`;
+            
+            const result = await callGenerativeAI(prompt, e.currentTarget);
+            if(result) {
+                suggestionsDiv.innerHTML = result.replace(/\n/g, '<br>');
+                suggestionsDiv.classList.remove('hidden');
+            }
         });
 
         // --- Confirmation Modal Logic ---
@@ -1850,6 +2160,7 @@
             const closeModal = () => {
                 modal.classList.remove('active');
                 confirmBtn.removeEventListener('click', confirmHandler);
+                 cancelBtn.removeEventListener('click', closeModal);
             };
 
             confirmBtn.addEventListener('click', confirmHandler, { once: true });
@@ -1878,13 +2189,16 @@
             populateMaterialSelects(document.getElementById('bom-material-select'));
             populateMaterialSelects(document.getElementById('purchase-material-select'));
             populateMaterialSelects(document.getElementById('spoilage-material-select'));
+            populateSelect(document.getElementById('purchase-supplier-select'), suppliers, 'select_supplier');
+
 
             // Render lists
             elements.dishesList.innerHTML = dishes.map(renderDish).join('');
             renderMaterialCategories();
             renderMaterialsList();
             renderDashboard();
-            renderEmployeesList(); // <-- FIX: Add this call
+            renderEmployeesList();
+            renderSuppliersList();
         }
         
          // --- Dashboard Logic ---
@@ -1916,7 +2230,7 @@
             }, {});
 
             renderPieChart('orderStatusChart', {
-                labels: Object.keys(statusCounts).map(key => orderStatuses[key]?.name || key),
+                labels: Object.keys(statusCounts).map(key => orderStatuses[key]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || key),
                 data: Object.values(statusCounts),
                 colors: Object.keys(statusCounts).map(key => orderStatuses[key]?.color || '#ccc')
             });
@@ -1966,8 +2280,7 @@
         handleDatePresetChange('this_month', elements.orderLookupStartDate, elements.orderLookupEndDate);
         handleDatePresetChange('this_month', elements.inventoryReportStartDate, elements.inventoryReportEndDate);
         handleDatePresetChange('this_month', elements.profitReportStartDate, elements.profitReportEndDate);
-        renderApp();
-        setLanguage(currentLang);
+        setLanguage(currentLang); // Set language before initial renderApp
     });
     </script>
 </body>
