@@ -1214,6 +1214,22 @@
             profitReportEndDate: document.getElementById('profit-report-end-date'),
         };
 
+        // --- Helper for Material Usage Calculation ---
+        function getMaterialUsage(orders) {
+            const usage = {}; // { materialId: quantity }
+            orders.forEach(order => {
+                order.items.forEach(item => {
+                    const dish = findById(dishes, item.dishId);
+                    if (dish && dish.bom) {
+                        dish.bom.forEach(bomItem => {
+                            usage[bomItem.materialId] = (usage[bomItem.materialId] || 0) + (bomItem.quantity * item.quantity);
+                        });
+                    }
+                });
+            });
+            return usage;
+        }
+
         const setLanguage = (lang) => {
              currentLang = lang;
             localStorage.setItem('language', lang);
@@ -2315,6 +2331,153 @@
                 }
             });
         }, 1000);
+
+        // --- Report Logic ---
+        document.getElementById('view-inventory-report-btn').addEventListener('click', () => {
+            const startDateStr = document.getElementById('report-start-date').value;
+            const endDateStr = document.getElementById('report-end-date').value;
+
+            if (!startDateStr || !endDateStr) {
+                alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
+                return;
+            }
+
+            const startDate = new Date(startDateStr);
+            startDate.setHours(0, 0, 0, 0);
+
+            const endDate = new Date(endDateStr);
+            endDate.setHours(23, 59, 59, 999);
+            
+            const completedOrders = loadFromStorage('completedOrders');
+
+            // Filter data for calculations
+            const purchasesBefore = purchases.filter(p => new Date(p.date) < startDate);
+            const spoilageBefore = spoilageRecords.filter(s => new Date(s.date) < startDate);
+            const ordersBefore = completedOrders.filter(o => new Date(o.timestamps.completed) < startDate);
+            const usageBefore = getMaterialUsage(ordersBefore);
+
+            const purchasesInPeriod = purchases.filter(p => new Date(p.date) >= startDate && new Date(p.date) <= endDate);
+            const spoilageInPeriod = spoilageRecords.filter(s => new Date(s.date) >= startDate && new Date(s.date) <= endDate);
+            const ordersInPeriod = completedOrders.filter(o => new Date(o.timestamps.completed) >= startDate && new Date(o.timestamps.completed) <= endDate);
+            const usageInPeriod = getMaterialUsage(ordersInPeriod);
+            
+            const reportData = rawMaterials.map(material => {
+                const materialId = material.id;
+                
+                const openingPurchases = purchasesBefore.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
+                const openingSpoilage = spoilageBefore.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
+                const openingUsage = usageBefore[materialId] || 0;
+                const openingStock = openingPurchases - openingUsage - openingSpoilage;
+
+                const periodPurchases = purchasesInPeriod.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
+                const periodSpoilage = spoilageInPeriod.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
+                const periodUsage = usageInPeriod[materialId] || 0;
+
+                const closingStock = openingStock + periodPurchases - periodUsage - periodSpoilage;
+
+                return {
+                    name: material.name,
+                    unit: material.unit,
+                    openingStock: openingStock,
+                    purchasedInPeriod: periodPurchases,
+                    usedInPeriod: periodUsage,
+                    spoiledInPeriod: periodSpoilage,
+                    closingStock: closingStock
+                };
+            });
+
+            // Render the table
+            const reportBody = document.getElementById('inventory-report-body');
+            reportBody.innerHTML = reportData.map(row => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${row.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.unit}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.openingStock.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.purchasedInPeriod.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.usedInPeriod.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.spoiledInPeriod.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">${row.closingStock.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        });
+
+        const COMMISSION_RATE = 0.20; // 20% commission fee assumption
+        document.getElementById('calculate-profit-btn').addEventListener('click', () => {
+            const startDateStr = document.getElementById('profit-report-start-date').value;
+            const endDateStr = document.getElementById('profit-report-end-date').value;
+
+            if (!startDateStr || !endDateStr) {
+                alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
+                return;
+            }
+            
+            const startDate = new Date(startDateStr);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(endDateStr);
+            endDate.setHours(23, 59, 59, 999);
+            
+            const completedOrdersInPeriod = loadFromStorage('completedOrders').filter(o => {
+                const completedDate = new Date(o.timestamps.completed);
+                return completedDate >= startDate && completedDate <= endDate;
+            });
+
+            const totalRevenue = completedOrdersInPeriod.reduce((sum, order) => sum + order.totalPrice, 0);
+
+            const totalCOGS = completedOrdersInPeriod.reduce((sum, order) => {
+                const orderCost = order.items.reduce((itemSum, item) => {
+                    const dish = findById(dishes, item.dishId);
+                    const dishCost = dish ? (dish.cost || calculateBomCost(dish.bom)) : 0;
+                    return itemSum + (dishCost * item.quantity);
+                }, 0);
+                return sum + orderCost;
+            }, 0);
+
+            const totalCommission = totalRevenue * COMMISSION_RATE;
+
+            const spoilageInPeriod = spoilageRecords.filter(s => {
+                const spoilageDate = new Date(s.date);
+                return spoilageDate >= startDate && spoilageDate <= endDate;
+            });
+            const totalSpoilageCost = spoilageInPeriod.reduce((sum, record) => {
+                const material = findById(rawMaterials, record.materialId);
+                const cost = material ? material.price * record.quantity : 0;
+                return sum + cost;
+            }, 0);
+            
+            const daysInPeriod = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+            const totalMonthlyRaw = otherCosts.filter(c => c.frequency === 'monthly').reduce((sum, c) => sum + c.amount, 0);
+            const totalYearlyRaw = otherCosts.filter(c => c.frequency === 'yearly').reduce((sum, c) => sum + c.amount, 0);
+            const monthlyExpenseInPeriod = (totalMonthlyRaw / 30.44) * daysInPeriod;
+            const yearlyExpenseInPeriod = (totalYearlyRaw / 365.25) * daysInPeriod;
+            const totalOperatingExpense = monthlyExpenseInPeriod + yearlyExpenseInPeriod;
+
+            const netProfit = totalRevenue - totalCOGS - totalCommission - totalSpoilageCost - totalOperatingExpense;
+            
+            document.getElementById('result-revenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('result-cogs').textContent = formatCurrency(totalCOGS);
+            document.getElementById('result-commission-fees').textContent = formatCurrency(totalCommission);
+            document.getElementById('result-monthly-expense').textContent = formatCurrency(totalOperatingExpense);
+            document.getElementById('result-spoilage-cost').textContent = formatCurrency(totalSpoilageCost);
+            document.getElementById('result-net-profit').textContent = formatCurrency(netProfit);
+
+            const revenueByDish = completedOrdersInPeriod
+                .flatMap(o => o.items)
+                .reduce((acc, item) => {
+                    const dish = findById(dishes, item.dishId);
+                    const dishName = dish ? dish.name : 'Unknown';
+                    const itemRevenue = (findById(dishes, item.dishId)?.price || 0) * item.quantity;
+                    acc[dishName] = (acc[dishName] || 0) + itemRevenue;
+                    return acc;
+                }, {});
+                
+            renderPieChart('revenueStructureChart', {
+                labels: Object.keys(revenueByDish),
+                data: Object.values(revenueByDish),
+                colors: ['#3B82F6', '#10B981', '#F97316', '#8B5CF6', '#EF4444', '#F59E0B', '#6366F1', '#EC4899', '#22D3EE']
+            });
+
+            document.getElementById('profit-results').classList.remove('hidden');
+        });
         
         // --- INITIAL LOAD ---
         handleDatePresetChange('this_month', elements.orderLookupStartDate, elements.orderLookupEndDate);
@@ -2325,5 +2488,4 @@
     </script>
 </body>
 </html>
-
 
