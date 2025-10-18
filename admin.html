@@ -13,7 +13,7 @@
         .tab-content.active { display: block; }
         .modal { display: none; }
         .modal.active { display: flex; }
-        .tab-content, .modal, #toast-notification {
+        .tab-content, .modal {
             animation: fadeIn 0.3s;
         }
         @keyframes fadeIn {
@@ -32,23 +32,9 @@
         .sidebar-link.active {
             background-color: #4a5568; /* a shade of gray */
         }
-        #toast-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-        #toast-notification.success { background-color: #10B981; color: white; }
-        #toast-notification.error { background-color: #EF4444; color: white; }
     </style>
 </head>
 <body class="bg-gray-100">
-
-    <div id="toast-notification" class="hidden"></div>
 
     <div class="flex h-screen">
         <!-- Sidebar -->
@@ -437,7 +423,6 @@
                             <form id="add-material-form" class="space-y-4">
                                 <input type="text" id="material-name" data-lang-placeholder="material_name" placeholder="Tên nguyên liệu" required class="w-full border border-gray-300 rounded-md py-2 px-3">
                                 <input type="text" id="material-unit" data-lang-placeholder="unit_placeholder" placeholder="Đơn vị (kg, gr, cái)" required class="w-full border border-gray-300 rounded-md py-2 px-3">
-                                 <input type="number" id="material-min-stock" data-lang-placeholder="min_stock_placeholder" placeholder="Tồn kho tối thiểu" required class="w-full border border-gray-300 rounded-md py-2 px-3">
                                 <select id="material-category-select" class="w-full border border-gray-300 rounded-md py-2 px-3"></select>
                                 <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" data-lang="add_btn">Thêm Nguyên Liệu</button>
                             </form>
@@ -795,10 +780,6 @@
                     <input type="text" id="edit-material-unit" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium" data-lang="min_stock_level">Mức tồn kho tối thiểu</label>
-                    <input type="number" id="edit-material-min-stock" required class="mt-1 w-full border-gray-300 rounded-md py-2 px-3">
-                </div>
-                <div>
                     <label class="block text-sm font-medium" data-lang="category">Phân loại</label>
                     <select id="edit-material-category-select" class="w-full border border-gray-300 rounded-md py-2 px-3"></select>
                 </div>
@@ -833,7 +814,7 @@
     </div>
     
     <!-- Generic Confirmation Modal -->
-    <div id="confirmation-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+    <div id="confirmation-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
             <h2 id="confirmation-title" class="text-xl font-bold mb-4">Xác nhận</h2>
             <p id="confirmation-message" class="mb-6">Bạn có chắc chắn muốn thực hiện hành động này?</p>
@@ -847,15 +828,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        /**
-         * LƯU Ý QUAN TRỌNG:
-         * Hệ thống này hiện đang sử dụng localStorage để lưu trữ dữ liệu.
-         * Đây là giải pháp phù hợp cho mục đích demo và sử dụng trên một máy tính duy nhất.
-         * Để triển khai trong môi trường thực tế với nhiều người dùng, cần thay thế
-         * localStorage bằng một cơ sở dữ liệu chuyên dụng như Firebase, Supabase, hoặc một backend tự xây dựng.
-        */
         
-        // --- TRANSLATIONS ---
         const translations = {
             vi: {
                 dashboard_title: 'Bảng Điều Khiển',
@@ -1029,8 +1002,6 @@
                 category: 'Phân loại',
                 uncategorized: 'Chưa phân loại',
                 select_category: 'Chọn phân loại',
-                min_stock_level: 'Mức tồn kho tối thiểu',
-                min_stock_placeholder: 'Tồn kho tối thiểu',
                 payroll_management: 'Quản Lý Lương',
                 payroll_management_title: 'Chấm Công & Tính Lương',
                 salary_history: 'Lịch Sử Lương',
@@ -1056,20 +1027,15 @@
                 total_deductions: 'Tổng khấu trừ',
                 net_salary: 'Lương Thực Lĩnh',
                 salary_for_insurance: 'Lương đóng bảo hiểm',
-                confirm_delete_title: 'Xác nhận xóa',
-                confirm_delete_msg: 'Bạn có chắc chắn muốn xóa mục này?',
-                toast_add_success: 'Thêm thành công!',
-                toast_update_success: 'Cập nhật thành công!',
-                toast_delete_success: 'Xóa thành công!',
-                toast_error: 'Có lỗi xảy ra!',
+
             },
             zh: {
                 dashboard_title: '儀表板',
                 dashboard_overview: '總覽',
                 today_revenue: '今日收入',
                 today_orders: '新訂單',
-                best_selling_dish: '熱銷菜色',
-                low_stock_alert: '低庫存警報',
+                best_selling_dish: '最暢銷菜色',
+                low_stock_alert: '低庫存警告',
                 order_status_distribution: '訂單狀態分佈',
                 recent_activity: '最近活動',
                 employee_management: '員工管理',
@@ -1096,15 +1062,15 @@
                 employee_type: '工作類型',
                 employee_type_part_time: '兼職',
                 employee_type_contract: '合約',
-                roles: '角色',
+                roles: '職位',
                 add_employee_btn: '新增員工',
                 employee_list: '員工列表',
                 employee_details_title: '員工詳細資訊',
-                terminate_employee_btn: '終止合約',
+                terminate_employee_btn: '解僱',
                 terminate_employee_title: '終止合約',
                 termination_date: '離職日期',
                 termination_reason: '離職原因',
-                confirm_termination_btn: '確認離職',
+                confirm_termination_btn: '確認解僱',
                 employee_status: '狀態',
                 status_active: '在職',
                 status_terminated: '已離職',
@@ -1118,8 +1084,8 @@
                 this_quarter: '本季',
                 this_year: '本年',
                 custom_option: '自訂',
-                from_date: '從',
-                to_date: '到',
+                from_date: '從日期',
+                to_date: '到日期',
                 search_btn: '查詢',
                 order_list: '訂單列表',
                 status_new: '新訂單',
@@ -1133,7 +1099,7 @@
                 description: '描述',
                 selling_price: '售價 (VND)',
                 image_url: '圖片網址',
-                bom_title: '物料清單 (BOM)',
+                bom_title: '原料物料清單 (BOM)',
                 quantity_short: '數量',
                 estimated_cost: '預估成本',
                 add_dish_btn: '新增菜色',
@@ -1144,7 +1110,7 @@
                 contact_person: '聯絡人',
                 phone_number: '電話號碼',
                 address: '地址',
-                tax_code: '稅號 (如有)',
+                tax_code: '稅號',
                 add_supplier_btn: '新增供應商',
                 suppliers_list_title: '供應商列表',
                 purchase_management_title: '原料與進貨管理',
@@ -1158,7 +1124,7 @@
                 material: '原料',
                 quantity: '數量',
                 unit: '單位',
-                total_price: '總金額 (VND)',
+                total_price: '總價 (VND)',
                 supplier: '供應商',
                 new_unit_price_label: '新單價將是',
                 confirm_purchase_btn: '確認進貨',
@@ -1180,9 +1146,9 @@
                 onetime: '一次性 (投資)',
                 add_cost_btn: '新增費用',
                 monthly_costs: '每月費用',
-                total_monthly: '每月總計:',
+                total_monthly: '本月總計:',
                 yearly_costs: '每年費用',
-                total_yearly: '每年總計:',
+                total_yearly: '本年總計:',
                 onetime_costs: '一次性費用 (投資)',
                 total: '總計:',
                 profit_report_title: '利潤報告',
@@ -1191,9 +1157,9 @@
                 total_revenue: '總收入:',
                 total_cogs: '總銷貨成本:',
                 total_commission_fees: '總佣金費用:',
-                total_operating_expenses: '總營運費用 (每月):',
+                total_operating_expenses: '總營運費用 (月):',
                 spoilage_cost: '損耗成本 (預估):',
-                net_profit: '淨利潤 (稅前):',
+                net_profit: '淨利 (稅前):',
                 revenue_structure: '收入結構',
                 inventory_report_title: '原料進銷存報告',
                 view_report_btn: '查看報告',
@@ -1235,22 +1201,20 @@
                 category: '分類',
                 uncategorized: '未分類',
                 select_category: '選擇分類',
-                min_stock_level: '最低庫存量',
-                min_stock_placeholder: '最低庫存量',
                 payroll_management: '薪資管理',
                 payroll_management_title: '考勤與薪資計算',
                 salary_history: '薪資歷史',
                 current_salary: '目前薪資',
-                add_new_salary: '新增薪資',
+                add_new_salary: '新增薪資標準',
                 new_salary_rate: '新薪資',
                 effective_date: '生效日期',
                 save_salary_btn: '儲存薪資',
                 salary_per_hour: '時薪',
                 salary_per_month: '月薪',
-                timesheet_for_month: '考勤月份',
-                load_timesheet_data: '載入資料',
+                timesheet_for_month: '考勤表月份',
+                load_timesheet_data: '載入考勤資料',
                 employee: '員工',
-                salary_rate: '薪資',
+                salary_rate: '薪資標準',
                 hours_worked: '工時',
                 performance_bonus: '獎金/罰款 (VND)',
                 calculate_payroll: '計算薪資',
@@ -1262,30 +1226,40 @@
                 total_deductions: '總扣除額',
                 net_salary: '實領薪資',
                 salary_for_insurance: '投保薪資',
-                confirm_delete_title: '確認刪除',
-                confirm_delete_msg: '您確定要刪除此項目嗎？',
-                toast_add_success: '新增成功！',
-                toast_update_success: '更新成功！',
-                toast_delete_success: '刪除成功！',
-                toast_error: '發生錯誤！',
             }
         };
 
         let currentLang = localStorage.getItem('language') || 'vi';
-        let chartInstances = {};
-        let currentEditingBOM = [];
+        
+        let salesDataInPeriod = []; // Store filtered sales data globally for this tab
+        let editingBomItems = []; // For edit dish modal
+        let chartInstances = {}; // To hold chart objects
 
-        // --- STATE MANAGEMENT ---
+        // --- Helper Functions ---
+        const formatCurrency = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+        const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
+        const todayISO = () => new Date().toISOString().split('T')[0];
+        
         const loadFromStorage = (key, defaultValue = []) => {
             try {
                 const data = localStorage.getItem(key);
                 return data ? JSON.parse(data) : defaultValue;
             } catch (e) {
-                console.error(`Error loading ${key} from localStorage`, e);
+                console.error(`Error parsing ${key} from localStorage`, e);
                 return defaultValue;
             }
         };
-        
+
+        const formatDuration = (ms) => {
+            if (!ms || ms < 0) return '00:00:00';
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        };
+
+        // --- Data Initialization from localStorage ---
         let dishes = loadFromStorage('dishes');
         let rawMaterials = loadFromStorage('rawMaterials');
         let suppliers = loadFromStorage('suppliers');
@@ -1296,51 +1270,79 @@
         let otherCosts = loadFromStorage('otherCosts');
         let materialCategories = loadFromStorage('materialCategories');
         let timesheets = loadFromStorage('timesheets', {});
-        let completedOrders = loadFromStorage('completedOrders');
-        let activeOrders = loadFromStorage('activeOrders');
+        let currentBomItems = [];
 
-        function saveData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
-        }
+        const orderStatuses = {
+            'new': { name: 'Đơn mới', name_zh: '新訂單', color: '#3B82F6' },
+            'preparing': { name: 'Đang chuẩn bị', name_zh: '準備中', color: '#F97316' },
+            'delivering': { name: 'Đang giao', name_zh: '配送中', color: '#8B5CF6' },
+            'completed': { name: 'Hoàn thành', name_zh: '已完成', color: '#10B981' },
+            'cancelled': { name: 'Đã hủy', name_zh: '已取消', color: '#EF4444' }
+        };
 
-        // --- UTILITY FUNCTIONS ---
-        const formatCurrency = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
-        const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
-        const todayISO = () => new Date().toISOString().split('T')[0];
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast-notification');
-            toast.textContent = message;
-            toast.className = ''; // Reset classes
-            toast.classList.add(type, 'active');
-            setTimeout(() => {
-                toast.classList.remove('active');
-                toast.classList.add('hidden');
-            }, 3000);
-        }
+        const employeeRoles = {
+            'taker': { name: 'Nhận Đơn', name_zh: '接單員' },
+            'kitchen': { name: 'Bếp', name_zh: '廚房' },
+            'shipper': { name: 'Giao Hàng', name_zh: '配送員' }
+        };
         
-        function logAdjustment(typeKey, reason, details = {}) {
-            const newLog = {
-                id: Date.now(),
-                date: new Date().toISOString(),
-                typeKey: `log_type_${typeKey}`,
-                reason,
-                details
-            };
-            adjustmentLogs.unshift(newLog); // Add to the beginning
-            saveData('adjustmentLogs', adjustmentLogs);
-        }
+        const employmentTypes = {
+            'part-time': {name: 'Bán thời gian', name_zh: '兼職'},
+            'contract': {name: 'Hợp đồng lao động', name_zh: '勞動合約'}
+        };
+        
+        // --- DOM Elements ---
+        const elements = {
+            // Modals
+            editDishModal: document.getElementById('edit-dish-modal'),
+            editDishForm: document.getElementById('edit-dish-form'),
+            cancelEditDishBtn: document.getElementById('cancel-edit-dish'),
+            editMaterialModal: document.getElementById('edit-material-modal'),
+            editMaterialForm: document.getElementById('edit-material-form'),
+            cancelEditMaterialBtn: document.getElementById('cancel-edit-material'),
+            editCategoryModal: document.getElementById('edit-category-modal'),
+            confirmationModal: document.getElementById('confirmation-modal'),
+            employeeDetailsModal: document.getElementById('employee-details-modal'),
+            editSupplierModal: document.getElementById('edit-supplier-modal'),
+            // Menu
+            dishesList: document.getElementById('dishes-list'),
+            // Materials
+            materialsList: document.getElementById('materials-list'),
+            materialCategoriesList: document.getElementById('material-categories-list'),
+            searchMaterialInput: document.getElementById('search-material-input'),
+             // Employees
+            addEmployeeForm: document.getElementById('add-employee-form'),
+            employeesList: document.getElementById('employees-list'),
+             // Suppliers
+            addSupplierForm: document.getElementById('add-supplier-form'),
+            suppliersList: document.getElementById('suppliers-list'),
+            // Sales
+            orderLookupPresetFilter: document.getElementById('order-lookup-preset-filter'),
+            orderLookupStartDate: document.getElementById('order-lookup-start-date'),
+            orderLookupEndDate: document.getElementById('order-lookup-end-date'),
+            orderLookupBtn: document.getElementById('order-lookup-btn'),
+            orderStats: document.getElementById('order-stats'),
+            orderDetailsList: document.getElementById('order-details-list'),
+            orderDetailsTitle: document.getElementById('order-details-title'),
+            // Inventory Report
+            inventoryReportPresetFilter: document.getElementById('report-preset-filter'),
+            inventoryReportStartDate: document.getElementById('report-start-date'),
+            inventoryReportEndDate: document.getElementById('report-end-date'),
+            // Profit Report
+            profitReportPresetFilter: document.getElementById('profit-report-preset-filter'),
+            profitReportStartDate: document.getElementById('profit-report-start-date'),
+            profitReportEndDate: document.getElementById('profit-report-end-date'),
+        };
 
-        // --- CORE LOGIC ---
+        // --- Helper for Material Usage Calculation ---
         function getMaterialUsage(orders) {
-            const usage = {};
+            const usage = {}; // { materialId: quantity }
             orders.forEach(order => {
                 order.items.forEach(item => {
                     const dish = findById(dishes, item.dishId);
                     if (dish && dish.bom) {
                         dish.bom.forEach(bomItem => {
-                            const materialId = bomItem.materialId;
-                            usage[materialId] = (usage[materialId] || 0) + (bomItem.quantity * item.quantity);
+                            usage[bomItem.materialId] = (usage[bomItem.materialId] || 0) + (bomItem.quantity * item.quantity);
                         });
                     }
                 });
@@ -1348,190 +1350,1000 @@
             return usage;
         }
 
-        function calculateCurrentStock(materialId) {
-            const totalPurchased = purchases.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
-            const totalSpoiled = spoilageRecords.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
-            const totalUsed = getMaterialUsage(completedOrders)[materialId] || 0;
-            return totalPurchased - totalSpoiled - totalUsed;
-        }
-
-        function updateAllMaterialPrices() {
-            rawMaterials.forEach(material => {
-                const relevantPurchases = purchases.filter(p => p.materialId === material.id).sort((a,b) => new Date(b.date) - new Date(a.date));
-                if (relevantPurchases.length > 0) {
-                    material.price = relevantPurchases[0].unitPrice;
+        const setLanguage = (lang) => {
+             currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                } else if (translations['vi'][key]) { // Fallback to Vietnamese
+                    el.textContent = translations['vi'][key];
                 }
             });
-            saveData('rawMaterials', rawMaterials);
+             document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                const key = el.dataset.langPlaceholder;
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                } else if (translations['vi'][key]) {
+                    el.placeholder = translations['vi'][key];
+                }
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                 btn.classList.toggle('active', btn.dataset.langCode === lang);
+            });
+            renderApp(); // Re-render the application to update dynamic content
+        };
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.langCode)));
+        
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                tabLinks.forEach(l => l.classList.remove('active:bg-gray-700', 'bg-gray-700'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                link.classList.add('active:bg-gray-700', 'bg-gray-700');
+                document.getElementById(link.dataset.tab).classList.add('active');
+            });
+        });
+
+        function populateSelect(select, items, placeholderKey, valueField = 'id', textField = 'name', selectedValue = null) {
+            if (!select) return;
+            const placeholder = translations[currentLang]?.[placeholderKey] || placeholderKey;
+            select.innerHTML = `<option value="">-- ${placeholder} --</option>`;
+            items.forEach(item => {
+                const isSelected = selectedValue && item[valueField] == selectedValue;
+                select.innerHTML += `<option value="${item[valueField]}" ${isSelected ? 'selected' : ''}>${item[textField]}</option>`;
+            });
         }
         
-        function recalculateAllDishCosts() {
-            dishes.forEach(dish => {
-                let cost = 0;
-                if (dish.bom) {
-                    dish.bom.forEach(item => {
-                        const material = findById(rawMaterials, item.materialId);
-                        cost += (material?.price || 0) * item.quantity;
-                    });
-                }
-                dish.cost = cost;
+        function logAdjustment(typeKey, recordId, reason, changes) {
+            adjustmentLogs.unshift({
+                id: Date.now(),
+                typeKey: typeKey,
+                recordId: recordId,
+                reason: reason,
+                date: new Date().toISOString(),
+                changes: changes
             });
-            saveData('dishes', dishes);
+            localStorage.setItem('adjustmentLogs', JSON.stringify(adjustmentLogs));
         }
 
-        function getCurrentSalary(employee) {
-            if (!employee.salaryHistory || employee.salaryHistory.length === 0) return null;
+        function handleDatePresetChange(presetValue, startDateInput, endDateInput) {
             const today = new Date();
-            const applicableSalaries = employee.salaryHistory
-                .filter(s => new Date(s.effectiveDate) <= today)
-                .sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate));
-            return applicableSalaries[0] || null;
+            let startDate, endDate = today;
+
+            startDateInput.disabled = true;
+            endDateInput.disabled = true;
+
+            switch (presetValue) {
+                case 'this_month':
+                    startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    break;
+                case 'this_quarter':
+                    const quarter = Math.floor(today.getMonth() / 3);
+                    startDate = new Date(today.getFullYear(), quarter * 3, 1);
+                    break;
+                case 'this_year':
+                    startDate = new Date(today.getFullYear(), 0, 1);
+                    break;
+                case 'custom':
+                    startDateInput.disabled = false;
+                    endDateInput.disabled = false;
+                    startDateInput.value = '';
+                    endDateInput.value = '';
+                    return; // Exit here for custom
+            }
+
+            startDateInput.value = startDate.toISOString().split('T')[0];
+            endDateInput.value = endDate.toISOString().split('T')[0];
         }
-
-        // --- RENDERING FUNCTIONS ---
-        // These functions will now only be responsible for generating HTML, not fetching data.
-
-        function renderDashboard() {
-            // ... (Logic remains the same, but it uses global variables now) ...
+        // --- Employee & Salary Management ---
+        function getSalaryForDate(employee, date) {
+            if (!employee.salaryHistory || employee.salaryHistory.length === 0) {
+                return { rate: 0, type: employee.employmentType, effectiveDate: '1900-01-01' };
+            }
+            const targetDate = new Date(date);
+            const sortedHistory = [...employee.salaryHistory].sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate));
+            
+            for (const entry of sortedHistory) {
+                if (new Date(entry.effectiveDate) <= targetDate) {
+                    return entry;
+                }
+            }
+            // If no matching date is found (e.g., all are in the future), return the earliest one as a fallback
+            return sortedHistory[sortedHistory.length - 1];
         }
 
         function renderEmployeesList() {
-             const listEl = document.getElementById('employees-list');
-             listEl.innerHTML = employees.length > 0 ? employees.map(emp => {
+            const listEl = elements.employeesList;
+            listEl.innerHTML = employees.length ? employees.map(emp => {
                 const statusClass = emp.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                const statusText = emp.status === 'active' ? translations[currentLang].status_active : translations[currentLang].status_terminated;
-                return `<div class="bg-white p-4 rounded-lg shadow flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="${emp.photoUrl || 'https://placehold.co/40x40/E2E8F0/4A5568?text=NV'}" alt="${emp.name}" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <p class="font-semibold text-gray-800">${emp.name}</p>
-                                    <p class="text-sm text-gray-500">${emp.idCode}</p>
-                                </div>
+                const statusText = emp.status === 'active' ? (translations[currentLang].status_active || 'Đang làm việc') : (translations[currentLang].status_terminated || 'Đã thôi việc');
+                return `
+                    <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <img src="${emp.photoUrl || 'https://placehold.co/40x40/E2E8F0/4A5568?text=NV'}" alt="photo" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <p class="font-semibold text-gray-800">${emp.name}</p>
+                                <p class="text-sm text-gray-500">${emp.idCode}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                             <span class="text-xs font-medium px-2 py-1 rounded-full ${statusClass}">${statusText}</span>
+                             <button class="view-employee-btn text-sm text-blue-600 hover:underline" data-id="${emp.id}">${translations[currentLang].view_details}</button>
+                             ${emp.status === 'active' ? `<button class="terminate-employee-btn text-sm text-red-600 hover:underline" data-id="${emp.id}">${translations[currentLang].terminate_employee_btn}</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('') : `<p class="text-center text-gray-500">${translations[currentLang].empty_data}</p>`;
+        }
+
+        elements.addEmployeeForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const selectedRoles = Array.from(document.querySelectorAll('#employee-roles-checkboxes input:checked')).map(cb => cb.value);
+            const newEmployee = {
+                id: Date.now(),
+                name: document.getElementById('employee-name').value,
+                idCode: document.getElementById('employee-id-code').value,
+                dob: document.getElementById('employee-dob').value,
+                nid: document.getElementById('employee-nid').value,
+                photoUrl: document.getElementById('employee-photo-url').value,
+                permanentAddress: document.getElementById('employee-permanent-address').value,
+                currentAddress: document.getElementById('employee-current-address').value,
+                startDate: document.getElementById('employee-start-date').value,
+                employmentType: document.getElementById('employee-type').value,
+                roles: selectedRoles,
+                status: 'active',
+                salaryHistory: []
+            };
+            employees.push(newEmployee);
+            localStorage.setItem('employees', JSON.stringify(employees));
+            renderEmployeesList();
+            elements.addEmployeeForm.reset();
+        });
+
+        elements.employeesList.addEventListener('click', (e) => {
+            if (e.target.matches('.view-employee-btn')) {
+                const employee = findById(employees, e.target.dataset.id);
+                if (employee) openEmployeeDetailsModal(employee);
+            }
+             if (e.target.matches('.terminate-employee-btn')) {
+                const employeeId = parseInt(e.target.dataset.id);
+                const reason = prompt(translations[currentLang].termination_reason);
+                if(reason) {
+                    showConfirmation(translations[currentLang].terminate_employee_title, `Bạn có chắc muốn cho nhân viên này thôi việc?`, () => {
+                        employees = employees.map(emp => emp.id === employeeId ? { ...emp, status: 'terminated', terminationDate: todayISO(), terminationReason: reason } : emp);
+                        localStorage.setItem('employees', JSON.stringify(employees));
+                        renderEmployeesList();
+                    });
+                }
+            }
+        });
+        
+        function renderSalaryManagement(emp) {
+            const salaryHistoryList = document.getElementById('employee-salary-history-list');
+            const salaryForm = document.getElementById('add-salary-form');
+            
+            const currentSalary = getSalaryForDate(emp, new Date());
+            const salaryTypeKey = emp.employmentType === 'part-time' ? 'salary_per_hour' : 'salary_per_month';
+            const salaryTypeText = translations[currentLang][salaryTypeKey] || '';
+            
+            let historyHtml = `<p class="mb-2 text-sm"><strong>${translations[currentLang].current_salary}:</strong> ${formatCurrency(currentSalary.rate)} / ${salaryTypeText}</p>`;
+            
+            if (emp.salaryHistory && emp.salaryHistory.length > 0) {
+                 historyHtml += emp.salaryHistory
+                    .sort((a,b) => new Date(b.effectiveDate) - new Date(a.effectiveDate))
+                    .map(s => `<div class="text-xs p-1 bg-gray-100 rounded"><span>${s.effectiveDate}:</span> <span class="font-mono">${formatCurrency(s.rate)}</span></div>`)
+                    .join('');
+            } else {
+                historyHtml += `<p class="text-xs text-gray-500">${translations[currentLang].empty_data}</p>`;
+            }
+            salaryHistoryList.innerHTML = historyHtml;
+
+            const formHandler = (e) => {
+                e.preventDefault();
+                const newRate = parseFloat(document.getElementById('new-salary-rate').value);
+                const newEffectiveDate = document.getElementById('salary-effective-date').value;
+
+                if (isNaN(newRate) || !newEffectiveDate) {
+                    alert('Vui lòng nhập đầy đủ thông tin lương.');
+                    return;
+                }
+                
+                const employeeToUpdate = findById(employees, emp.id);
+                if (!employeeToUpdate.salaryHistory) {
+                    employeeToUpdate.salaryHistory = [];
+                }
+                employeeToUpdate.salaryHistory.push({
+                    rate: newRate,
+                    type: employeeToUpdate.employmentType,
+                    effectiveDate: newEffectiveDate
+                });
+                
+                localStorage.setItem('employees', JSON.stringify(employees));
+                renderSalaryManagement(employeeToUpdate); // Re-render the section
+                salaryForm.reset();
+            };
+            
+            salaryForm.replaceWith(salaryForm.cloneNode(true)); // Remove old event listeners
+            document.getElementById('add-salary-form').addEventListener('submit', formHandler);
+        }
+
+        function openEmployeeDetailsModal(emp) {
+            const contentEl = document.getElementById('employee-modal-content');
+            const rolesText = emp.roles.map(r => employeeRoles[r]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || r).join(', ');
+            const empTypeText = employmentTypes[emp.employmentType]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || emp.employmentType;
+            contentEl.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 text-center">
+                         <img src="${emp.photoUrl || 'https://placehold.co/128x128/E2E8F0/4A5568?text=NV'}" alt="photo" class="w-32 h-32 rounded-full object-cover mx-auto mb-4">
+                    </div>
+                    <div class="md:col-span-2 space-y-3">
+                         <p><strong>${translations[currentLang].employee_name}:</strong> ${emp.name}</p>
+                         <p><strong>${translations[currentLang].employee_id_code}:</strong> ${emp.idCode}</p>
+                         <p><strong>${translations[currentLang].employee_dob}:</strong> ${emp.dob}</p>
+                         <p><strong>${translations[currentLang].employee_nid}:</strong> ${emp.nid}</p>
+                         <p><strong>${translations[currentLang].employee_start_date}:</strong> ${emp.startDate}</p>
+                         <p><strong>${translations[currentLang].employee_type}:</strong> ${empTypeText}</p>
+                         <p><strong>${translations[currentLang].roles}:</strong> ${rolesText}</p>
+                         <p><strong>${translations[currentLang].employee_permanent_address}:</strong> ${emp.permanentAddress}</p>
+                         <p><strong>${translations[currentLang].employee_current_address}:</strong> ${emp.currentAddress}</p>
+                         ${emp.status === 'terminated' ? `
+                             <div class="mt-4 p-3 bg-red-50 border-l-4 border-red-400 rounded">
+                                 <p><strong>${translations[currentLang].termination_date}:</strong> ${emp.terminationDate}</p>
+                                 <p><strong>${translations[currentLang].termination_reason}:</strong> ${emp.terminationReason}</p>
+                             </div>` : ''}
+                    </div>
+                </div>
+                 <!-- Salary Section -->
+                <div class="mt-6 pt-4 border-t">
+                    <h3 class="text-xl font-semibold mb-4" data-lang="salary_history">Lịch Sử Lương</h3>
+                    <div id="employee-salary-history-list" class="space-y-2 mb-4 max-h-40 overflow-y-auto"></div>
+                    <form id="add-salary-form" class="p-4 bg-gray-50 rounded-lg space-y-3">
+                        <h4 class="font-semibold" data-lang="add_new_salary">Thêm mức lương mới</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="new-salary-rate" class="block text-sm font-medium text-gray-700" data-lang="new_salary_rate">Mức lương mới</label>
+                                <input type="number" id="new-salary-rate" required min="0" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                            <div>
+                                <label for="salary-effective-date" class="block text-sm font-medium text-gray-700" data-lang="effective_date">Ngày hiệu lực</label>
+                                <input type="date" id="salary-effective-date" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700" data-lang="save_salary_btn">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            renderSalaryManagement(emp);
+            elements.employeeDetailsModal.classList.add('active');
+        }
+
+        document.getElementById('close-employee-modal-btn').addEventListener('click', () => {
+            elements.employeeDetailsModal.classList.remove('active');
+        });
+
+        // --- Supplier Management ---
+        function renderSuppliersList() {
+            const listEl = elements.suppliersList;
+            listEl.innerHTML = suppliers.length ? suppliers.map(s => `
+                <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-start">
+                    <div>
+                        <p class="font-semibold text-gray-800">${s.name}</p>
+                        <p class="text-sm text-gray-500">${s.contact || ''} - ${s.phone || ''}</p>
+                        <p class="text-xs text-gray-400 mt-1">${s.address || ''} ${s.taxcode ? `(MST: ${s.taxcode})` : ''}</p>
+                    </div>
+                    <div class="flex items-center gap-4 flex-shrink-0">
+                        <button class="edit-supplier-btn text-sm text-blue-600 hover:underline" data-id="${s.id}">${translations[currentLang].edit}</button>
+                        <button class="delete-supplier-btn text-sm text-red-600 hover:underline" data-id="${s.id}">${translations[currentLang].delete}</button>
+                    </div>
+                </div>
+            `).join('') : `<p class="text-center text-gray-500">${translations[currentLang].empty_data}</p>`;
+        }
+
+        elements.addSupplierForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newSupplier = {
+                id: Date.now(),
+                name: document.getElementById('supplier-name').value,
+                contact: document.getElementById('supplier-contact').value,
+                phone: document.getElementById('supplier-phone').value,
+                address: document.getElementById('supplier-address').value,
+                taxcode: document.getElementById('supplier-taxcode').value,
+            };
+            suppliers.push(newSupplier);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            renderApp(); 
+            elements.addSupplierForm.reset();
+        });
+
+        elements.suppliersList.addEventListener('click', (e) => {
+            if (e.target.matches('.edit-supplier-btn')) {
+                const supplier = findById(suppliers, e.target.dataset.id);
+                if (supplier) openEditSupplierModal(supplier);
+            }
+             if (e.target.matches('.delete-supplier-btn')) {
+                showConfirmation('Xóa nhà cung cấp?', 'Bạn có chắc muốn xóa nhà cung cấp này?', () => {
+                    suppliers = suppliers.filter(s => s.id !== parseInt(e.target.dataset.id));
+                    localStorage.setItem('suppliers', JSON.stringify(suppliers));
+                    renderSuppliersList();
+                });
+            }
+        });
+        
+        function openEditSupplierModal(supplier) {
+            const modal = elements.editSupplierModal;
+            modal.querySelector('#edit-supplier-id').value = supplier.id;
+            modal.querySelector('#edit-supplier-name').value = supplier.name;
+            modal.querySelector('#edit-supplier-contact').value = supplier.contact;
+            modal.querySelector('#edit-supplier-phone').value = supplier.phone;
+            modal.querySelector('#edit-supplier-address').value = supplier.address;
+            modal.querySelector('#edit-supplier-taxcode').value = supplier.taxcode;
+            modal.classList.add('active');
+        }
+
+        document.getElementById('cancel-edit-supplier-btn').addEventListener('click', () => {
+             elements.editSupplierModal.classList.remove('active');
+        });
+
+        document.getElementById('edit-supplier-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const supplierId = parseInt(document.getElementById('edit-supplier-id').value);
+            const updatedSupplier = {
+                id: supplierId,
+                name: document.getElementById('edit-supplier-name').value,
+                contact: document.getElementById('edit-supplier-contact').value,
+                phone: document.getElementById('edit-supplier-phone').value,
+                address: document.getElementById('edit-supplier-address').value,
+                taxcode: document.getElementById('edit-supplier-taxcode').value,
+            };
+            suppliers = suppliers.map(s => s.id === supplierId ? updatedSupplier : s);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            renderSuppliersList();
+            elements.editSupplierModal.classList.remove('active');
+        });
+
+
+        // --- Sales & Order Lookup Logic ---
+        elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
+        elements.inventoryReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.inventoryReportStartDate, elements.inventoryReportEndDate));
+        elements.profitReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.profitReportStartDate, elements.profitReportEndDate));
+
+        elements.orderLookupBtn.addEventListener('click', () => {
+            const startDate = new Date(elements.orderLookupStartDate.value);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(elements.orderLookupEndDate.value);
+            endDate.setHours(23, 59, 59, 999);
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                alert("Vui lòng chọn ngày hợp lệ.");
+                return;
+            }
+
+            const activeOrders = loadFromStorage('activeOrders');
+            const completedOrders = loadFromStorage('completedOrders');
+            const cancelledOrders = loadFromStorage('cancelledOrders');
+
+            const allOrdersInPeriod = [];
+
+            activeOrders.forEach(order => {
+                const orderDate = new Date(order.timestamps.created);
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    allOrdersInPeriod.push({ ...order, finalStatus: order.status });
+                }
+            });
+
+            completedOrders.forEach(order => {
+                const orderDate = new Date(order.timestamps.completed);
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    allOrdersInPeriod.push({ ...order, finalStatus: 'completed' });
+                }
+            });
+
+            cancelledOrders.forEach(record => {
+                const orderDate = new Date(record.timestamp);
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    allOrdersInPeriod.push({ 
+                        ...record.order, 
+                        finalStatus: 'cancelled', 
+                        cancellationReason: record.reason,
+                        cancellationTimestamp: record.timestamp
+                    });
+                }
+            });
+            
+            salesDataInPeriod = allOrdersInPeriod; // Store for filtering
+            renderOrderStats(salesDataInPeriod);
+            elements.orderDetailsTitle.classList.add('hidden');
+            elements.orderDetailsList.innerHTML = '';
+        });
+
+        function renderOrderStats(orders) {
+            const counts = Object.keys(orderStatuses).reduce((acc, key) => ({...acc, [key]: 0}), {});
+            orders.forEach(order => {
+                if (counts.hasOwnProperty(order.finalStatus)) {
+                    counts[order.finalStatus]++;
+                }
+            });
+
+            elements.orderStats.innerHTML = Object.keys(orderStatuses).map(statusKey => {
+                const status = orderStatuses[statusKey];
+                const count = counts[statusKey];
+                const name = status[`name${currentLang === 'zh' ? '_zh' : ''}`] || status.name;
+                return `
+                    <div class="stat-card p-4 bg-white rounded-lg shadow-md text-center cursor-pointer border-2 border-transparent" style="--status-color: ${status.color};" data-status="${statusKey}">
+                        <p class="text-3xl font-bold" style="color: ${status.color};">${count}</p>
+                        <p class="text-sm font-medium text-gray-600">${name}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        elements.orderStats.addEventListener('click', (e) => {
+            const card = e.target.closest('.stat-card');
+            if (!card) return;
+
+            const statusKey = card.dataset.status;
+            const filteredData = salesDataInPeriod.filter(sale => sale.finalStatus === statusKey);
+            
+            const statusName = orderStatuses[statusKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || statusKey;
+            elements.orderDetailsTitle.textContent = `${translations[currentLang].order_list}: ${statusName}`;
+            elements.orderDetailsTitle.classList.remove('hidden');
+
+            renderOrderDetailsList(filteredData);
+        });
+
+        function renderOrderDetailsList(data) {
+             elements.orderDetailsList.innerHTML = data.length ? data.map(order => {
+                const statusInfo = orderStatuses[order.finalStatus];
+                const dishNames = order.items.map(i => findById(dishes, i.dishId)?.name || 'N/A').join(', ');
+
+                const timeInfoHtml = (() => {
+                    if (order.finalStatus === 'completed') {
+                        const duration = order.timestamps.completed - order.timestamps.created;
+                        return `<div class="text-right">
+                                    <p class="font-semibold text-green-600">${formatDuration(duration)}</p>
+                                    <p class="text-xs text-gray-500" data-lang="total_time">${translations[currentLang].total_time}</p>
+                                </div>`;
+                    } else if (order.finalStatus === 'cancelled') {
+                        const duration = order.cancellationTimestamp - order.timestamps.created;
+                        return `<div class="text-right">
+                                    <p class="font-semibold text-red-600">${formatDuration(duration)}</p>
+                                    <p class="text-xs text-gray-500" data-lang="total_time">${translations[currentLang].total_time}</p>
+                                </div>`;
+                    } else { // new, preparing, delivering
+                        return `<div class="text-right">
+                                    <p class="font-semibold text-blue-600 live-timer" data-timestamp="${order.timestamps.created}">00:00:00</p>
+                                    <p class="text-xs text-gray-500" data-lang="duration">${translations[currentLang].duration}</p>
+                                </div>`;
+                    }
+                })();
+
+                 return `
+                    <div class="p-4 bg-gray-50 rounded-lg border-l-4" style="border-color: ${statusInfo.color};">
+                        <div class="flex flex-wrap justify-between items-center gap-2">
+                            <div>
+                                <p class="font-bold text-gray-800">${order.customer.orderId}</p>
+                                <p class="text-sm text-gray-600">${dishNames}</p>
+                                <p class="text-xs text-gray-500">${new Date(order.timestamps.created).toLocaleString('vi-VN')}</p>
                             </div>
                             <div class="flex items-center gap-4">
-                                <span class="text-xs font-medium px-2 py-1 rounded-full ${statusClass}">${statusText}</span>
-                                <button class="view-employee-btn text-blue-600 hover:text-blue-800" data-id="${emp.id}">${translations[currentLang].view_details}</button>
+                                <div class="text-right">
+                                    <p class="font-semibold text-gray-800">${order.customer.name}</p>
+                                    <p class="text-xs text-gray-500">${order.customer.phone}</p>
+                                </div>
+                                ${timeInfoHtml}
                             </div>
-                        </div>`;
-             }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
+                        </div>
+                        ${order.finalStatus === 'cancelled' ? `<p class="text-xs text-red-600 mt-1">Lý do hủy: ${order.cancellationReason}</p>` : ''}
+                    </div>
+                `;
+             }).join('') : `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang].empty_data}</p>`;
         }
         
-        // ... (All other render functions for suppliers, dishes, etc. will follow a similar pattern)
-        function renderSuppliersList() {
-            document.getElementById('suppliers-list').innerHTML = suppliers.map(s => `
-                <div class="p-3 bg-gray-50 rounded-md flex justify-between items-center">
-                    <div>
-                        <p class="font-semibold">${s.name}</p>
-                        <p class="text-sm text-gray-600">${s.phone || ''} - ${s.contact || ''}</p>
-                    </div>
-                    <div>
-                         <button class="edit-supplier-btn text-sm text-blue-600 p-2" data-id="${s.id}">${translations[currentLang].edit}</button>
-                         <button class="delete-supplier-btn text-sm text-red-600 p-2" data-id="${s.id}">${translations[currentLang].delete}</button>
+        // --- Menu Management ---
+        const renderDish = (d) => {
+             const currentPrice = getPriceForDate(d, new Date());
+             return `
+            <div class="flex justify-between items-start p-3 bg-gray-50 rounded-md border">
+                <div>
+                    <p class="font-semibold">${d.name} - ${formatCurrency(currentPrice)}</p>
+                    <p class="text-sm text-gray-500">${translations[currentLang].estimated_cost}: ${formatCurrency(d.cost)}</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="edit-dish-btn text-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-1 px-2 rounded" data-id="${d.id}">${translations[currentLang].edit}</button>
+                    <button class="delete-dish-btn text-xs bg-red-400 hover:bg-red-500 text-red-900 font-semibold py-1 px-2 rounded" data-id="${d.id}">${translations[currentLang].delete}</button>
+                </div>
+            </div>
+        `};
+
+        elements.dishesList.addEventListener('click', e => {
+            if (e.target.matches('.edit-dish-btn')) {
+                const dish = findById(dishes, e.target.dataset.id);
+                if (dish) openEditDishModal(dish);
+            }
+            if (e.target.matches('.delete-dish-btn')) {
+                showConfirmation('Xác nhận xóa', 'Bạn có chắc muốn xóa món ăn này?', () => {
+                    dishes = dishes.filter(d => d.id !== parseInt(e.target.dataset.id));
+                    localStorage.setItem('dishes', JSON.stringify(dishes));
+                    renderApp();
+                });
+            }
+        });
+
+        function openEditDishModal(dish) {
+            const modal = elements.editDishModal;
+            modal.querySelector('#edit-dish-id').value = dish.id;
+            modal.querySelector('#edit-dish-name').value = dish.name;
+            modal.querySelector('#edit-dish-description').value = dish.description;
+            modal.querySelector('#edit-dish-image-url').value = dish.imageUrl || '';
+            
+            const currentPrice = getPriceForDate(dish, new Date());
+            modal.querySelector('#edit-dish-price').value = currentPrice;
+            modal.querySelector('#edit-dish-price-effective-date').value = '';
+
+            editingBomItems = JSON.parse(JSON.stringify(dish.bom || []));
+            populateMaterialSelects(modal.querySelector('#edit-bom-material-select'));
+            renderEditingBomItems();
+            modal.classList.add('active');
+        }
+
+        elements.cancelEditDishBtn.addEventListener('click', () => elements.editDishModal.classList.remove('active'));
+
+        elements.editDishModal.querySelector('#edit-add-bom-item-btn').addEventListener('click', () => {
+             const materialId = parseInt(elements.editDishModal.querySelector('#edit-bom-material-select').value);
+            const quantity = parseFloat(elements.editDishModal.querySelector('#edit-bom-quantity').value);
+            if (materialId && quantity > 0 && !editingBomItems.some(item => item.materialId === materialId)) {
+                editingBomItems.push({ materialId, quantity });
+                renderEditingBomItems();
+                elements.editDishModal.querySelector('#edit-bom-quantity').value = '';
+            }
+        });
+
+        function renderEditingBomItems() {
+            const listEl = elements.editDishModal.querySelector('#edit-bom-items-list');
+            listEl.innerHTML = editingBomItems.map((item, index) => {
+                const material = findById(rawMaterials, item.materialId);
+                return `<div class="flex justify-between items-center text-sm p-1 bg-blue-50 rounded">
+                    <span>${material?.name || 'N/A'} - ${item.quantity} ${material?.unit || ''}</span>
+                    <button type="button" class="remove-bom-item-btn text-red-500" data-index="${index}">X</button>
+                </div>`;
+            }).join('');
+            
+            elements.editDishModal.querySelector('#edit-estimated-cost').textContent = formatCurrency(calculateBomCost(editingBomItems));
+
+            listEl.querySelectorAll('.remove-bom-item-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    editingBomItems.splice(parseInt(e.target.dataset.index), 1);
+                    renderEditingBomItems();
+                });
+            });
+        }
+        
+        elements.editDishForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const dishId = parseInt(document.getElementById('edit-dish-id').value);
+            const reason = document.getElementById('edit-dish-reason').value;
+            const originalDish = findById(dishes, dishId);
+            
+            const newPrice = parseFloat(document.getElementById('edit-dish-price').value);
+            const effectiveDate = document.getElementById('edit-dish-price-effective-date').value;
+            const priceHistory = originalDish.priceHistory || [{ price: originalDish.price, effectiveDate: '1970-01-01'}];
+            
+            if (newPrice !== getPriceForDate(originalDish, new Date(effectiveDate || todayISO()))) {
+                if(!effectiveDate) { alert('Vui lòng chọn ngày áp dụng giá mới.'); return; }
+                 priceHistory.push({ price: newPrice, effectiveDate });
+            }
+
+            const updatedDish = {
+                ...originalDish,
+                name: document.getElementById('edit-dish-name').value,
+                description: document.getElementById('edit-dish-description').value,
+                imageUrl: document.getElementById('edit-dish-image-url').value,
+                price: getPriceForDate({...originalDish, priceHistory}, new Date()),
+                priceHistory: priceHistory,
+                bom: editingBomItems,
+                cost: calculateBomCost(editingBomItems)
+            };
+            
+            logAdjustment('log_type_dish', dishId, reason, {}); // Simplified log for now
+            dishes = dishes.map(d => d.id === dishId ? updatedDish : d);
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+            
+            elements.editDishModal.classList.remove('active');
+            e.target.reset();
+            renderApp();
+        });
+
+        // --- Material & Category Management ---
+        function renderMaterialCategories() {
+            const listEl = elements.materialCategoriesList;
+            listEl.innerHTML = materialCategories.map(cat => `
+                <div class="flex justify-between items-center p-2 bg-gray-100 rounded-md">
+                    <span>${cat.name}</span>
+                    <div class="flex gap-2">
+                         <button class="edit-category-btn text-xs text-yellow-700 hover:text-yellow-900" data-id="${cat.id}">Sửa</button>
+                        <button class="delete-category-btn text-xs text-red-500 hover:text-red-700" data-id="${cat.id}">Xóa</button>
                     </div>
                 </div>
             `).join('');
+            populateSelect(document.getElementById('material-category-select'), materialCategories, 'select_category');
+        }
+
+        document.getElementById('add-category-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const nameInput = document.getElementById('category-name');
+            const name = nameInput.value.trim();
+            if (name) {
+                materialCategories.push({ id: Date.now(), name });
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                renderMaterialCategories();
+                nameInput.value = '';
+            }
+        });
+
+        elements.materialCategoriesList.addEventListener('click', e => {
+            if (e.target.matches('.edit-category-btn')) {
+                const category = findById(materialCategories, e.target.dataset.id);
+                if (category) openEditCategoryModal(category);
+            }
+            if (e.target.matches('.delete-category-btn')) {
+                handleDeleteCategory(parseInt(e.target.dataset.id));
+            }
+        });
+
+        function openEditCategoryModal(category) {
+            const modal = elements.editCategoryModal;
+            modal.querySelector('#edit-category-id').value = category.id;
+            modal.querySelector('#edit-category-name').value = category.name;
+            modal.classList.add('active');
+        }
+
+        document.getElementById('cancel-edit-category').addEventListener('click', () => elements.editCategoryModal.classList.remove('active'));
+        
+        document.getElementById('edit-category-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const catId = parseInt(document.getElementById('edit-category-id').value);
+            const newName = document.getElementById('edit-category-name').value.trim();
+            if(newName) {
+                materialCategories = materialCategories.map(c => c.id === catId ? {...c, name: newName} : c);
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                elements.editCategoryModal.classList.remove('active');
+                renderApp();
+            }
+        });
+
+        function handleDeleteCategory(categoryId) {
+            showConfirmation('Xóa phân loại?', 'Bạn có chắc muốn xóa phân loại này? Các nguyên vật liệu trong nhóm sẽ trở thành "Chưa phân loại".', () => {
+                materialCategories = materialCategories.filter(c => c.id !== categoryId);
+                rawMaterials.forEach(m => {
+                    if (m.categoryId === categoryId) {
+                        m.categoryId = null;
+                    }
+                });
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderApp();
+            });
         }
         
+        document.getElementById('add-material-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('material-name').value.trim();
+            const unit = document.getElementById('material-unit').value.trim();
+            const categoryId = parseInt(document.getElementById('material-category-select').value) || null;
+            if (name && unit) {
+                rawMaterials.push({ id: Date.now(), name, unit, price: 0, categoryId });
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderMaterialsList();
+                e.target.reset();
+            }
+        });
+
+        elements.searchMaterialInput.addEventListener('input', () => renderMaterialsList());
+
+        function renderMaterialsList() {
+            const searchTerm = elements.searchMaterialInput.value.toLowerCase();
+            const listEl = elements.materialsList;
+
+            const filteredMaterials = rawMaterials.filter(m => m.name.toLowerCase().includes(searchTerm));
+            const grouped = filteredMaterials.reduce((acc, m) => {
+                const catId = m.categoryId || 'uncategorized';
+                if (!acc[catId]) acc[catId] = [];
+                acc[catId].push(m);
+                return acc;
+            }, {});
+
+            const categoryOrder = materialCategories.map(c => c.id);
+            if (grouped.uncategorized) categoryOrder.push('uncategorized');
+
+            listEl.innerHTML = categoryOrder.map(catId => {
+                if (!grouped[catId]) return '';
+                const category = catId === 'uncategorized' ? { name: translations[currentLang].uncategorized } : findById(materialCategories, catId);
+                if (!category) return '';
+
+                const materialsHtml = grouped[catId].map(m => `
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-md">
+                        <div>
+                            <p class="font-medium text-sm">${m.name} (${m.unit})</p>
+                            <p class="font-mono text-xs text-gray-600">${formatCurrency(m.price)}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="edit-material-btn text-xs text-yellow-700 hover:text-yellow-900" data-id="${m.id}">${translations[currentLang].edit}</button>
+                            <button class="delete-material-btn text-xs text-red-500 hover:text-red-700" data-id="${m.id}">${translations[currentLang].delete}</button>
+                        </div>
+                    </div>`).join('');
+
+                return `<div>
+                            <h4 class="font-semibold text-gray-700 text-md mt-2 mb-1 pb-1 border-b">${category.name}</h4>
+                            <div class="space-y-2">${materialsHtml}</div>
+                        </div>`;
+            }).join('') || `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
+        }
+        
+        elements.materialsList.addEventListener('click', e => {
+            if (e.target.matches('.edit-material-btn')) {
+                const material = findById(rawMaterials, e.target.dataset.id);
+                if (material) openEditMaterialModal(material);
+            }
+            if (e.target.matches('.delete-material-btn')) {
+                handleDeleteMaterial(parseInt(e.target.dataset.id));
+            }
+        });
+
+        function handleDeleteMaterial(materialId) {
+            const isUsed = dishes.some(d => d.bom && d.bom.some(item => item.materialId === materialId));
+            if (isUsed) {
+                alert('Không thể xóa nguyên vật liệu này vì nó đang được sử dụng trong định lượng của một món ăn.');
+                return;
+            }
+            showConfirmation('Xóa nguyên liệu?', 'Bạn có chắc muốn xóa nguyên vật liệu này?', () => {
+                 rawMaterials = rawMaterials.filter(m => m.id !== materialId);
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderApp();
+            });
+        }
+
+        function openEditMaterialModal(material) {
+            const modal = elements.editMaterialModal;
+            populateSelect(modal.querySelector('#edit-material-category-select'), materialCategories, 'select_category', 'id', 'name', material.categoryId);
+            modal.querySelector('#edit-material-id').value = material.id;
+            modal.querySelector('#edit-material-name').value = material.name;
+            modal.querySelector('#edit-material-unit').value = material.unit;
+            modal.classList.add('active');
+        }
+        
+        elements.cancelEditMaterialBtn.addEventListener('click', () => elements.editMaterialModal.classList.remove('active'));
+
+        elements.editMaterialForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const materialId = parseInt(document.getElementById('edit-material-id').value);
+            const reason = document.getElementById('edit-material-reason').value;
+
+            const updatedMaterial = {
+                ...findById(rawMaterials, materialId),
+                name: document.getElementById('edit-material-name').value,
+                unit: document.getElementById('edit-material-unit').value,
+                categoryId: parseInt(document.getElementById('edit-material-category-select').value) || null
+            };
+
+            logAdjustment('log_type_material', materialId, reason, {});
+            rawMaterials = rawMaterials.map(m => m.id === materialId ? updatedMaterial : m);
+            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+
+            elements.editMaterialModal.classList.remove('active');
+            e.target.reset();
+            renderApp();
+        });
+
+        function getPriceForDate(dish, date) {
+            if (!dish.priceHistory || dish.priceHistory.length === 0) return dish.price;
+            const sortedHistory = [...dish.priceHistory].sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate));
+            const dateString = date.toISOString().split('T')[0];
+            for (const entry of sortedHistory) {
+                if (entry.effectiveDate <= dateString) return entry.price;
+            }
+            return dish.price; // fallback to base price
+        }
+        
+        function calculateBomCost(bomItems) {
+            return bomItems.reduce((total, item) => {
+                const material = findById(rawMaterials, item.materialId);
+                return total + (material ? material.price * item.quantity : 0);
+            }, 0);
+        }
+        
+        function updateAllMaterialPrices() {
+            const latestPurchases = {};
+            const sortedPurchases = [...purchases].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            for (const p of sortedPurchases) {
+                if (!latestPurchases[p.materialId]) {
+                    latestPurchases[p.materialId] = p.unitPrice;
+                }
+            }
+
+            rawMaterials.forEach(material => {
+                material.price = latestPurchases[material.id] || material.price || 0;
+            });
+
+            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+        }
+
+        function recalculateAllDishCosts() {
+             dishes.forEach(dish => {
+                dish.cost = calculateBomCost(dish.bom);
+            });
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+        }
+        
+        function populateMaterialSelects(selectElement) {
+            const grouped = rawMaterials.reduce((acc, m) => {
+                const catId = m.categoryId || 'uncategorized';
+                if (!acc[catId]) acc[catId] = [];
+                acc[catId].push(m);
+                return acc;
+            }, {});
+            
+            selectElement.innerHTML = `<option value="">-- ${translations[currentLang].select_material} --</option>`;
+
+            materialCategories.forEach(cat => {
+                if (grouped[cat.id]) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = cat.name;
+                    grouped[cat.id].forEach(m => {
+                        optgroup.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+                    });
+                    selectElement.appendChild(optgroup);
+                }
+            });
+
+            if (grouped.uncategorized) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = translations[currentLang].uncategorized;
+                grouped.uncategorized.forEach(m => {
+                    optgroup.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+                });
+                selectElement.appendChild(optgroup);
+            }
+        }
+        
+        // --- Confirmation Modal ---
+        function showConfirmation(title, message, onConfirm) {
+            const modal = elements.confirmationModal;
+            modal.querySelector('#confirmation-title').textContent = title;
+            modal.querySelector('#confirmation-message').textContent = message;
+            
+            const confirmBtn = modal.querySelector('#confirm-ok-btn');
+            const cancelBtn = modal.querySelector('#confirm-cancel-btn');
+            
+            const confirmHandler = () => {
+                onConfirm();
+                closeHandler();
+            };
+
+            const closeHandler = () => {
+                modal.classList.remove('active');
+                confirmBtn.removeEventListener('click', confirmHandler);
+                cancelBtn.removeEventListener('click', closeHandler);
+            };
+
+            confirmBtn.addEventListener('click', confirmHandler, { once: true });
+            cancelBtn.addEventListener('click', closeHandler, { once: true });
+            
+            modal.classList.add('active');
+        }
+
         function renderApp() {
-            console.log("Rendering App...");
-            // Central function to refresh the entire UI based on current state variables
             updateAllMaterialPrices();
             recalculateAllDishCosts();
             
-            // Set Language for all elements
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                const key = el.getAttribute('data-lang');
-                if (translations[currentLang][key]) {
-                    el.textContent = translations[currentLang][key];
-                }
-            });
-            document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-lang-placeholder');
-                if (translations[currentLang][key]) {
-                    el.placeholder = translations[currentLang][key];
-                }
-            });
-
-            // Re-render dynamic lists
-            renderDashboard();
+            // Render components
             renderEmployeesList();
             renderSuppliersList();
-            // renderDishesList(); // You'd create this
-            // renderMaterialsList(); // and this
-            // ... and so on for every dynamic part of the UI.
+            renderMaterialCategories();
+            renderMaterialsList();
             
-            // Re-populate select dropdowns
-            // populateMaterialSelects(document.getElementById('bom-material-select'));
-            // ... and so on
+            // Populate dynamic selects
+            const rolesContainer = document.getElementById('employee-roles-checkboxes');
+            if(rolesContainer) {
+                rolesContainer.innerHTML = Object.keys(employeeRoles).map(key => `
+                    <label class="flex items-center">
+                        <input type="checkbox" name="employee-roles" value="${key}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                        <span class="ml-2 text-gray-700">${employeeRoles[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || employeeRoles[key].name}</span>
+                    </label>
+                `).join('');
+            }
+            document.getElementById('dishes-list').innerHTML = dishes.map(renderDish).join('');
+
+            populateMaterialSelects(document.getElementById('bom-material-select'));
+            populateMaterialSelects(document.getElementById('purchase-material-select'));
+            populateMaterialSelects(document.getElementById('spoilage-material-select'));
+            populateSelect(document.getElementById('purchase-supplier-select'), suppliers, 'select_supplier');
+
+            renderDashboard();
+        }
+        
+        // --- Dashboard Logic ---
+        function renderDashboard() {
+            const todayStart = new Date();
+            todayStart.setHours(0,0,0,0);
+            const todayEnd = new Date();
+            todayEnd.setHours(23,59,59,999);
+            
+            const completedOrders = loadFromStorage('completedOrders');
+            const activeOrders = loadFromStorage('activeOrders');
+            
+            const todaysCompleted = completedOrders.filter(o => new Date(o.timestamps.completed) >= todayStart && new Date(o.timestamps.completed) <= todayEnd);
+            const todaysOrders = [...todaysCompleted, ...activeOrders.filter(o => new Date(o.timestamps.created) >= todayStart)];
+
+            // Card 1: Revenue
+            const todayRevenue = todaysCompleted.reduce((sum, order) => sum + order.total, 0);
+            document.getElementById('dashboard-revenue').textContent = formatCurrency(todayRevenue);
+
+            // Card 2: Orders
+            document.getElementById('dashboard-orders').textContent = todaysOrders.length;
+
+            // Card 3: Best Seller
+            const dishCounts = {};
+            todaysOrders.forEach(order => {
+                order.items.forEach(item => {
+                    dishCounts[item.dishId] = (dishCounts[item.dishId] || 0) + item.quantity;
+                });
+            });
+            const bestSellerId = Object.keys(dishCounts).sort((a,b) => dishCounts[b] - dishCounts[a])[0];
+            const bestSeller = bestSellerId ? findById(dishes, bestSellerId)?.name : 'N/A';
+            document.getElementById('dashboard-best-seller').textContent = bestSeller;
+
+            // Card 4: Low Stock - Placeholder
+            document.getElementById('dashboard-low-stock').textContent = '0'; // Needs inventory logic
+            
+            // Chart
+            const statusCounts = activeOrders.reduce((acc, order) => {
+                acc[order.status] = (acc[order.status] || 0) + 1;
+                return acc;
+            }, {});
+            statusCounts.completed = todaysCompleted.length;
+
+            const chartData = {
+                labels: Object.keys(statusCounts).map(key => orderStatuses[key]?.name || key),
+                datasets: [{
+                    data: Object.values(statusCounts),
+                    backgroundColor: Object.keys(statusCounts).map(key => orderStatuses[key]?.color || '#ccc'),
+                }]
+            };
+            
+            const ctx = document.getElementById('orderStatusChart').getContext('2d');
+            if (chartInstances.orderStatus) chartInstances.orderStatus.destroy();
+            chartInstances.orderStatus = new Chart(ctx, {
+                type: 'doughnut',
+                data: chartData,
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         }
 
-        // --- EVENT LISTENERS (DELEGATION) ---
-        // Using delegation to handle events on dynamically created elements
+        // --- Live Timer Update ---
+        setInterval(() => {
+            document.querySelectorAll('.live-timer').forEach(timerEl => {
+                const timestamp = parseInt(timerEl.dataset.timestamp, 10);
+                if (!isNaN(timestamp)) {
+                    const duration = Date.now() - timestamp;
+                    timerEl.textContent = formatDuration(duration);
+                }
+            });
+        }, 1000);
         
-        document.body.addEventListener('click', (e) => {
-            const target = e.target;
-            
-            // Tab switching
-            if (target.closest('.tab-link')) {
-                e.preventDefault();
-                const tabId = target.closest('.tab-link').dataset.tab;
-                document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('bg-gray-700'));
-                target.closest('.tab-link').classList.add('bg-gray-700');
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById(tabId).classList.add('active');
-            }
-            
-            // Language switching
-            if (target.closest('.lang-btn')) {
-                currentLang = target.closest('.lang-btn').dataset.langCode;
-                localStorage.setItem('language', currentLang);
-                renderApp();
-            }
-
-            // View Employee Modal
-            if (target.closest('.view-employee-btn')) {
-                const employeeId = target.closest('.view-employee-btn').dataset.id;
-                // ... logic to open and populate the employee modal
-            }
-
-            // Edit Supplier Modal
-            if(target.closest('.edit-supplier-btn')) {
-                const supplierId = target.closest('.edit-supplier-btn').dataset.id;
-                // ... logic to open and populate supplier modal
-            }
-            
-            // ... more delegated events for other buttons ...
-        });
-        
-        // --- FORM SUBMISSIONS ---
-        document.getElementById('add-supplier-form').addEventListener('submit', e => {
-            e.preventDefault();
-            // ... Logic to add a supplier ...
-            suppliers.push(newSupplier);
-            saveData('suppliers', suppliers);
-            showToast(translations[currentLang].toast_add_success);
-            e.target.reset();
-            renderApp(); // Re-render the entire UI
-        });
-
-        // ... (Add submit listeners for ALL other forms in the same pattern) ...
-
-
-        // --- INITIALIZATION ---
-        function initializeApp() {
-            const currentMonth = new Date().toISOString().slice(0, 7);
-            document.getElementById('payroll-month').value = currentMonth;
-            
-            // Set default dates
-            document.getElementById('purchase-date').value = todayISO();
-            document.getElementById('spoilage-date').value = todayISO();
-            // ... set default dates for reports ...
-
-            renderApp(); // Initial render
-        }
-
-        initializeApp();
-
+        // --- INITIAL LOAD ---
+        const currentMonth = new Date().toISOString().slice(0, 7);
+        document.getElementById('payroll-month').value = currentMonth;
+        handleDatePresetChange('this_month', elements.orderLookupStartDate, elements.orderLookupEndDate);
+        handleDatePresetChange('this_month', elements.inventoryReportStartDate, elements.inventoryReportEndDate);
+        handleDatePresetChange('this_month', elements.profitReportStartDate, elements.profitReportEndDate);
+        setLanguage(currentLang); // This will call renderApp
     });
     </script>
 </body>
