@@ -58,6 +58,12 @@
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.663M12 12A3 3 0 1012 6a3 3 0 000 6z" /></svg>
                     <span data-lang="employee_management">Quản Lý Nhân Viên</span>
                 </a>
+                 <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="payroll-management">
+                    <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V6.375c0-.621.504-1.125 1.125-1.125h.375m18 0h-4.5M3.75 18.75h4.5m10.5 0h-4.5c-.414 0-.75-.336-.75-.75V15c0-.414.336-.75.75-.75h4.5c.414 0 .75.336.75.75v3c0 .414-.336.75-.75.75z" />
+                    </svg>
+                    <span data-lang="payroll_management">Quản Lý Lương</span>
+                </a>
                 <a href="#" class="tab-link hover:bg-gray-700 flex items-center px-4 py-2 rounded-lg" data-tab="sales-management">
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l.383-1.437M7.5 14.25L5.106 5.165A2.25 2.25 0 002.854 3H2.25" />
@@ -219,6 +225,68 @@
                         <div class="bg-white p-6 rounded-lg shadow-md">
                             <h2 class="text-xl font-semibold mb-4" data-lang="employee_list">Danh Sách Nhân Viên</h2>
                             <div id="employees-list" class="space-y-4 max-h-[80vh] overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Payroll Management -->
+            <div id="payroll-management" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="payroll_management_title">Chấm Công & Tính Lương</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b">
+                        <div>
+                            <label for="payroll-month" class="block text-sm font-medium text-gray-700" data-lang="timesheet_for_month">Bảng Chấm Công Tháng</label>
+                            <input type="month" id="payroll-month" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="self-end">
+                            <button id="load-timesheet-btn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700" data-lang="load_timesheet_data">Tải Dữ Liệu</button>
+                        </div>
+                    </div>
+
+                    <div id="timesheet-container" class="hidden">
+                        <h2 class="text-xl font-semibold mb-4">Bảng chấm công và thưởng phạt</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="employee">Nhân viên</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="salary_rate">Mức lương</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="hours_worked">Giờ làm việc</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="performance_bonus">Thưởng/Phạt (VND)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="timesheet-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- Timesheet rows will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-right mt-6">
+                            <button id="calculate-payroll-btn" class="bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700" data-lang="calculate_payroll">Tính Lương</button>
+                        </div>
+                    </div>
+
+                    <div id="payroll-results-container" class="hidden mt-8 pt-6 border-t">
+                        <h2 id="payroll-results-title" class="text-xl font-semibold mb-4">Bảng lương</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="employee">Nhân viên</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="gross_salary">Lương Gộp</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="salary_for_insurance">Lương đóng BH</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="social_insurance">BHXH (8%)</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="health_insurance">BHYT (1.5%)</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="unemployment_insurance">BHTN (1%)</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="total_deductions">Tổng khấu trừ</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="performance_bonus">Thưởng/Phạt</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="net_salary">Thực Lĩnh</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payroll-results-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- Payroll results will be injected here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -934,6 +1002,32 @@
                 category: 'Phân loại',
                 uncategorized: 'Chưa phân loại',
                 select_category: 'Chọn phân loại',
+                payroll_management: 'Quản Lý Lương',
+                payroll_management_title: 'Chấm Công & Tính Lương',
+                salary_history: 'Lịch Sử Lương',
+                current_salary: 'Mức lương hiện tại',
+                add_new_salary: 'Thêm mức lương mới',
+                new_salary_rate: 'Mức lương mới',
+                effective_date: 'Ngày hiệu lực',
+                save_salary_btn: 'Lưu Lương',
+                salary_per_hour: 'lương/giờ',
+                salary_per_month: 'lương/tháng',
+                timesheet_for_month: 'Bảng Chấm Công Tháng',
+                load_timesheet_data: 'Tải Dữ Liệu',
+                employee: 'Nhân viên',
+                salary_rate: 'Mức lương',
+                hours_worked: 'Giờ làm việc',
+                performance_bonus: 'Thưởng/Phạt (VND)',
+                calculate_payroll: 'Tính Lương',
+                payroll_results_for: 'Bảng Lương Tháng',
+                gross_salary: 'Lương Gộp',
+                social_insurance: 'BHXH (8%)',
+                health_insurance: 'BHYT (1.5%)',
+                unemployment_insurance: 'BHTN (1%)',
+                total_deductions: 'Tổng khấu trừ',
+                net_salary: 'Lương Thực Lĩnh',
+                salary_for_insurance: 'Lương đóng bảo hiểm',
+
             },
             zh: {
                 dashboard_title: '儀表板',
@@ -1107,6 +1201,31 @@
                 category: '分類',
                 uncategorized: '未分類',
                 select_category: '選擇分類',
+                payroll_management: '薪資管理',
+                payroll_management_title: '考勤與薪資計算',
+                salary_history: '薪資歷史',
+                current_salary: '目前薪資',
+                add_new_salary: '新增薪資標準',
+                new_salary_rate: '新薪資',
+                effective_date: '生效日期',
+                save_salary_btn: '儲存薪資',
+                salary_per_hour: '時薪',
+                salary_per_month: '月薪',
+                timesheet_for_month: '考勤表月份',
+                load_timesheet_data: '載入考勤資料',
+                employee: '員工',
+                salary_rate: '薪資標準',
+                hours_worked: '工時',
+                performance_bonus: '獎金/罰款 (VND)',
+                calculate_payroll: '計算薪資',
+                payroll_results_for: '薪資報表月份',
+                gross_salary: '總薪資',
+                social_insurance: '社會保險 (8%)',
+                health_insurance: '健康保險 (1.5%)',
+                unemployment_insurance: '失業保險 (1%)',
+                total_deductions: '總扣除額',
+                net_salary: '實領薪資',
+                salary_for_insurance: '投保薪資',
             }
         };
 
@@ -1150,6 +1269,7 @@
         let employees = loadFromStorage('employees');
         let otherCosts = loadFromStorage('otherCosts');
         let materialCategories = loadFromStorage('materialCategories');
+        let timesheets = loadFromStorage('timesheets', {});
         let currentBomItems = [];
 
         const orderStatuses = {
@@ -1319,7 +1439,23 @@
             startDateInput.value = startDate.toISOString().split('T')[0];
             endDateInput.value = endDate.toISOString().split('T')[0];
         }
-        // --- Employee Management ---
+        // --- Employee & Salary Management ---
+        function getSalaryForDate(employee, date) {
+            if (!employee.salaryHistory || employee.salaryHistory.length === 0) {
+                return { rate: 0, type: employee.employmentType, effectiveDate: '1900-01-01' };
+            }
+            const targetDate = new Date(date);
+            const sortedHistory = [...employee.salaryHistory].sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate));
+            
+            for (const entry of sortedHistory) {
+                if (new Date(entry.effectiveDate) <= targetDate) {
+                    return entry;
+                }
+            }
+            // If no matching date is found (e.g., all are in the future), return the earliest one as a fallback
+            return sortedHistory[sortedHistory.length - 1];
+        }
+
         function renderEmployeesList() {
             const listEl = elements.employeesList;
             listEl.innerHTML = employees.length ? employees.map(emp => {
@@ -1359,7 +1495,8 @@
                 startDate: document.getElementById('employee-start-date').value,
                 employmentType: document.getElementById('employee-type').value,
                 roles: selectedRoles,
-                status: 'active'
+                status: 'active',
+                salaryHistory: []
             };
             employees.push(newEmployee);
             localStorage.setItem('employees', JSON.stringify(employees));
@@ -1384,6 +1521,55 @@
                 }
             }
         });
+        
+        function renderSalaryManagement(emp) {
+            const salaryHistoryList = document.getElementById('employee-salary-history-list');
+            const salaryForm = document.getElementById('add-salary-form');
+            
+            const currentSalary = getSalaryForDate(emp, new Date());
+            const salaryTypeKey = emp.employmentType === 'part-time' ? 'salary_per_hour' : 'salary_per_month';
+            const salaryTypeText = translations[currentLang][salaryTypeKey] || '';
+            
+            let historyHtml = `<p class="mb-2 text-sm"><strong>${translations[currentLang].current_salary}:</strong> ${formatCurrency(currentSalary.rate)} / ${salaryTypeText}</p>`;
+            
+            if (emp.salaryHistory && emp.salaryHistory.length > 0) {
+                 historyHtml += emp.salaryHistory
+                    .sort((a,b) => new Date(b.effectiveDate) - new Date(a.effectiveDate))
+                    .map(s => `<div class="text-xs p-1 bg-gray-100 rounded"><span>${s.effectiveDate}:</span> <span class="font-mono">${formatCurrency(s.rate)}</span></div>`)
+                    .join('');
+            } else {
+                historyHtml += `<p class="text-xs text-gray-500">${translations[currentLang].empty_data}</p>`;
+            }
+            salaryHistoryList.innerHTML = historyHtml;
+
+            const formHandler = (e) => {
+                e.preventDefault();
+                const newRate = parseFloat(document.getElementById('new-salary-rate').value);
+                const newEffectiveDate = document.getElementById('salary-effective-date').value;
+
+                if (isNaN(newRate) || !newEffectiveDate) {
+                    alert('Vui lòng nhập đầy đủ thông tin lương.');
+                    return;
+                }
+                
+                const employeeToUpdate = findById(employees, emp.id);
+                if (!employeeToUpdate.salaryHistory) {
+                    employeeToUpdate.salaryHistory = [];
+                }
+                employeeToUpdate.salaryHistory.push({
+                    rate: newRate,
+                    type: employeeToUpdate.employmentType,
+                    effectiveDate: newEffectiveDate
+                });
+                
+                localStorage.setItem('employees', JSON.stringify(employees));
+                renderSalaryManagement(employeeToUpdate); // Re-render the section
+                salaryForm.reset();
+            };
+            
+            salaryForm.replaceWith(salaryForm.cloneNode(true)); // Remove old event listeners
+            document.getElementById('add-salary-form').addEventListener('submit', formHandler);
+        }
 
         function openEmployeeDetailsModal(emp) {
             const contentEl = document.getElementById('employee-modal-content');
@@ -1411,7 +1597,29 @@
                              </div>` : ''}
                     </div>
                 </div>
+                 <!-- Salary Section -->
+                <div class="mt-6 pt-4 border-t">
+                    <h3 class="text-xl font-semibold mb-4" data-lang="salary_history">Lịch Sử Lương</h3>
+                    <div id="employee-salary-history-list" class="space-y-2 mb-4 max-h-40 overflow-y-auto"></div>
+                    <form id="add-salary-form" class="p-4 bg-gray-50 rounded-lg space-y-3">
+                        <h4 class="font-semibold" data-lang="add_new_salary">Thêm mức lương mới</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="new-salary-rate" class="block text-sm font-medium text-gray-700" data-lang="new_salary_rate">Mức lương mới</label>
+                                <input type="number" id="new-salary-rate" required min="0" class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                            <div>
+                                <label for="salary-effective-date" class="block text-sm font-medium text-gray-700" data-lang="effective_date">Ngày hiệu lực</label>
+                                <input type="date" id="salary-effective-date" required class="mt-1 block w-full border-gray-300 rounded-md py-2 px-3">
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700" data-lang="save_salary_btn">Lưu</button>
+                        </div>
+                    </form>
+                </div>
             `;
+            renderSalaryManagement(emp);
             elements.employeeDetailsModal.classList.add('active');
         }
 
@@ -1920,572 +2128,5 @@
                 ...findById(rawMaterials, materialId),
                 name: document.getElementById('edit-material-name').value,
                 unit: document.getElementById('edit-material-unit').value,
-                categoryId: parseInt(document.getElementById('edit-material-category-select').value) || null,
-            };
-
-            logAdjustment('log_type_material', materialId, reason, {});
-            rawMaterials = rawMaterials.map(m => m.id === materialId ? updatedMaterial : m);
-            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
-
-            elements.editMaterialModal.classList.remove('active');
-            e.target.reset();
-            renderApp();
-        });
-
-        function getPriceForDate(dish, date) {
-            if (!dish.priceHistory || dish.priceHistory.length === 0) return dish.price;
-            const sortedHistory = [...dish.priceHistory].sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate));
-            const dateString = date.toISOString().split('T')[0];
-            for (const entry of sortedHistory) {
-                if (entry.effectiveDate <= dateString) return entry.price;
-            }
-            return dish.price; // fallback to base price
-        }
-        
-        function calculateBomCost(bomItems) {
-            return bomItems.reduce((total, item) => {
-                const material = findById(rawMaterials, item.materialId);
-                return total + (material ? material.price * item.quantity : 0);
-            }, 0);
-        }
-        
-        function updateAllMaterialPrices() {
-            const latestPurchases = {};
-            const sortedPurchases = [...purchases].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            for (const p of sortedPurchases) {
-                if (!latestPurchases[p.materialId]) {
-                    latestPurchases[p.materialId] = p.unitPrice;
-                }
-            }
-
-            rawMaterials.forEach(material => {
-                material.price = latestPurchases[material.id] || material.price || 0;
-            });
-
-            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
-        }
-
-        function recalculateAllDishCosts() {
-             dishes.forEach(dish => {
-                dish.cost = calculateBomCost(dish.bom);
-            });
-            localStorage.setItem('dishes', JSON.stringify(dishes));
-        }
-        
-        function populateMaterialSelects(selectElement) {
-            const placeholder = translations[currentLang].select_material;
-            selectElement.innerHTML = `<option value="">-- ${placeholder} --</option>`;
-
-            const grouped = rawMaterials.reduce((acc, m) => {
-                const catId = m.categoryId || 'uncategorized';
-                if (!acc[catId]) acc[catId] = [];
-                acc[catId].push(m);
-                return acc;
-            }, {});
-
-             materialCategories.forEach(cat => {
-                if (grouped[cat.id]) {
-                    const optgroup = document.createElement('optgroup');
-                    optgroup.label = cat.name;
-                    grouped[cat.id].forEach(m => {
-                        const option = document.createElement('option');
-                        option.value = m.id;
-                        option.textContent = m.name;
-                        optgroup.appendChild(option);
-                    });
-                    selectElement.appendChild(optgroup);
-                }
-            });
-
-            if (grouped.uncategorized) {
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = translations[currentLang].uncategorized;
-                grouped.uncategorized.forEach(m => {
-                     const option = document.createElement('option');
-                     option.value = m.id;
-                     option.textContent = m.name;
-                     optgroup.appendChild(option);
-                });
-                selectElement.appendChild(optgroup);
-            }
-        }
-        
-        // --- Confirmation Modal Logic ---
-        function showConfirmation(title, message, onConfirm) {
-            const modal = elements.confirmationModal;
-            modal.querySelector('#confirmation-title').textContent = title;
-            modal.querySelector('#confirmation-message').textContent = message;
-            
-            const confirmBtn = modal.querySelector('#confirm-ok-btn');
-            const cancelBtn = modal.querySelector('#confirm-cancel-btn');
-
-            const confirmHandler = () => {
-                onConfirm();
-                closeModal();
-            };
-            
-            const closeModal = () => {
-                modal.classList.remove('active');
-                confirmBtn.removeEventListener('click', confirmHandler);
-                 cancelBtn.removeEventListener('click', closeModal);
-            };
-
-            confirmBtn.addEventListener('click', confirmHandler, { once: true });
-            cancelBtn.addEventListener('click', closeModal, { once: true });
-            
-            modal.classList.add('active');
-        }
-
-
-        function renderApp() {
-            updateAllMaterialPrices();
-            recalculateAllDishCosts();
-            
-            // Employee role checkboxes
-            const rolesContainer = document.getElementById('employee-roles-checkboxes');
-            if(rolesContainer) {
-                rolesContainer.innerHTML = Object.keys(employeeRoles).map(key => `
-                    <label class="flex items-center">
-                        <input type="checkbox" name="employee-roles" value="${key}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                        <span class="ml-2 text-gray-700">${employeeRoles[key][`name${currentLang === 'zh' ? '_zh' : ''}`] || employeeRoles[key].name}</span>
-                    </label>
-                `).join('');
-            }
-            
-            // Populate all material dropdowns
-            populateMaterialSelects(document.getElementById('bom-material-select'));
-            populateMaterialSelects(document.getElementById('purchase-material-select'));
-            populateMaterialSelects(document.getElementById('spoilage-material-select'));
-            populateSelect(document.getElementById('purchase-supplier-select'), suppliers, 'select_supplier');
-
-
-            // Render lists
-            elements.dishesList.innerHTML = dishes.map(renderDish).join('');
-            renderMaterialCategories();
-            renderMaterialsList();
-            renderDashboard();
-            renderEmployeesList();
-            renderSuppliersList();
-            renderPurchasesList();
-            renderSpoilageList();
-            renderOtherCostsLists();
-        }
-
-        // --- Purchase Logic ---
-        function renderPurchasesList() {
-            const listEl = document.getElementById('purchases-list');
-            const sortedPurchases = [...purchases].sort((a,b) => new Date(b.date) - new Date(a.date));
-            listEl.innerHTML = sortedPurchases.length ? sortedPurchases.slice(0, 20).map(p => { // Show recent 20
-                const material = findById(rawMaterials, p.materialId);
-                return `
-                <div class="text-xs p-2 bg-gray-50 rounded">
-                    <p>${p.date}: <span class="font-semibold">${material?.name || 'N/A'}</span></p>
-                    <p>SL: ${p.quantity} ${material?.unit || ''} - Tổng: ${formatCurrency(p.totalPrice)}</p>
-                </div>
-                `;
-            }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
-        }
-        
-        document.getElementById('add-purchase-form').addEventListener('submit', e => {
-            e.preventDefault();
-            const materialId = parseInt(document.getElementById('purchase-material-select').value);
-            const quantity = parseFloat(document.getElementById('purchase-quantity').value);
-            const totalPrice = parseFloat(document.getElementById('purchase-total-price').value);
-
-            const newPurchase = {
-                id: Date.now(),
-                date: document.getElementById('purchase-date').value,
-                materialId: materialId,
-                quantity: quantity,
-                totalPrice: totalPrice,
-                unitPrice: (quantity > 0) ? totalPrice / quantity : 0,
-                supplierId: parseInt(document.getElementById('purchase-supplier-select').value)
-            };
-
-            if(!newPurchase.date || isNaN(newPurchase.materialId) || isNaN(newPurchase.quantity) || isNaN(newPurchase.totalPrice) || isNaN(newPurchase.supplierId)) {
-                alert('Vui lòng điền đầy đủ thông tin nhập kho.');
-                return;
-            }
-
-            purchases.push(newPurchase);
-            localStorage.setItem('purchases', JSON.stringify(purchases));
-            
-            renderApp();
-            
-            e.target.reset();
-            document.getElementById('new-unit-price').textContent = formatCurrency(0);
-            document.getElementById('purchase-unit').value = '';
-        });
-
-        document.getElementById('purchase-material-select').addEventListener('change', (e) => {
-            const material = findById(rawMaterials, e.target.value);
-            document.getElementById('purchase-unit').value = material ? material.unit : '';
-        });
-        
-        const purchaseQuantityInput = document.getElementById('purchase-quantity');
-        const purchaseTotalPriceInput = document.getElementById('purchase-total-price');
-        const newUnitPriceEl = document.getElementById('new-unit-price');
-
-        function updateNewUnitPrice() {
-            const quantity = parseFloat(purchaseQuantityInput.value);
-            const totalPrice = parseFloat(purchaseTotalPriceInput.value);
-            if (quantity > 0 && totalPrice > 0) {
-                const unitPrice = totalPrice / quantity;
-                newUnitPriceEl.textContent = formatCurrency(unitPrice);
-            } else {
-                newUnitPriceEl.textContent = formatCurrency(0);
-            }
-        }
-        purchaseQuantityInput.addEventListener('input', updateNewUnitPrice);
-        purchaseTotalPriceInput.addEventListener('input', updateNewUnitPrice);
-        
-
-        // --- Spoilage Logic ---
-        function renderSpoilageList() {
-            const listEl = document.getElementById('spoilage-list');
-            const sortedRecords = [...spoilageRecords].sort((a,b) => new Date(b.date) - new Date(a.date));
-            listEl.innerHTML = sortedRecords.length ? sortedRecords.map(r => {
-                const material = findById(rawMaterials, r.materialId);
-                return `
-                <div class="p-2 bg-red-50 rounded text-sm flex justify-between">
-                    <span>${r.date}: ${material?.name || 'N/A'} - ${r.quantity} ${material?.unit || ''} (${r.reason})</span>
-                    <button class="delete-spoilage-btn text-red-500 hover:text-red-700 font-bold" data-id="${r.id}">X</button>
-                </div>`;
-            }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
-        }
-
-        document.getElementById('spoilage-list').addEventListener('click', e => {
-            if(e.target.matches('.delete-spoilage-btn')) {
-                const recordId = parseInt(e.target.dataset.id);
-                showConfirmation('Xóa hư hao?', 'Bạn có chắc muốn xóa ghi nhận hư hao này?', () => {
-                     spoilageRecords = spoilageRecords.filter(r => r.id !== recordId);
-                     localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
-                     renderSpoilageList();
-                });
-            }
-        });
-
-        document.getElementById('spoilage-material-select').addEventListener('change', (e) => {
-            const material = findById(rawMaterials, e.target.value);
-            document.getElementById('spoilage-unit').value = material ? material.unit : '';
-        });
-        
-        document.getElementById('add-spoilage-form').addEventListener('submit', e => {
-            e.preventDefault();
-            const newSpoilage = {
-                id: Date.now(),
-                date: document.getElementById('spoilage-date').value,
-                materialId: parseInt(document.getElementById('spoilage-material-select').value),
-                quantity: parseFloat(document.getElementById('spoilage-quantity').value),
-                reason: document.getElementById('spoilage-reason').value
-            };
-            if (!newSpoilage.date || isNaN(newSpoilage.materialId) || isNaN(newSpoilage.quantity) || !newSpoilage.reason) {
-                alert('Vui lòng điền đầy đủ thông tin.');
-                return;
-            }
-            spoilageRecords.push(newSpoilage);
-            localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
-            renderSpoilageList();
-            e.target.reset();
-            document.getElementById('spoilage-unit').value = '';
-        });
-
-        // --- Other Costs Logic ---
-        function renderOtherCostsLists() {
-            const monthlyList = document.getElementById('monthly-costs-list');
-            const yearlyList = document.getElementById('yearly-costs-list');
-            const onetimeList = document.getElementById('onetime-costs-list');
-            let totalMonthly = 0, totalYearly = 0, totalOnetime = 0;
-
-            const renderList = (items) => items.map(c => `
-                <div class="flex justify-between items-center text-sm p-2 bg-gray-50 rounded">
-                    <span>${c.name}</span>
-                    <div class="flex items-center gap-3">
-                        <span class="font-semibold">${formatCurrency(c.amount)}</span>
-                        <button class="delete-cost-btn text-red-500 hover:text-red-700 font-bold" data-id="${c.id}">X</button>
-                    </div>
-                </div>`).join('');
-            
-            const monthlyCosts = otherCosts.filter(c => c.frequency === 'monthly');
-            monthlyList.innerHTML = monthlyCosts.length ? renderList(monthlyCosts) : `<p class="text-gray-500 text-center text-sm">${translations[currentLang].empty_data}</p>`;
-            totalMonthly = monthlyCosts.reduce((sum, c) => sum + c.amount, 0);
-
-            const yearlyCosts = otherCosts.filter(c => c.frequency === 'yearly');
-            yearlyList.innerHTML = yearlyCosts.length ? renderList(yearlyCosts) : `<p class="text-gray-500 text-center text-sm">${translations[currentLang].empty_data}</p>`;
-            totalYearly = yearlyCosts.reduce((sum, c) => sum + c.amount, 0);
-            
-            const onetimeCosts = otherCosts.filter(c => c.frequency === 'onetime');
-            onetimeList.innerHTML = onetimeCosts.length ? renderList(onetimeCosts) : `<p class="text-gray-500 text-center text-sm">${translations[currentLang].empty_data}</p>`;
-            totalOnetime = onetimeCosts.reduce((sum, c) => sum + c.amount, 0);
-
-            document.getElementById('total-monthly-costs').textContent = formatCurrency(totalMonthly);
-            document.getElementById('total-yearly-costs').textContent = formatCurrency(totalYearly);
-            document.getElementById('total-onetime-costs').textContent = formatCurrency(totalOnetime);
-        }
-
-        function handleDeleteCost(e) {
-            if(e.target.matches('.delete-cost-btn')) {
-                const costId = parseInt(e.target.dataset.id);
-                 showConfirmation('Xóa chi phí?', 'Bạn có chắc muốn xóa chi phí này?', () => {
-                     otherCosts = otherCosts.filter(c => c.id !== costId);
-                     localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
-                     renderOtherCostsLists();
-                });
-            }
-        }
-        document.getElementById('monthly-costs-list').addEventListener('click', handleDeleteCost);
-        document.getElementById('yearly-costs-list').addEventListener('click', handleDeleteCost);
-        document.getElementById('onetime-costs-list').addEventListener('click', handleDeleteCost);
-
-        document.getElementById('add-other-cost-form').addEventListener('submit', e => {
-            e.preventDefault();
-            const newCost = {
-                id: Date.now(),
-                name: document.getElementById('other-cost-name').value,
-                amount: parseFloat(document.getElementById('other-cost-amount').value),
-                frequency: document.getElementById('other-cost-frequency').value
-            };
-             if (!newCost.name || isNaN(newCost.amount)) {
-                alert('Vui lòng điền đầy đủ thông tin chi phí.');
-                return;
-            }
-            otherCosts.push(newCost);
-            localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
-            renderOtherCostsLists();
-            e.target.reset();
-        });
-
-
-        // --- Dashboard Logic ---
-        function renderDashboard() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const completedToday = loadFromStorage('completedOrders').filter(o => new Date(o.timestamps.completed) >= today);
-            const activeToday = loadFromStorage('activeOrders').filter(o => new Date(o.timestamps.created) >= today);
-            
-            const revenueToday = completedToday.reduce((sum, order) => sum + order.totalPrice, 0);
-            document.getElementById('dashboard-revenue').textContent = formatCurrency(revenueToday);
-            document.getElementById('dashboard-orders').textContent = activeToday.length + completedToday.length;
-            
-            // Best seller logic
-            const dishCounts = completedToday.flatMap(o => o.items).reduce((acc, item) => {
-                acc[item.dishId] = (acc[item.dishId] || 0) + item.quantity;
-                return acc;
-            }, {});
-            const bestSellerId = Object.keys(dishCounts).sort((a,b) => dishCounts[b] - dishCounts[a])[0];
-            const bestSellerDish = findById(dishes, bestSellerId);
-            document.getElementById('dashboard-best-seller').textContent = bestSellerDish ? bestSellerDish.name : 'N/A';
-
-            // Chart
-            const statusCounts = [...activeToday, ...completedToday].reduce((acc, order) => {
-                const status = order.finalStatus || order.status;
-                acc[status] = (acc[status] || 0) + 1;
-                return acc;
-            }, {});
-
-            renderPieChart('orderStatusChart', {
-                labels: Object.keys(statusCounts).map(key => orderStatuses[key]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || key),
-                data: Object.values(statusCounts),
-                colors: Object.keys(statusCounts).map(key => orderStatuses[key]?.color || '#ccc')
-            });
-        }
-        
-        // --- Charting Function ---
-        function renderPieChart(canvasId, { labels, data, colors }) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            if (chartInstances[canvasId]) {
-                chartInstances[canvasId].destroy();
-            }
-            chartInstances[canvasId] = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-        }
-
-
-        // --- Live Timer Update ---
-        setInterval(() => {
-            document.querySelectorAll('.live-timer').forEach(timerEl => {
-                const timestamp = parseInt(timerEl.dataset.timestamp, 10);
-                if (!isNaN(timestamp)) {
-                    const duration = Date.now() - timestamp;
-                    timerEl.textContent = formatDuration(duration);
-                }
-            });
-        }, 1000);
-
-        // --- Report Logic ---
-        document.getElementById('view-inventory-report-btn').addEventListener('click', () => {
-            const startDateStr = document.getElementById('report-start-date').value;
-            const endDateStr = document.getElementById('report-end-date').value;
-
-            if (!startDateStr || !endDateStr) {
-                alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
-                return;
-            }
-
-            const startDate = new Date(startDateStr);
-            startDate.setHours(0, 0, 0, 0);
-
-            const endDate = new Date(endDateStr);
-            endDate.setHours(23, 59, 59, 999);
-            
-            const completedOrders = loadFromStorage('completedOrders');
-
-            // Filter data for calculations
-            const purchasesBefore = purchases.filter(p => new Date(p.date) < startDate);
-            const spoilageBefore = spoilageRecords.filter(s => new Date(s.date) < startDate);
-            const ordersBefore = completedOrders.filter(o => new Date(o.timestamps.completed) < startDate);
-            const usageBefore = getMaterialUsage(ordersBefore);
-
-            const purchasesInPeriod = purchases.filter(p => new Date(p.date) >= startDate && new Date(p.date) <= endDate);
-            const spoilageInPeriod = spoilageRecords.filter(s => new Date(s.date) >= startDate && new Date(s.date) <= endDate);
-            const ordersInPeriod = completedOrders.filter(o => new Date(o.timestamps.completed) >= startDate && new Date(o.timestamps.completed) <= endDate);
-            const usageInPeriod = getMaterialUsage(ordersInPeriod);
-            
-            const reportData = rawMaterials.map(material => {
-                const materialId = material.id;
-                
-                const openingPurchases = purchasesBefore.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
-                const openingSpoilage = spoilageBefore.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
-                const openingUsage = usageBefore[materialId] || 0;
-                const openingStock = openingPurchases - openingUsage - openingSpoilage;
-
-                const periodPurchases = purchasesInPeriod.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
-                const periodSpoilage = spoilageInPeriod.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
-                const periodUsage = usageInPeriod[materialId] || 0;
-
-                const closingStock = openingStock + periodPurchases - periodUsage - periodSpoilage;
-
-                return {
-                    name: material.name,
-                    unit: material.unit,
-                    openingStock: openingStock,
-                    purchasedInPeriod: periodPurchases,
-                    usedInPeriod: periodUsage,
-                    spoiledInPeriod: periodSpoilage,
-                    closingStock: closingStock
-                };
-            });
-
-            // Render the table
-            const reportBody = document.getElementById('inventory-report-body');
-            reportBody.innerHTML = reportData.map(row => `
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${row.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.unit}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.openingStock.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.purchasedInPeriod.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.usedInPeriod.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.spoiledInPeriod.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">${row.closingStock.toFixed(2)}</td>
-                </tr>
-            `).join('');
-        });
-
-        const COMMISSION_RATE = 0.20; // 20% commission fee assumption
-        document.getElementById('calculate-profit-btn').addEventListener('click', () => {
-            const startDateStr = document.getElementById('profit-report-start-date').value;
-            const endDateStr = document.getElementById('profit-report-end-date').value;
-
-            if (!startDateStr || !endDateStr) {
-                alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
-                return;
-            }
-            
-            const startDate = new Date(startDateStr);
-            startDate.setHours(0, 0, 0, 0);
-            const endDate = new Date(endDateStr);
-            endDate.setHours(23, 59, 59, 999);
-            
-            const completedOrdersInPeriod = loadFromStorage('completedOrders').filter(o => {
-                const completedDate = new Date(o.timestamps.completed);
-                return completedDate >= startDate && completedDate <= endDate;
-            });
-
-            const totalRevenue = completedOrdersInPeriod.reduce((sum, order) => sum + order.totalPrice, 0);
-
-            const totalCOGS = completedOrdersInPeriod.reduce((sum, order) => {
-                const orderCost = order.items.reduce((itemSum, item) => {
-                    const dish = findById(dishes, item.dishId);
-                    const dishCost = dish ? (dish.cost || calculateBomCost(dish.bom)) : 0;
-                    return itemSum + (dishCost * item.quantity);
-                }, 0);
-                return sum + orderCost;
-            }, 0);
-
-            const totalCommission = totalRevenue * COMMISSION_RATE;
-
-            const spoilageInPeriod = spoilageRecords.filter(s => {
-                const spoilageDate = new Date(s.date);
-                return spoilageDate >= startDate && spoilageDate <= endDate;
-            });
-            const totalSpoilageCost = spoilageInPeriod.reduce((sum, record) => {
-                const material = findById(rawMaterials, record.materialId);
-                const cost = material ? material.price * record.quantity : 0;
-                return sum + cost;
-            }, 0);
-            
-            const daysInPeriod = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
-            const totalMonthlyRaw = otherCosts.filter(c => c.frequency === 'monthly').reduce((sum, c) => sum + c.amount, 0);
-            const totalYearlyRaw = otherCosts.filter(c => c.frequency === 'yearly').reduce((sum, c) => sum + c.amount, 0);
-            const monthlyExpenseInPeriod = (totalMonthlyRaw / 30.44) * daysInPeriod;
-            const yearlyExpenseInPeriod = (totalYearlyRaw / 365.25) * daysInPeriod;
-            const totalOperatingExpense = monthlyExpenseInPeriod + yearlyExpenseInPeriod;
-
-            const netProfit = totalRevenue - totalCOGS - totalCommission - totalSpoilageCost - totalOperatingExpense;
-            
-            document.getElementById('result-revenue').textContent = formatCurrency(totalRevenue);
-            document.getElementById('result-cogs').textContent = formatCurrency(totalCOGS);
-            document.getElementById('result-commission-fees').textContent = formatCurrency(totalCommission);
-            document.getElementById('result-monthly-expense').textContent = formatCurrency(totalOperatingExpense);
-            document.getElementById('result-spoilage-cost').textContent = formatCurrency(totalSpoilageCost);
-            document.getElementById('result-net-profit').textContent = formatCurrency(netProfit);
-
-            const revenueByDish = completedOrdersInPeriod
-                .flatMap(o => o.items)
-                .reduce((acc, item) => {
-                    const dish = findById(dishes, item.dishId);
-                    const dishName = dish ? dish.name : 'Unknown';
-                    const itemRevenue = (findById(dishes, item.dishId)?.price || 0) * item.quantity;
-                    acc[dishName] = (acc[dishName] || 0) + itemRevenue;
-                    return acc;
-                }, {});
-                
-            renderPieChart('revenueStructureChart', {
-                labels: Object.keys(revenueByDish),
-                data: Object.values(revenueByDish),
-                colors: ['#3B82F6', '#10B981', '#F97316', '#8B5CF6', '#EF4444', '#F59E0B', '#6366F1', '#EC4899', '#22D3EE']
-            });
-
-            document.getElementById('profit-results').classList.remove('hidden');
-        });
-        
-        // --- INITIAL LOAD ---
-        handleDatePresetChange('this_month', elements.orderLookupStartDate, elements.orderLookupEndDate);
-        handleDatePresetChange('this_month', elements.inventoryReportStartDate, elements.inventoryReportEndDate);
-        handleDatePresetChange('this_month', elements.profitReportStartDate, elements.profitReportEndDate);
-        setLanguage(currentLang); // Set language before initial renderApp
-    });
-    </script>
-</body>
-</html>
+                categoryId
 
