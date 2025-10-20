@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             total_yearly: 'Tổng cộng năm:',
             onetime_costs: 'Chi phí một lần (Đầu tư)',
             profit_report_title: 'Báo Cáo Lợi Nhuận',
-            calculate_profit_btn: 'Xem Báo Cáo',
+            calculate_profit_btn: 'Tính Lương',
             business_results_period: 'Kết Quả Kinh Doanh Trong Kỳ',
             total_revenue: 'Tổng Doanh Thu:',
             total_cogs: 'Tổng Giá Vốn Hàng Bán:',
@@ -194,12 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
             save_salary_btn: 'Lưu Mức Lương',
             salary_history: 'Lịch Sử Thay Đổi Lương',
             timesheet_entry_title: 'Chấm Công',
-            payroll_period: 'Kỳ lương',
+            payroll_period: 'Kỳ Tính Lương',
             work_days: 'Ngày công thực tế',
             paid_leave_days: 'Ngày nghỉ phép (hưởng lương)',
             dependents_count: 'Số người phụ thuộc',
             total_work_hours: 'Tổng số giờ làm việc',
-            calculate_payroll_btn: 'Tính Lương Kỳ Này',
             no_salary_setup: 'Chưa thiết lập lương',
             not_yet_entered: 'Chưa chấm công',
             payslip_title: 'Bảng Lương Chi Tiết',
@@ -348,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
             total_yearly: '本年總計:',
             onetime_costs: '一次性費用 (投資)',
             profit_report_title: '利潤報告',
-            calculate_profit_btn: '查看報告',
+            calculate_profit_btn: '計算薪資',
             business_results_period: '期間經營成果',
             total_revenue: '總收入:',
             total_cogs: '總銷貨成本:',
@@ -405,14 +404,12 @@ document.addEventListener('DOMContentLoaded', () => {
             effective_date: '生效日期',
             reason_placeholder: '例如：定期加薪、試用期...',
             save_salary_btn: '儲存薪資',
-            salary_history: '薪資變更歷史',
             timesheet_entry_title: '出勤記錄',
             payroll_period: '薪資週期',
             work_days: '實際工作天數',
             paid_leave_days: '帶薪休假天數',
             dependents_count: '受撫養人數',
             total_work_hours: '總工時',
-            calculate_payroll_btn: '計算本期薪資',
             no_salary_setup: '尚未設定薪資',
             not_yet_entered: '尚未記錄工時',
             payslip_title: '薪資明細',
@@ -440,11 +437,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const findById = (arr, id) => arr.find(item => item.id === parseInt(id));
     const todayISO = () => new Date().toISOString().split('T')[0];
     
-    const loadFromStorage = (key, defaultValue = []) => {
+    const loadFromStorage = (key, defaultValue = {}) => {
         try {
             const data = localStorage.getItem(key);
-            // Handle case where payrolls is an empty array from old data
-            if (key === 'payrolls' && Array.isArray(data)) return defaultValue;
+            if (key === 'payrolls' && Array.isArray(JSON.parse(data))) return defaultValue;
             return data ? JSON.parse(data) : defaultValue;
         } catch (e) {
             console.error(`Error parsing ${key} from localStorage`, e);
@@ -462,16 +458,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Data Initialization from localStorage ---
-    let dishes = loadFromStorage('dishes');
-    let rawMaterials = loadFromStorage('rawMaterials');
-    let suppliers = loadFromStorage('suppliers');
-    let purchases = loadFromStorage('purchases');
-    let spoilageRecords = loadFromStorage('spoilageRecords');
-    let adjustmentLogs = loadFromStorage('adjustmentLogs');
-    let employees = loadFromStorage('employees');
-    let otherCosts = loadFromStorage('otherCosts');
-    let materialCategories = loadFromStorage('materialCategories');
-    let payrolls = loadFromStorage('payrolls', {}); // { 'periodKey': { employeeId: data } }
+    let dishes = loadFromStorage('dishes', []);
+    let rawMaterials = loadFromStorage('rawMaterials', []);
+    let suppliers = loadFromStorage('suppliers', []);
+    let purchases = loadFromStorage('purchases', []);
+    let spoilageRecords = loadFromStorage('spoilageRecords', []);
+    let adjustmentLogs = loadFromStorage('adjustmentLogs', []);
+    let employees = loadFromStorage('employees', []);
+    let otherCosts = loadFromStorage('otherCosts', []);
+    let materialCategories = loadFromStorage('materialCategories', []);
+    let payrolls = loadFromStorage('payrolls', {});
     let currentBomItems = [];
 
     const orderStatuses = {
@@ -537,7 +533,6 @@ document.addEventListener('DOMContentLoaded', () => {
         profitReportEndDate: document.getElementById('profit-report-end-date'),
         // Payroll
         payrollEmployeeList: document.getElementById('payroll-employee-list'),
-        payrollPeriodSelect: document.getElementById('payroll-period-select'),
     };
 
     // --- Payroll Constants (VIETNAM LAW) ---
@@ -621,9 +616,9 @@ document.addEventListener('DOMContentLoaded', () => {
     tabLinks.forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
-            tabLinks.forEach(l => l.classList.remove('active:bg-gray-700', 'bg-gray-700'));
+            tabLinks.forEach(l => l.classList.remove('bg-gray-700'));
             tabContents.forEach(c => c.classList.remove('active'));
-            link.classList.add('active:bg-gray-700', 'bg-gray-700');
+            link.classList.add('bg-gray-700');
             document.getElementById(link.dataset.tab).classList.add('active');
         });
     });
@@ -872,7 +867,6 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.editSupplierModal.classList.remove('active');
     });
 
-
     // --- Sales & Order Lookup Logic ---
     if(elements.orderLookupPresetFilter) elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
     if(elements.inventoryReportPresetFilter) elements.inventoryReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.inventoryReportStartDate, elements.inventoryReportEndDate));
@@ -890,9 +884,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const activeOrders = loadFromStorage('activeOrders');
-            const completedOrders = loadFromStorage('completedOrders');
-            const cancelledOrders = loadFromStorage('cancelledOrders');
+            const activeOrders = loadFromStorage('activeOrders', []);
+            const completedOrders = loadFromStorage('completedOrders', []);
+            const cancelledOrders = loadFromStorage('cancelledOrders', []);
             const allOrdersInPeriod = [];
 
             activeOrders.forEach(order => {
@@ -1331,13 +1325,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getPriceForDate(dish, date) {
-        if (!dish.priceHistory || dish.priceHistory.length === 0) return dish.price;
+        if (!dish || !date) return 0;
+        if (!dish.priceHistory || dish.priceHistory.length === 0) return dish.price || 0;
+        
         const sortedHistory = [...dish.priceHistory].sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate));
-        const dateString = date.toISOString().split('T')[0];
+        const dateString = (typeof date.toISOString === 'function') ? date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+
         for (const entry of sortedHistory) {
             if (entry.effectiveDate <= dateString) return entry.price;
         }
-        return dish.price; // fallback to base price
+        // Fallback to the oldest price if no match found (e.g., date is before first effectiveDate)
+        return sortedHistory[sortedHistory.length-1].price || dish.price || 0;
     }
     
     function calculateBomCost(bomItems) {
@@ -1651,8 +1649,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
-        const completedToday = loadFromStorage('completedOrders').filter(o => new Date(o.timestamps.completed) >= today);
-        const activeToday = loadFromStorage('activeOrders').filter(o => new Date(o.timestamps.created) >= today);
+        const completedToday = loadFromStorage('completedOrders', []).filter(o => new Date(o.timestamps.completed) >= today);
+        const activeToday = loadFromStorage('activeOrders', []).filter(o => new Date(o.timestamps.created) >= today);
         
         const revenueToday = completedToday.reduce((sum, order) => sum + order.totalPrice, 0);
         document.getElementById('dashboard-revenue').textContent = formatCurrency(revenueToday);
@@ -1711,7 +1709,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     // --- Live Timer Update ---
     setInterval(() => {
         document.querySelectorAll('.live-timer').forEach(timerEl => {
@@ -1737,12 +1734,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const startDate = new Date(startDateStr);
             startDate.setHours(0, 0, 0, 0);
-
             const endDate = new Date(endDateStr);
             endDate.setHours(23, 59, 59, 999);
             
-            const completedOrders = loadFromStorage('completedOrders');
-
+            const completedOrders = loadFromStorage('completedOrders', []);
             const purchasesBefore = purchases.filter(p => new Date(p.date) < startDate);
             const spoilageBefore = spoilageRecords.filter(s => new Date(s.date) < startDate);
             const ordersBefore = completedOrders.filter(o => new Date(o.timestamps.completed) < startDate);
@@ -1770,11 +1765,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return {
                     name: material.name,
                     unit: material.unit,
-                    openingStock: openingStock,
+                    openingStock,
                     purchasedInPeriod: periodPurchases,
                     usedInPeriod: periodUsage,
                     spoiledInPeriod: periodSpoilage,
-                    closingStock: closingStock
+                    closingStock
                 };
             });
 
@@ -1810,7 +1805,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const endDate = new Date(endDateStr);
             endDate.setHours(23, 59, 59, 999);
             
-            const completedOrdersInPeriod = loadFromStorage('completedOrders').filter(o => {
+            const completedOrdersInPeriod = loadFromStorage('completedOrders', []).filter(o => {
                 const completedDate = new Date(o.timestamps.completed);
                 return completedDate >= startDate && completedDate <= endDate;
             });
@@ -1876,46 +1871,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- PAYROLL MANAGEMENT ---
     
-    function getWeekNumber(d) {
-        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-        var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-        return [d.getUTCFullYear(), weekNo];
-    }
-
-    function generatePayrollPeriods() {
-        const periods = {};
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth();
-
-        // Last 3 months for contract employees
-        for (let i = 0; i < 3; i++) {
-            const d = new Date(year, month - i, 1);
-            const periodKey = `M-${d.getFullYear()}-${d.getMonth() + 1}`;
-            periods[periodKey] = `Tháng ${d.getMonth() + 1}/${d.getFullYear()}`;
-        }
-
-        // Last 4 weeks for part-time employees
-        for (let i = 0; i < 4; i++) {
-            const d = new Date(now);
-            d.setDate(d.getDate() - (i * 7));
-             const [wYear, wNumber] = getWeekNumber(d);
-            const periodKey = `W-${wYear}-${wNumber}`;
-            periods[periodKey] = `Tuần ${wNumber}/${wYear}`;
-        }
-        return periods;
-    }
-    
-    function populatePayrollPeriodSelect() {
-        if (!elements.payrollPeriodSelect) return;
-        const periods = generatePayrollPeriods();
-        elements.payrollPeriodSelect.innerHTML = Object.entries(periods)
-            .sort((a,b) => b[1].localeCompare(a[1])) // Sort to show most recent first
-            .map(([key, text]) => `<option value="${key}">${text}</option>`).join('');
-    }
-
     function getSalaryForDate(employee, date) {
         if (!employee.salaryHistory || employee.salaryHistory.length === 0) return null;
         
@@ -1963,15 +1918,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (elements.payrollEmployeeList) {
         elements.payrollEmployeeList.addEventListener('click', e => {
-            const employeeId = e.target.dataset.id;
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const employeeId = button.dataset.id;
             if (!employeeId) return;
 
             const employee = findById(employees, employeeId);
             if (!employee) return;
 
-            if (e.target.matches('.setup-salary-btn')) {
+            if (button.matches('.setup-salary-btn')) {
                 openSalarySetupModal(employee);
-            } else if (e.target.matches('.enter-timesheet-btn')) {
+            } else if (button.matches('.enter-timesheet-btn')) {
                 openTimesheetModal(employee);
             }
         });
@@ -2030,15 +1988,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openTimesheetModal(employee) {
         const modal = elements.timesheetModal;
-        const periodKey = elements.payrollPeriodSelect.value;
-        const periodText = elements.payrollPeriodSelect.options[elements.payrollPeriodSelect.selectedIndex].text;
+        const periodKey = `timesheet-${employee.id}`;
         
         modal.querySelector('#timesheet-employee-name').textContent = employee.name;
-        modal.querySelector('#timesheet-period').textContent = periodText;
+        modal.querySelector('#timesheet-period').textContent = "Nhập liệu thủ công";
         modal.querySelector('#timesheet-employee-id').value = employee.id;
-        modal.querySelector('#timesheet-period-key').value = periodKey;
-
-        const existingData = (payrolls[periodKey] && payrolls[periodKey][employee.id]) ? payrolls[periodKey][employee.id] : {};
+        
+        const existingData = payrolls[periodKey] || {};
         
         if (employee.employmentType === 'contract') {
             modal.querySelector('#timesheet-contract-fields').style.display = 'block';
@@ -2059,7 +2015,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timesheetForm.addEventListener('submit', e => {
             e.preventDefault();
             const employeeId = parseInt(document.getElementById('timesheet-employee-id').value);
-            const periodKey = document.getElementById('timesheet-period-key').value;
+            const periodKey = `timesheet-${employeeId}`; // Store timesheet data per employee
             const employee = findById(employees, employeeId);
             let timesheetData = {};
 
@@ -2075,14 +2031,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }
             
-            if (!payrolls[periodKey]) {
-                payrolls[periodKey] = {};
-            }
-            payrolls[periodKey][employeeId] = timesheetData;
+            payrolls[periodKey] = timesheetData;
             localStorage.setItem('payrolls', JSON.stringify(payrolls));
-
+            
+            alert('Đã lưu chấm công thành công!');
             elements.timesheetModal.classList.remove('active');
-            renderPayrollEmployeeList();
         });
     }
 
@@ -2091,23 +2044,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const calculatePayrollBtn = document.getElementById('calculate-payroll-btn');
     if (calculatePayrollBtn) {
         calculatePayrollBtn.addEventListener('click', () => {
-            const periodKey = elements.payrollPeriodSelect.value;
-            const periodData = payrolls[periodKey];
+            const startDateStr = document.getElementById('payroll-start-date').value;
+            const endDateStr = document.getElementById('payroll-end-date').value;
 
-            if (!periodData) {
-                alert('Chưa có dữ liệu chấm công cho kỳ này.');
+            if (!startDateStr || !endDateStr) {
+                alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc để tính lương.');
+                return;
+            }
+
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+            if (startDate > endDate) {
+                alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc.');
                 return;
             }
 
             const activeEmployees = employees.filter(e => e.status === 'active');
-            let resultText = `BẢNG LƯƠNG CHI TIẾT\nKỳ: ${elements.payrollPeriodSelect.options[elements.payrollPeriodSelect.selectedIndex].text}\n====================\n\n`;
+            let resultText = `BẢNG LƯƠNG CHI TIẾT\nKỳ: ${startDateStr} đến ${endDateStr}\n====================\n\n`;
             let foundData = false;
 
             for (const emp of activeEmployees) {
-                const timesheet = periodData[emp.id];
+                const timesheet = payrolls[`timesheet-${emp.id}`];
                 if (!timesheet) continue;
 
-                const salaryRecord = getSalaryForDate(emp, new Date());
+                const salaryRecord = getSalaryForDate(emp, startDate);
                 if (!salaryRecord) continue;
                 
                 foundData = true;
@@ -2118,7 +2078,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const paidLeave = timesheet.paidLeave || 0;
                     const totalWorkDays = workDays + paidLeave;
 
-                    const grossSalary = (salaryRecord.amount / 26) * totalWorkDays; // Giả định 26 ngày công/tháng
+                    const grossSalary = (salaryRecord.amount / 26) * totalWorkDays;
                     const salaryForInsurance = Math.min(grossSalary, INSURANCE_BASE_SALARY_CAP);
                     
                     const bhxh = salaryForInsurance * BHXH_RATE;
@@ -2150,15 +2110,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!foundData) {
-                resultText = "Không có nhân viên nào được chấm công trong kỳ này để tính lương.";
+                resultText = "Không có nhân viên nào được chấm công để tính lương.";
             }
 
             alert(resultText);
         });
-    }
-
-    if (elements.payrollPeriodSelect) {
-        elements.payrollPeriodSelect.addEventListener('change', renderPayrollEmployeeList);
     }
     
     // --- App Initialization & Rendering ---
@@ -2195,7 +2151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPurchasesList();
         renderSpoilageList();
         renderOtherCostsLists();
-        populatePayrollPeriodSelect();
         renderPayrollEmployeeList();
     }
 
