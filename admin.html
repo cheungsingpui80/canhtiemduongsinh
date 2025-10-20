@@ -557,7 +557,34 @@
                     <div id="adjustment-logs-list" class="space-y-4"></div>
                 </div>
             </div>
-
+            <div id="payroll-management" class="tab-content">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="payroll_management_title">Quản Lý Lương Nhân Viên</h1>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold" data-lang="employee_list">Danh Sách Nhân Viên</h2>
+                        <div class="flex items-center gap-4">
+                             <select id="payroll-period-select" class="border-gray-300 rounded-md shadow-sm">
+                                </select>
+                            <button id="calculate-payroll-btn" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700" data-lang="calculate_payroll_btn">Tính Lương Kỳ Này</button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="employee_name">Nhân Viên</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="employee_type">Hình Thức</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" data-lang="current_salary">Mức Lương Hiện tại</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase" data-lang="actions">Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payroll-employee-list" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
         </main>
     </div>
 
