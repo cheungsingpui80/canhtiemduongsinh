@@ -557,18 +557,31 @@
                     <div id="adjustment-logs-list" class="space-y-4"></div>
                 </div>
             </div>
+
             <div id="payroll-management" class="tab-content">
                 <h1 class="text-3xl font-bold text-gray-800 mb-6" data-lang="payroll_management_title">Quản Lý Lương Nhân Viên</h1>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold" data-lang="employee_list">Danh Sách Nhân Viên</h2>
-                        <div class="flex items-center gap-4">
-                             <select id="payroll-period-select" class="border-gray-300 rounded-md shadow-sm">
-                                </select>
-                            <button id="calculate-payroll-btn" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700" data-lang="calculate_payroll_btn">Tính Lương Kỳ Này</button>
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b">
+                        <div>
+                            <h2 class="text-xl font-semibold" data-lang="payroll_period">Kỳ Tính Lương</h2>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-4">
+                             <div>
+                                <label for="payroll-start-date" class="block text-sm font-medium text-gray-700" data-lang="from_date">Từ ngày</label>
+                                <input type="date" id="payroll-start-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            </div>
+                            <div>
+                                <label for="payroll-end-date" class="block text-sm font-medium text-gray-700" data-lang="to_date">Đến ngày</label>
+                                <input type="date" id="payroll-end-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            </div>
+                            <div class="self-end">
+                                <button id="calculate-payroll-btn" class="bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700" data-lang="calculate_payroll_btn">Tính Lương</button>
+                            </div>
                         </div>
                     </div>
+            
                     <div class="overflow-x-auto">
+                        <h2 class="text-xl font-semibold mb-4" data-lang="employee_list">Danh Sách Nhân Viên</h2>
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
