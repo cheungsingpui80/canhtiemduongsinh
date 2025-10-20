@@ -2,11 +2,186 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const translations = {
         vi: {
-            // ... (Các bản dịch cũ giữ nguyên) ...
+            // --- CÁC BẢN DỊCH CHUNG ĐÃ BỔ SUNG ---
+            edit: 'Sửa',
+            delete: 'Xóa',
+            close_btn: 'Đóng',
+            save_changes_btn: 'Lưu Thay Đổi',
+            cancel_btn: 'Hủy',
+            actions: 'Hành Động',
+            reason: 'Lý do',
+            status: 'Trạng thái',
+            total: 'Tổng cộng:',
+            empty_data: 'Chưa có dữ liệu.',
+            // --- CÁC BẢN DỊCH CŨ ---
+            dashboard_title: 'Bảng Điều Khiển',
+            dashboard_overview: 'Tổng Quan',
+            today_revenue: 'Doanh thu hôm nay',
+            today_orders: 'Đơn hàng mới',
+            best_selling_dish: 'Món bán chạy nhất',
+            low_stock_alert: 'Cảnh báo tồn kho',
+            order_status_distribution: 'Phân bổ Trạng thái Đơn hàng',
+            recent_activity: 'Hoạt động Gần đây',
+            employee_management: 'Quản Lý Nhân Viên',
+            order_lookup: 'Tra Cứu Đơn Hàng',
+            menu_management: 'Quản Lý Thực Đơn',
+            supplier_management: 'Nhà Cung Cấp',
+            material_management: 'Nguyên Vật Liệu',
+            spoilage_management: 'Quản Lý Hư Hao',
+            other_costs: 'Chi Phí Khác',
+            profit_report: 'Báo Cáo Lợi Nhuận',
+            inventory_report: 'Báo Cáo Tồn Kho',
+            adjustment_logs: 'Lịch Sử Điều Chỉnh',
+            employee_management_title: 'Quản Lý Nhân Viên',
+            add_new_employee: 'Thêm Nhân Viên Mới',
+            employee_id_code: 'Mã số nhân viên',
+            employee_name: 'Họ và Tên',
+            employee_dob: 'Ngày sinh',
+            employee_nid: 'Số CCCD/CC',
+            employee_photo_url: 'URL Hình ảnh',
+            employee_photo_url_placeholder: 'https://example.com/photo.jpg',
+            employee_permanent_address: 'Địa chỉ thường trú',
+            employee_current_address: 'Địa chỉ hiện tại',
+            employee_start_date: 'Ngày nhận việc',
+            employee_type: 'Hình thức làm việc',
+            employee_type_part_time: 'Bán thời gian',
+            employee_type_contract: 'Hợp đồng lao động',
+            roles: 'Vai trò',
+            add_employee_btn: 'Thêm Nhân Viên',
+            employee_list: 'Danh Sách Nhân Viên',
+            employee_details_title: 'Thông Tin Chi Tiết Nhân Viên',
+            terminate_employee_btn: 'Thôi việc',
+            terminate_employee_title: 'Chấm Dứt Hợp Đồng',
+            termination_date: 'Ngày thôi việc',
+            termination_reason: 'Lý do thôi việc',
+            confirm_termination_btn: 'Xác nhận thôi việc',
+            employee_status: 'Trạng thái',
+            status_active: 'Đang làm việc',
+            status_terminated: 'Đã thôi việc',
+            view_details: 'Xem chi tiết',
+            role_taker: 'Nhận Đơn',
+            role_kitchen: 'Bếp',
+            role_shipper: 'Giao Hàng',
+            order_lookup_title: 'Tra Cứu Đơn Hàng',
+            view_by: 'Xem theo',
+            this_month: 'Tháng này',
+            this_quarter: 'Quí này',
+            this_year: 'Năm này',
+            custom_option: 'Tùy chọn',
+            from_date: 'Từ ngày',
+            to_date: 'Đến ngày',
+            search_btn: 'Tra cứu',
+            order_list: 'Danh sách Đơn Hàng',
+            status_new: 'Đơn mới',
+            status_preparing: 'Đang chuẩn bị',
+            status_delivering: 'Đang giao',
+            status_completed: 'Hoàn thành',
+            status_cancelled: 'Đã hủy',
+            menu_management_title: 'Quản Lý Thực Đơn & Định Lượng (BOM)',
+            add_new_dish: 'Thêm Món Mới',
+            dish_name: 'Tên món',
+            description: 'Mô tả',
+            selling_price: 'Giá Bán (VND)',
+            image_url: 'URL Hình ảnh',
+            bom_title: 'Định Lượng Nguyên Liệu (BOM)',
+            quantity_short: 'SL',
+            estimated_cost: 'Giá vốn ước tính',
+            add_dish_btn: 'Thêm Món',
+            current_dishes_list: 'Danh Sách Món Ăn Hiện Có',
+            supplier_management_title: 'Quản Lý Nhà Cung Cấp',
+            add_new_supplier: 'Thêm NCC Mới',
+            supplier_name: 'Tên nhà cung cấp',
+            contact_person: 'Người liên hệ',
+            phone_number: 'Số điện thoại',
+            address: 'Địa chỉ',
+            tax_code: 'Mã số thuế (nếu có)',
+            add_supplier_btn: 'Thêm NCC',
+            suppliers_list_title: 'Danh Sách Nhà Cung Cấp',
+            purchase_management_title: 'Nguyên Vật Liệu & Nhập Kho',
+            define_material: 'Định Nghĩa Nguyên Vật Liệu',
+            material_name: 'Tên nguyên liệu',
+            unit_placeholder: 'Đơn vị (kg, gr, cái)',
+            add_btn: 'Thêm',
+            materials_list_title: 'Danh Sách Nguyên Vật Liệu',
+            record_purchase: 'Nhập Kho',
+            purchase_date: 'Ngày nhập hàng',
+            material: 'Nguyên liệu',
+            quantity: 'Số lượng',
+            unit: 'Đơn vị',
+            total_price: 'Tổng tiền (VND)',
+            supplier: 'Nhà cung cấp',
+            new_unit_price_label: 'Đơn giá mới sẽ là',
+            confirm_purchase_btn: 'Xác Nhận Nhập Kho',
+            purchase_history_title: 'Lịch Sử Nhập Kho',
+            spoilage_management_title: 'Quản Lý Nguyên Vật Liệu Hư Hao',
+            record_spoilage: 'Ghi Nhận Hư Hao',
+            spoilage_date: 'Ngày thải bỏ',
+            spoilage_reason: 'Nguyên nhân thải bỏ',
+            spoilage_reason_placeholder: 'VD: Hết hạn, hỏng...',
+            record_btn: 'Ghi Nhận',
+            spoilage_history_title: 'Lịch Sử Hư Hao',
+            other_costs_title: 'Quản Lý Chi Phí Khác',
+            add_new_cost: 'Thêm Chi Phí Mới',
+            cost_name: 'Tên chi phí',
+            amount: 'Số tiền (VND)',
+            cost_type: 'Loại chi phí',
+            monthly: 'Hàng tháng',
+            yearly: 'Hàng năm',
+            onetime: 'Một lần (Đầu tư)',
+            add_cost_btn: 'Thêm Chi Phí',
+            monthly_costs: 'Chi phí hàng tháng',
+            total_monthly: 'Tổng cộng tháng:',
+            yearly_costs: 'Chi phí hàng năm',
+            total_yearly: 'Tổng cộng năm:',
+            onetime_costs: 'Chi phí một lần (Đầu tư)',
+            profit_report_title: 'Báo Cáo Lợi Nhuận',
+            calculate_profit_btn: 'Xem Báo Cáo',
+            business_results_period: 'Kết Quả Kinh Doanh Trong Kỳ',
+            total_revenue: 'Tổng Doanh Thu:',
+            total_cogs: 'Tổng Giá Vốn Hàng Bán:',
+            total_commission_fees: 'Tổng Phí Chiết Khấu:',
+            total_operating_expenses: 'Tổng Chi Phí Hoạt Động (Tháng):',
+            spoilage_cost: 'Chi Phí Hư Hao (Ước Tính):',
+            net_profit: 'Lợi Nhuận Ròng (Trước Thuế):',
+            revenue_structure: 'Cơ cấu doanh thu',
+            inventory_report_title: 'Báo Cáo Xuất Nhập Tồn Nguyên Liệu',
+            view_report_btn: 'Xem Báo Cáo',
+            material_name_header: 'Tên Nguyên Liệu',
+            unit_header: 'ĐVT',
+            opening_stock: 'Tồn Đầu Kỳ',
+            purchased_in_period: 'Nhập Trong Kỳ',
+            used_in_period: 'Xuất Trong Kỳ (Bán)',
+            spoiled_in_period: 'Hư Hao Trong Kỳ',
+            closing_stock: 'Tồn Cuối Kỳ',
+            adjustment_logs_title: 'Lịch Sử Điều Chỉnh Dữ Liệu',
+            empty_adjustment_logs: 'Chưa có lịch sử điều chỉnh nào.',
+            select_material: 'Chọn nguyên liệu',
+            select_supplier: 'Chọn NCC',
+            log_type_supplier: 'Nhà Cung Cấp',
+            log_type_purchase: 'Nhập kho',
+            log_type_dish: 'Món Ăn',
+            log_type_material: 'Nguyên Vật Liệu',
+            edit_supplier_title: 'Điều Chỉnh Thông Tin Nhà Cung Cấp',
+            supplier_name_label: 'Tên nhà cung cấp',
+            tax_code_label: 'Mã số thuế',
+            adjustment_reason: 'Lý do điều chỉnh',
+            edit_purchase_title: 'Điều Chỉnh Dữ Liệu Nhập Kho',
+            edit_dish_title: 'Điều Chỉnh Thông Tin Món Ăn',
+            price_effective_date: 'Ngày Áp Dụng Giá Mới',
+            edit_material_title: 'Điều Chỉnh Thông Tin Nguyên Vật Liệu',
+            total_time: 'Tổng thời gian',
+            duration: 'Thời gian trôi qua',
+            material_categories: 'Phân loại Nguyên vật liệu',
+            category_name_placeholder: 'Tên phân loại mới',
+            search_material_placeholder: 'Tìm kiếm nguyên vật liệu...',
+            edit_category_title: 'Chỉnh Sửa Phân Loại',
+            category_name: 'Tên phân loại',
+            category: 'Phân loại',
+            uncategorized: 'Chưa phân loại',
+            select_category: 'Chọn phân loại',
             payroll_management: 'Quản Lý Lương',
             payroll_management_title: 'Quản Lý Lương Nhân Viên',
             current_salary: 'Mức Lương Hiện tại',
-            actions: 'Hành Động',
             setup_salary: 'Thiết lập Lương',
             enter_timesheet: 'Chấm công',
             view_payslip: 'Xem Bảng lương',
@@ -15,11 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
             salary_amount: 'Mức Lương (VND)',
             salary_amount_note: 'Nhập lương tháng cho HĐLĐ, lương ngày cho bán thời gian.',
             effective_date: 'Ngày Hiệu Lực',
-            reason: 'Lý do thay đổi',
             reason_placeholder: 'VD: Tăng lương định kỳ, Thử việc...',
             save_salary_btn: 'Lưu Mức Lương',
             salary_history: 'Lịch Sử Thay Đổi Lương',
-            close_btn: 'Đóng',
             timesheet_entry_title: 'Chấm Công',
             payroll_period: 'Kỳ lương',
             work_days: 'Ngày công thực tế',
@@ -40,14 +213,188 @@ document.addEventListener('DOMContentLoaded', () => {
             taxable_income: 'Thu nhập tính thuế',
             pit_tax: 'Thuế TNCN',
             net_salary: 'Lương thực nhận (NET)',
-            // Thêm các bản dịch mới khác nếu cần
         },
         zh: {
-            // ... (Các bản dịch cũ giữ nguyên) ...
+            // --- CÁC BẢN DỊCH CHUNG ĐÃ BỔ SUNG ---
+            edit: '編輯',
+            delete: '刪除',
+            close_btn: '關閉',
+            save_changes_btn: '儲存變更',
+            cancel_btn: '取消',
+            actions: '操作',
+            reason: '原因',
+            status: '狀態',
+            total: '總計:',
+            empty_data: '尚無資料。',
+            // --- CÁC BẢN DỊCH CŨ ---
+            dashboard_title: '儀表板',
+            dashboard_overview: '總覽',
+            today_revenue: '今日收入',
+            today_orders: '新訂單',
+            best_selling_dish: '最暢銷菜色',
+            low_stock_alert: '低庫存警告',
+            order_status_distribution: '訂單狀態分佈',
+            recent_activity: '最近活動',
+            employee_management: '員工管理',
+            order_lookup: '訂單查詢',
+            menu_management: '菜單管理',
+            supplier_management: '供應商管理',
+            material_management: '原料管理',
+            spoilage_management: '損耗管理',
+            other_costs: '其他費用',
+            profit_report: '利潤報告',
+            inventory_report: '庫存報告',
+            adjustment_logs: '調整日誌',
+            employee_management_title: '員工管理',
+            add_new_employee: '新增員工',
+            employee_id_code: '員工編號',
+            employee_name: '姓名',
+            employee_dob: '出生日期',
+            employee_nid: '身份證號碼',
+            employee_photo_url: '照片網址',
+            employee_photo_url_placeholder: 'https://example.com/photo.jpg',
+            employee_permanent_address: '戶籍地址',
+            employee_current_address: '目前地址',
+            employee_start_date: '到職日期',
+            employee_type: '工作類型',
+            employee_type_part_time: '兼職',
+            employee_type_contract: '合約',
+            roles: '職位',
+            add_employee_btn: '新增員工',
+            employee_list: '員工列表',
+            employee_details_title: '員工詳細資訊',
+            terminate_employee_btn: '解僱',
+            terminate_employee_title: '終止合約',
+            termination_date: '離職日期',
+            termination_reason: '離職原因',
+            confirm_termination_btn: '確認解僱',
+            employee_status: '狀態',
+            status_active: '在職',
+            status_terminated: '已離職',
+            view_details: '查看詳情',
+            role_taker: '接單員',
+            role_kitchen: '廚房',
+            role_shipper: '外送員',
+            order_lookup_title: '訂單查詢',
+            view_by: '查看方式',
+            this_month: '本月',
+            this_quarter: '本季',
+            this_year: '本年',
+            custom_option: '自訂',
+            from_date: '從日期',
+            to_date: '到日期',
+            search_btn: '查詢',
+            order_list: '訂單列表',
+            status_new: '新訂單',
+            status_preparing: '準備中',
+            status_delivering: '配送中',
+            status_completed: '已完成',
+            status_cancelled: '已取消',
+            menu_management_title: '菜單與物料清單(BOM)管理',
+            add_new_dish: '新增菜色',
+            dish_name: '菜色名稱',
+            description: '描述',
+            selling_price: '售價 (VND)',
+            image_url: '圖片網址',
+            bom_title: '原料物料清單 (BOM)',
+            quantity_short: '數量',
+            estimated_cost: '預估成本',
+            add_dish_btn: '新增菜色',
+            current_dishes_list: '現有菜色列表',
+            supplier_management_title: '供應商管理',
+            add_new_supplier: '新增供應商',
+            supplier_name: '供應商名稱',
+            contact_person: '聯絡人',
+            phone_number: '電話號碼',
+            address: '地址',
+            tax_code: '稅號',
+            add_supplier_btn: '新增供應商',
+            suppliers_list_title: '供應商列表',
+            purchase_management_title: '原料與進貨管理',
+            define_material: '定義原料',
+            material_name: '原料名稱',
+            unit_placeholder: '單位 (公斤, 克, 個)',
+            add_btn: '新增',
+            materials_list_title: '原料列表',
+            record_purchase: '進貨登錄',
+            purchase_date: '進貨日期',
+            material: '原料',
+            quantity: '數量',
+            unit: '單位',
+            total_price: '總價 (VND)',
+            supplier: '供應商',
+            new_unit_price_label: '新單價將是',
+            confirm_purchase_btn: '確認進貨',
+            purchase_history_title: '進貨歷史',
+            spoilage_management_title: '損耗管理',
+            record_spoilage: '記錄損耗',
+            spoilage_date: '報廢日期',
+            spoilage_reason: '報廢原因',
+            spoilage_reason_placeholder: '例如：過期、損壞...',
+            record_btn: '記錄',
+            spoilage_history_title: '損耗歷史',
+            other_costs_title: '其他費用管理',
+            add_new_cost: '新增費用',
+            cost_name: '費用名稱',
+            amount: '金額 (VND)',
+            cost_type: '費用類型',
+            monthly: '每月',
+            yearly: '每年',
+            onetime: '一次性 (投資)',
+            add_cost_btn: '新增費用',
+            monthly_costs: '每月費用',
+            total_monthly: '本月總計:',
+            yearly_costs: '每年費用',
+            total_yearly: '本年總計:',
+            onetime_costs: '一次性費用 (投資)',
+            profit_report_title: '利潤報告',
+            calculate_profit_btn: '查看報告',
+            business_results_period: '期間經營成果',
+            total_revenue: '總收入:',
+            total_cogs: '總銷貨成本:',
+            total_commission_fees: '總佣金費用:',
+            total_operating_expenses: '總營運費用 (月):',
+            spoilage_cost: '損耗成本 (預估):',
+            net_profit: '淨利 (稅前):',
+            revenue_structure: '收入結構',
+            inventory_report_title: '原料進銷存報告',
+            view_report_btn: '查看報告',
+            material_name_header: '原料名稱',
+            unit_header: '單位',
+            opening_stock: '期初庫存',
+            purchased_in_period: '期間進貨',
+            used_in_period: '期間銷貨',
+            spoiled_in_period: '期間損耗',
+            closing_stock: '期末庫存',
+            adjustment_logs_title: '資料調整日誌',
+            empty_adjustment_logs: '尚無調整日誌。',
+            select_material: '選擇原料',
+            select_supplier: '選擇供應商',
+            log_type_supplier: '供應商',
+            log_type_purchase: '進貨',
+            log_type_dish: '菜色',
+            log_type_material: '原料',
+            edit_supplier_title: '編輯供應商資訊',
+            supplier_name_label: '供應商名稱',
+            tax_code_label: '稅號',
+            adjustment_reason: '調整原因',
+            edit_purchase_title: '編輯進貨資料',
+            edit_dish_title: '編輯菜色資訊',
+            price_effective_date: '新價格生效日期',
+            edit_material_title: '編輯原料資訊',
+            total_time: '總時間',
+            duration: '經過時間',
+            material_categories: '原料分類',
+            category_name_placeholder: '新分類名稱',
+            search_material_placeholder: '搜尋原料...',
+            edit_category_title: '編輯分類',
+            category_name: '分類名稱',
+            category: '分類',
+            uncategorized: '未分類',
+            select_category: '選擇分類',
             payroll_management: '薪資管理',
             payroll_management_title: '員工薪資管理',
             current_salary: '目前薪資',
-            actions: '操作',
             setup_salary: '設定薪資',
             enter_timesheet: '打卡記錄',
             view_payslip: '查看薪資單',
@@ -56,11 +403,9 @@ document.addEventListener('DOMContentLoaded', () => {
             salary_amount: '薪資金額 (VND)',
             salary_amount_note: '合約員工請輸入月薪，兼職員工請輸入日薪。',
             effective_date: '生效日期',
-            reason: '變更原因',
             reason_placeholder: '例如：定期加薪、試用期...',
             save_salary_btn: '儲存薪資',
             salary_history: '薪資變更歷史',
-            close_btn: '關閉',
             timesheet_entry_title: '出勤記錄',
             payroll_period: '薪資週期',
             work_days: '實際工作天數',
@@ -98,6 +443,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadFromStorage = (key, defaultValue = []) => {
         try {
             const data = localStorage.getItem(key);
+            // Handle case where payrolls is an empty array from old data
+            if (key === 'payrolls' && Array.isArray(data)) return defaultValue;
             return data ? JSON.parse(data) : defaultValue;
         } catch (e) {
             console.error(`Error parsing ${key} from localStorage`, e);
@@ -146,7 +493,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'contract': {name: 'Hợp đồng lao động', name_zh: '勞動合約'}
     };
     
-    // --- DOM Elements ---
     const elements = {
         // Modals
         editDishModal: document.getElementById('edit-dish-modal'),
@@ -222,12 +568,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const taxableAtBracket = Math.min(taxableIncome - previousLimit, bracket.limit - previousLimit);
                 tax += taxableAtBracket * bracket.rate;
             }
+            if (taxableIncome <= bracket.limit) break;
             previousLimit = bracket.limit;
         }
         return tax;
     }
     
-    // ... (Toàn bộ các hàm cũ từ `getMaterialUsage` đến `renderApp` giữ nguyên) ...
     // --- Helper for Material Usage Calculation ---
     function getMaterialUsage(orders) {
         const usage = {}; // { materialId: quantity }
@@ -308,6 +654,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         let startDate, endDate = today;
 
+        if (!startDateInput || !endDateInput) return; // Guard against elements not in DOM
+
         startDateInput.disabled = true;
         endDateInput.disabled = true;
 
@@ -335,6 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- Employee Management ---
     function renderEmployeesList() {
+        if (!elements.employeesList) return;
         const listEl = elements.employeesList;
         listEl.innerHTML = employees.length ? employees.map(emp => {
             const statusClass = emp.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
@@ -357,48 +706,52 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('') : `<p class="text-center text-gray-500">${translations[currentLang].empty_data}</p>`;
     }
+    
+    if (elements.addEmployeeForm) {
+        elements.addEmployeeForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const selectedRoles = Array.from(document.querySelectorAll('#employee-roles-checkboxes input:checked')).map(cb => cb.value);
+            const newEmployee = {
+                id: Date.now(),
+                name: document.getElementById('employee-name').value,
+                idCode: document.getElementById('employee-id-code').value,
+                dob: document.getElementById('employee-dob').value,
+                nid: document.getElementById('employee-nid').value,
+                photoUrl: document.getElementById('employee-photo-url').value,
+                permanentAddress: document.getElementById('employee-permanent-address').value,
+                currentAddress: document.getElementById('employee-current-address').value,
+                startDate: document.getElementById('employee-start-date').value,
+                employmentType: document.getElementById('employee-type').value,
+                roles: selectedRoles,
+                status: 'active',
+                salaryHistory: [] // Khởi tạo lịch sử lương
+            };
+            employees.push(newEmployee);
+            localStorage.setItem('employees', JSON.stringify(employees));
+            renderEmployeesList();
+            elements.addEmployeeForm.reset();
+        });
+    }
 
-    elements.addEmployeeForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const selectedRoles = Array.from(document.querySelectorAll('#employee-roles-checkboxes input:checked')).map(cb => cb.value);
-        const newEmployee = {
-            id: Date.now(),
-            name: document.getElementById('employee-name').value,
-            idCode: document.getElementById('employee-id-code').value,
-            dob: document.getElementById('employee-dob').value,
-            nid: document.getElementById('employee-nid').value,
-            photoUrl: document.getElementById('employee-photo-url').value,
-            permanentAddress: document.getElementById('employee-permanent-address').value,
-            currentAddress: document.getElementById('employee-current-address').value,
-            startDate: document.getElementById('employee-start-date').value,
-            employmentType: document.getElementById('employee-type').value,
-            roles: selectedRoles,
-            status: 'active',
-            salaryHistory: [] // Khởi tạo lịch sử lương
-        };
-        employees.push(newEmployee);
-        localStorage.setItem('employees', JSON.stringify(employees));
-        renderEmployeesList();
-        elements.addEmployeeForm.reset();
-    });
-
-    elements.employeesList.addEventListener('click', (e) => {
-        if (e.target.matches('.view-employee-btn')) {
-            const employee = findById(employees, e.target.dataset.id);
-            if (employee) openEmployeeDetailsModal(employee);
-        }
-         if (e.target.matches('.terminate-employee-btn')) {
-            const employeeId = parseInt(e.target.dataset.id);
-            const reason = prompt(translations[currentLang].termination_reason);
-            if(reason) {
-                showConfirmation(translations[currentLang].terminate_employee_title, `Bạn có chắc muốn cho nhân viên này thôi việc?`, () => {
-                    employees = employees.map(emp => emp.id === employeeId ? { ...emp, status: 'terminated', terminationDate: todayISO(), terminationReason: reason } : emp);
-                    localStorage.setItem('employees', JSON.stringify(employees));
-                    renderEmployeesList();
-                });
+    if (elements.employeesList) {
+        elements.employeesList.addEventListener('click', (e) => {
+            if (e.target.matches('.view-employee-btn')) {
+                const employee = findById(employees, e.target.dataset.id);
+                if (employee) openEmployeeDetailsModal(employee);
             }
-        }
-    });
+             if (e.target.matches('.terminate-employee-btn')) {
+                const employeeId = parseInt(e.target.dataset.id);
+                const reason = prompt(translations[currentLang].termination_reason);
+                if(reason) {
+                    showConfirmation(translations[currentLang].terminate_employee_title, `Bạn có chắc muốn cho nhân viên này thôi việc?`, () => {
+                        employees = employees.map(emp => emp.id === employeeId ? { ...emp, status: 'terminated', terminationDate: todayISO(), terminationReason: reason } : emp);
+                        localStorage.setItem('employees', JSON.stringify(employees));
+                        renderEmployeesList();
+                    });
+                }
+            }
+        });
+    }
 
     function openEmployeeDetailsModal(emp) {
         const contentEl = document.getElementById('employee-modal-content');
@@ -434,9 +787,9 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.employeeDetailsModal.classList.remove('active');
     });
 
-    // ... (Các hàm Supplier, Sales, Menu, Material... giữ nguyên) ...
-     // --- Supplier Management ---
+    // --- Supplier Management ---
     function renderSuppliersList() {
+        if (!elements.suppliersList) return;
         const listEl = elements.suppliersList;
         listEl.innerHTML = suppliers.length ? suppliers.map(s => `
             <div class="p-3 bg-gray-50 rounded-lg border flex justify-between items-start">
@@ -453,35 +806,39 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('') : `<p class="text-center text-gray-500">${translations[currentLang].empty_data}</p>`;
     }
 
-    elements.addSupplierForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const newSupplier = {
-            id: Date.now(),
-            name: document.getElementById('supplier-name').value,
-            contact: document.getElementById('supplier-contact').value,
-            phone: document.getElementById('supplier-phone').value,
-            address: document.getElementById('supplier-address').value,
-            taxcode: document.getElementById('supplier-taxcode').value,
-        };
-        suppliers.push(newSupplier);
-        localStorage.setItem('suppliers', JSON.stringify(suppliers));
-        renderApp(); 
-        elements.addSupplierForm.reset();
-    });
+    if (elements.addSupplierForm) {
+        elements.addSupplierForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newSupplier = {
+                id: Date.now(),
+                name: document.getElementById('supplier-name').value,
+                contact: document.getElementById('supplier-contact').value,
+                phone: document.getElementById('supplier-phone').value,
+                address: document.getElementById('supplier-address').value,
+                taxcode: document.getElementById('supplier-taxcode').value,
+            };
+            suppliers.push(newSupplier);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            renderApp(); 
+            elements.addSupplierForm.reset();
+        });
+    }
 
-    elements.suppliersList.addEventListener('click', (e) => {
-        if (e.target.matches('.edit-supplier-btn')) {
-            const supplier = findById(suppliers, e.target.dataset.id);
-            if (supplier) openEditSupplierModal(supplier);
-        }
-         if (e.target.matches('.delete-supplier-btn')) {
-            showConfirmation('Xóa nhà cung cấp?', 'Bạn có chắc muốn xóa nhà cung cấp này?', () => {
-                suppliers = suppliers.filter(s => s.id !== parseInt(e.target.dataset.id));
-                localStorage.setItem('suppliers', JSON.stringify(suppliers));
-                renderSuppliersList();
-            });
-        }
-    });
+    if (elements.suppliersList) {
+        elements.suppliersList.addEventListener('click', (e) => {
+            if (e.target.matches('.edit-supplier-btn')) {
+                const supplier = findById(suppliers, e.target.dataset.id);
+                if (supplier) openEditSupplierModal(supplier);
+            }
+             if (e.target.matches('.delete-supplier-btn')) {
+                showConfirmation('Xóa nhà cung cấp?', 'Bạn có chắc muốn xóa nhà cung cấp này?', () => {
+                    suppliers = suppliers.filter(s => s.id !== parseInt(e.target.dataset.id));
+                    localStorage.setItem('suppliers', JSON.stringify(suppliers));
+                    renderSuppliersList();
+                });
+            }
+        });
+    }
     
     function openEditSupplierModal(supplier) {
         const modal = elements.editSupplierModal;
@@ -493,9 +850,9 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.querySelector('#edit-supplier-taxcode').value = supplier.taxcode;
         modal.classList.add('active');
     }
-
+    
     document.getElementById('cancel-edit-supplier-btn').addEventListener('click', () => {
-         elements.editSupplierModal.classList.remove('active');
+         if (elements.editSupplierModal) elements.editSupplierModal.classList.remove('active');
     });
 
     document.getElementById('edit-supplier-form').addEventListener('submit', (e) => {
@@ -517,60 +874,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Sales & Order Lookup Logic ---
-    elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
-    elements.inventoryReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.inventoryReportStartDate, elements.inventoryReportEndDate));
-    elements.profitReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.profitReportStartDate, elements.profitReportEndDate));
+    if(elements.orderLookupPresetFilter) elements.orderLookupPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.orderLookupStartDate, elements.orderLookupEndDate));
+    if(elements.inventoryReportPresetFilter) elements.inventoryReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.inventoryReportStartDate, elements.inventoryReportEndDate));
+    if(elements.profitReportPresetFilter) elements.profitReportPresetFilter.addEventListener('change', (e) => handleDatePresetChange(e.target.value, elements.profitReportStartDate, elements.profitReportEndDate));
+    
+    if (elements.orderLookupBtn) {
+        elements.orderLookupBtn.addEventListener('click', () => {
+            const startDate = new Date(elements.orderLookupStartDate.value);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(elements.orderLookupEndDate.value);
+            endDate.setHours(23, 59, 59, 999);
 
-    elements.orderLookupBtn.addEventListener('click', () => {
-        const startDate = new Date(elements.orderLookupStartDate.value);
-        startDate.setHours(0, 0, 0, 0);
-        const endDate = new Date(elements.orderLookupEndDate.value);
-        endDate.setHours(23, 59, 59, 999);
-
-        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-            alert("Vui lòng chọn ngày hợp lệ.");
-            return;
-        }
-
-        const activeOrders = loadFromStorage('activeOrders');
-        const completedOrders = loadFromStorage('completedOrders');
-        const cancelledOrders = loadFromStorage('cancelledOrders');
-
-        const allOrdersInPeriod = [];
-
-        activeOrders.forEach(order => {
-            const orderDate = new Date(order.timestamps.created);
-            if (orderDate >= startDate && orderDate <= endDate) {
-                allOrdersInPeriod.push({ ...order, finalStatus: order.status });
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                alert("Vui lòng chọn ngày hợp lệ.");
+                return;
             }
-        });
 
-        completedOrders.forEach(order => {
-            const orderDate = new Date(order.timestamps.completed);
-            if (orderDate >= startDate && orderDate <= endDate) {
-                allOrdersInPeriod.push({ ...order, finalStatus: 'completed' });
-            }
-        });
+            const activeOrders = loadFromStorage('activeOrders');
+            const completedOrders = loadFromStorage('completedOrders');
+            const cancelledOrders = loadFromStorage('cancelledOrders');
+            const allOrdersInPeriod = [];
 
-        cancelledOrders.forEach(record => {
-            const orderDate = new Date(record.timestamp);
-            if (orderDate >= startDate && orderDate <= endDate) {
-                allOrdersInPeriod.push({ 
-                    ...record.order, 
-                    finalStatus: 'cancelled', 
-                    cancellationReason: record.reason,
-                    cancellationTimestamp: record.timestamp
-                });
-            }
+            activeOrders.forEach(order => {
+                const orderDate = new Date(order.timestamps.created);
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    allOrdersInPeriod.push({ ...order, finalStatus: order.status });
+                }
+            });
+
+            completedOrders.forEach(order => {
+                const orderDate = new Date(order.timestamps.completed);
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    allOrdersInPeriod.push({ ...order, finalStatus: 'completed' });
+                }
+            });
+
+            cancelledOrders.forEach(record => {
+                const orderDate = new Date(record.timestamp);
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    allOrdersInPeriod.push({ 
+                        ...record.order, 
+                        finalStatus: 'cancelled', 
+                        cancellationReason: record.reason,
+                        cancellationTimestamp: record.timestamp
+                    });
+                }
+            });
+            
+            salesDataInPeriod = allOrdersInPeriod; // Store for filtering
+            renderOrderStats(salesDataInPeriod);
+            elements.orderDetailsTitle.classList.add('hidden');
+            elements.orderDetailsList.innerHTML = '';
         });
-        
-        salesDataInPeriod = allOrdersInPeriod; // Store for filtering
-        renderOrderStats(salesDataInPeriod);
-        elements.orderDetailsTitle.classList.add('hidden');
-        elements.orderDetailsList.innerHTML = '';
-    });
+    }
 
     function renderOrderStats(orders) {
+        if (!elements.orderStats) return;
         const counts = Object.keys(orderStatuses).reduce((acc, key) => ({...acc, [key]: 0}), {});
         orders.forEach(order => {
             if (counts.hasOwnProperty(order.finalStatus)) {
@@ -591,25 +950,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
 
-    elements.orderStats.addEventListener('click', (e) => {
-        const card = e.target.closest('.stat-card');
-        if (!card) return;
+    if (elements.orderStats) {
+        elements.orderStats.addEventListener('click', (e) => {
+            const card = e.target.closest('.stat-card');
+            if (!card) return;
 
-        const statusKey = card.dataset.status;
-        const filteredData = salesDataInPeriod.filter(sale => sale.finalStatus === statusKey);
-        
-        const statusName = orderStatuses[statusKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || statusKey;
-        elements.orderDetailsTitle.textContent = `${translations[currentLang].order_list}: ${statusName}`;
-        elements.orderDetailsTitle.classList.remove('hidden');
+            const statusKey = card.dataset.status;
+            const filteredData = salesDataInPeriod.filter(sale => sale.finalStatus === statusKey);
+            
+            const statusName = orderStatuses[statusKey]?.[`name${currentLang === 'zh' ? '_zh' : ''}`] || statusKey;
+            elements.orderDetailsTitle.textContent = `${translations[currentLang].order_list}: ${statusName}`;
+            elements.orderDetailsTitle.classList.remove('hidden');
 
-        renderOrderDetailsList(filteredData);
-    });
+            renderOrderDetailsList(filteredData);
+        });
+    }
 
     function renderOrderDetailsList(data) {
-         elements.orderDetailsList.innerHTML = data.length ? data.map(order => {
+        if (!elements.orderDetailsList) return;
+        elements.orderDetailsList.innerHTML = data.length ? data.map(order => {
             const statusInfo = orderStatuses[order.finalStatus];
             const dishNames = order.items.map(i => findById(dishes, i.dishId)?.name || 'N/A').join(', ');
-
             const timeInfoHtml = (() => {
                 if (order.finalStatus === 'completed') {
                     const duration = order.timestamps.completed - order.timestamps.created;
@@ -650,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${order.finalStatus === 'cancelled' ? `<p class="text-xs text-red-600 mt-1">Lý do hủy: ${order.cancellationReason}</p>` : ''}
                 </div>
             `;
-         }).join('') : `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang].empty_data}</p>`;
+        }).join('') : `<p class="text-gray-500 text-sm p-4 text-center">${translations[currentLang].empty_data}</p>`;
     }
     
     // --- Menu Management ---
@@ -669,19 +1030,21 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `};
 
-    elements.dishesList.addEventListener('click', e => {
-        if (e.target.matches('.edit-dish-btn')) {
-            const dish = findById(dishes, e.target.dataset.id);
-            if (dish) openEditDishModal(dish);
-        }
-        if (e.target.matches('.delete-dish-btn')) {
-            showConfirmation('Xác nhận xóa', 'Bạn có chắc muốn xóa món ăn này?', () => {
-                dishes = dishes.filter(d => d.id !== parseInt(e.target.dataset.id));
-                localStorage.setItem('dishes', JSON.stringify(dishes));
-                renderApp();
-            });
-        }
-    });
+    if (elements.dishesList) {
+        elements.dishesList.addEventListener('click', e => {
+            if (e.target.matches('.edit-dish-btn')) {
+                const dish = findById(dishes, e.target.dataset.id);
+                if (dish) openEditDishModal(dish);
+            }
+            if (e.target.matches('.delete-dish-btn')) {
+                showConfirmation('Xác nhận xóa', 'Bạn có chắc muốn xóa món ăn này?', () => {
+                    dishes = dishes.filter(d => d.id !== parseInt(e.target.dataset.id));
+                    localStorage.setItem('dishes', JSON.stringify(dishes));
+                    renderApp();
+                });
+            }
+        });
+    }
 
     function openEditDishModal(dish) {
         const modal = elements.editDishModal;
@@ -700,19 +1063,22 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('active');
     }
 
-    elements.cancelEditDishBtn.addEventListener('click', () => elements.editDishModal.classList.remove('active'));
+    if (elements.cancelEditDishBtn) elements.cancelEditDishBtn.addEventListener('click', () => elements.editDishModal.classList.remove('active'));
 
-    elements.editDishModal.querySelector('#edit-add-bom-item-btn').addEventListener('click', () => {
-         const materialId = parseInt(elements.editDishModal.querySelector('#edit-bom-material-select').value);
-        const quantity = parseFloat(elements.editDishModal.querySelector('#edit-bom-quantity').value);
-        if (materialId && quantity > 0 && !editingBomItems.some(item => item.materialId === materialId)) {
-            editingBomItems.push({ materialId, quantity });
-            renderEditingBomItems();
-            elements.editDishModal.querySelector('#edit-bom-quantity').value = '';
-        }
-    });
+    if (elements.editDishModal) {
+        elements.editDishModal.querySelector('#edit-add-bom-item-btn').addEventListener('click', () => {
+             const materialId = parseInt(elements.editDishModal.querySelector('#edit-bom-material-select').value);
+            const quantity = parseFloat(elements.editDishModal.querySelector('#edit-bom-quantity').value);
+            if (materialId && quantity > 0 && !editingBomItems.some(item => item.materialId === materialId)) {
+                editingBomItems.push({ materialId, quantity });
+                renderEditingBomItems();
+                elements.editDishModal.querySelector('#edit-bom-quantity').value = '';
+            }
+        });
+    }
 
     function renderEditingBomItems() {
+        if (!elements.editDishModal) return;
         const listEl = elements.editDishModal.querySelector('#edit-bom-items-list');
         listEl.innerHTML = editingBomItems.map((item, index) => {
             const material = findById(rawMaterials, item.materialId);
@@ -732,77 +1098,85 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    elements.editDishForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const dishId = parseInt(document.getElementById('edit-dish-id').value);
-        const reason = document.getElementById('edit-dish-reason').value;
-        const originalDish = findById(dishes, dishId);
-        
-        const newPrice = parseFloat(document.getElementById('edit-dish-price').value);
-        const effectiveDate = document.getElementById('edit-dish-price-effective-date').value;
-        const priceHistory = originalDish.priceHistory || [{ price: originalDish.price, effectiveDate: '1970-01-01'}];
-        
-        if (newPrice !== getPriceForDate(originalDish, new Date(effectiveDate || todayISO()))) {
-            if(!effectiveDate) { alert('Vui lòng chọn ngày áp dụng giá mới.'); return; }
-             priceHistory.push({ price: newPrice, effectiveDate });
-        }
+    if (elements.editDishForm) {
+        elements.editDishForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const dishId = parseInt(document.getElementById('edit-dish-id').value);
+            const reason = document.getElementById('edit-dish-reason').value;
+            const originalDish = findById(dishes, dishId);
+            
+            const newPrice = parseFloat(document.getElementById('edit-dish-price').value);
+            const effectiveDate = document.getElementById('edit-dish-price-effective-date').value;
+            const priceHistory = originalDish.priceHistory || [{ price: originalDish.price, effectiveDate: '1970-01-01'}];
+            
+            if (newPrice !== getPriceForDate(originalDish, new Date(effectiveDate || todayISO()))) {
+                if(!effectiveDate) { alert('Vui lòng chọn ngày áp dụng giá mới.'); return; }
+                 priceHistory.push({ price: newPrice, effectiveDate });
+            }
 
-        const updatedDish = {
-            ...originalDish,
-            name: document.getElementById('edit-dish-name').value,
-            description: document.getElementById('edit-dish-description').value,
-            imageUrl: document.getElementById('edit-dish-image-url').value,
-            price: getPriceForDate({...originalDish, priceHistory}, new Date()),
-            priceHistory: priceHistory,
-            bom: editingBomItems,
-            cost: calculateBomCost(editingBomItems)
-        };
-        
-        logAdjustment('log_type_dish', dishId, reason, {}); // Simplified log for now
-        dishes = dishes.map(d => d.id === dishId ? updatedDish : d);
-        localStorage.setItem('dishes', JSON.stringify(dishes));
-        
-        elements.editDishModal.classList.remove('active');
-        e.target.reset();
-        renderApp();
-    });
+            const updatedDish = {
+                ...originalDish,
+                name: document.getElementById('edit-dish-name').value,
+                description: document.getElementById('edit-dish-description').value,
+                imageUrl: document.getElementById('edit-dish-image-url').value,
+                price: getPriceForDate({...originalDish, priceHistory}, new Date()),
+                priceHistory: priceHistory,
+                bom: editingBomItems,
+                cost: calculateBomCost(editingBomItems)
+            };
+            
+            logAdjustment('log_type_dish', dishId, reason, {}); // Simplified log for now
+            dishes = dishes.map(d => d.id === dishId ? updatedDish : d);
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+            
+            elements.editDishModal.classList.remove('active');
+            e.target.reset();
+            renderApp();
+        });
+    }
 
     // --- Material & Category Management ---
     function renderMaterialCategories() {
+        if (!elements.materialCategoriesList) return;
         const listEl = elements.materialCategoriesList;
         listEl.innerHTML = materialCategories.map(cat => `
             <div class="flex justify-between items-center p-2 bg-gray-100 rounded-md">
                 <span>${cat.name}</span>
                 <div class="flex gap-2">
-                     <button class="edit-category-btn text-xs text-yellow-700 hover:text-yellow-900" data-id="${cat.id}">Sửa</button>
-                    <button class="delete-category-btn text-xs text-red-500 hover:text-red-700" data-id="${cat.id}">Xóa</button>
+                     <button class="edit-category-btn text-xs text-yellow-700 hover:text-yellow-900" data-id="${cat.id}">${translations[currentLang].edit}</button>
+                    <button class="delete-category-btn text-xs text-red-500 hover:text-red-700" data-id="${cat.id}">${translations[currentLang].delete}</button>
                 </div>
             </div>
         `).join('');
         populateSelect(document.getElementById('material-category-select'), materialCategories, 'select_category');
     }
 
-    document.getElementById('add-category-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const nameInput = document.getElementById('category-name');
-        const name = nameInput.value.trim();
-        if (name) {
-            materialCategories.push({ id: Date.now(), name });
-            localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
-            renderMaterialCategories();
-            nameInput.value = '';
-        }
-    });
+    const addCategoryForm = document.getElementById('add-category-form');
+    if (addCategoryForm) {
+        addCategoryForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const nameInput = document.getElementById('category-name');
+            const name = nameInput.value.trim();
+            if (name) {
+                materialCategories.push({ id: Date.now(), name });
+                localStorage.setItem('materialCategories', JSON.stringify(materialCategories));
+                renderMaterialCategories();
+                nameInput.value = '';
+            }
+        });
+    }
 
-    elements.materialCategoriesList.addEventListener('click', e => {
-        if (e.target.matches('.edit-category-btn')) {
-            const category = findById(materialCategories, e.target.dataset.id);
-            if (category) openEditCategoryModal(category);
-        }
-        if (e.target.matches('.delete-category-btn')) {
-            handleDeleteCategory(parseInt(e.target.dataset.id));
-        }
-    });
+    if (elements.materialCategoriesList) {
+        elements.materialCategoriesList.addEventListener('click', e => {
+            if (e.target.matches('.edit-category-btn')) {
+                const category = findById(materialCategories, e.target.dataset.id);
+                if (category) openEditCategoryModal(category);
+            }
+            if (e.target.matches('.delete-category-btn')) {
+                handleDeleteCategory(parseInt(e.target.dataset.id));
+            }
+        });
+    }
 
     function openEditCategoryModal(category) {
         const modal = elements.editCategoryModal;
@@ -839,22 +1213,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    document.getElementById('add-material-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const name = document.getElementById('material-name').value.trim();
-        const unit = document.getElementById('material-unit').value.trim();
-        const categoryId = parseInt(document.getElementById('material-category-select').value) || null;
-        if (name && unit) {
-            rawMaterials.push({ id: Date.now(), name, unit, price: 0, categoryId });
-            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
-            renderMaterialsList();
-            e.target.reset();
-        }
-    });
+    const addMaterialForm = document.getElementById('add-material-form');
+    if (addMaterialForm) {
+        addMaterialForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('material-name').value.trim();
+            const unit = document.getElementById('material-unit').value.trim();
+            const categoryId = parseInt(document.getElementById('material-category-select').value) || null;
+            if (name && unit) {
+                rawMaterials.push({ id: Date.now(), name, unit, price: 0, categoryId });
+                localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+                renderMaterialsList();
+                e.target.reset();
+            }
+        });
+    }
 
-    elements.searchMaterialInput.addEventListener('input', () => renderMaterialsList());
+    if (elements.searchMaterialInput) elements.searchMaterialInput.addEventListener('input', () => renderMaterialsList());
 
     function renderMaterialsList() {
+        if (!elements.materialsList || !elements.searchMaterialInput) return;
         const searchTerm = elements.searchMaterialInput.value.toLowerCase();
         const listEl = elements.materialsList;
 
@@ -893,15 +1271,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('') || `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
     }
     
-    elements.materialsList.addEventListener('click', e => {
-        if (e.target.matches('.edit-material-btn')) {
-            const material = findById(rawMaterials, e.target.dataset.id);
-            if (material) openEditMaterialModal(material);
-        }
-        if (e.target.matches('.delete-material-btn')) {
-            handleDeleteMaterial(parseInt(e.target.dataset.id));
-        }
-    });
+    if (elements.materialsList) {
+        elements.materialsList.addEventListener('click', e => {
+            if (e.target.matches('.edit-material-btn')) {
+                const material = findById(rawMaterials, e.target.dataset.id);
+                if (material) openEditMaterialModal(material);
+            }
+            if (e.target.matches('.delete-material-btn')) {
+                handleDeleteMaterial(parseInt(e.target.dataset.id));
+            }
+        });
+    }
 
     function handleDeleteMaterial(materialId) {
         const isUsed = dishes.some(d => d.bom && d.bom.some(item => item.materialId === materialId));
@@ -925,28 +1305,30 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('active');
     }
     
-    elements.cancelEditMaterialBtn.addEventListener('click', () => elements.editMaterialModal.classList.remove('active'));
+    if (elements.cancelEditMaterialBtn) elements.cancelEditMaterialBtn.addEventListener('click', () => elements.editMaterialModal.classList.remove('active'));
 
-    elements.editMaterialForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const materialId = parseInt(document.getElementById('edit-material-id').value);
-        const reason = document.getElementById('edit-material-reason').value;
+    if (elements.editMaterialForm) {
+        elements.editMaterialForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const materialId = parseInt(document.getElementById('edit-material-id').value);
+            const reason = document.getElementById('edit-material-reason').value;
 
-        const updatedMaterial = {
-            ...findById(rawMaterials, materialId),
-            name: document.getElementById('edit-material-name').value,
-            unit: document.getElementById('edit-material-unit').value,
-            categoryId: parseInt(document.getElementById('edit-material-category-select').value) || null,
-        };
+            const updatedMaterial = {
+                ...findById(rawMaterials, materialId),
+                name: document.getElementById('edit-material-name').value,
+                unit: document.getElementById('edit-material-unit').value,
+                categoryId: parseInt(document.getElementById('edit-material-category-select').value) || null,
+            };
 
-        logAdjustment('log_type_material', materialId, reason, {});
-        rawMaterials = rawMaterials.map(m => m.id === materialId ? updatedMaterial : m);
-        localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+            logAdjustment('log_type_material', materialId, reason, {});
+            rawMaterials = rawMaterials.map(m => m.id === materialId ? updatedMaterial : m);
+            localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
 
-        elements.editMaterialModal.classList.remove('active');
-        e.target.reset();
-        renderApp();
-    });
+            elements.editMaterialModal.classList.remove('active');
+            e.target.reset();
+            renderApp();
+        });
+    }
 
     function getPriceForDate(dish, date) {
         if (!dish.priceHistory || dish.priceHistory.length === 0) return dish.price;
@@ -959,6 +1341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function calculateBomCost(bomItems) {
+        if (!bomItems) return 0;
         return bomItems.reduce((total, item) => {
             const material = findById(rawMaterials, item.materialId);
             return total + (material ? material.price * item.quantity : 0);
@@ -990,6 +1373,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function populateMaterialSelects(selectElement) {
+        if (!selectElement) return;
         const placeholder = translations[currentLang].select_material;
         selectElement.innerHTML = `<option value="">-- ${placeholder} --</option>`;
 
@@ -1056,6 +1440,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Purchase Logic ---
     function renderPurchasesList() {
         const listEl = document.getElementById('purchases-list');
+        if (!listEl) return;
         const sortedPurchases = [...purchases].sort((a,b) => new Date(b.date) - new Date(a.date));
         listEl.innerHTML = sortedPurchases.length ? sortedPurchases.slice(0, 20).map(p => { // Show recent 20
             const material = findById(rawMaterials, p.materialId);
@@ -1068,63 +1453,70 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
     }
     
-    document.getElementById('add-purchase-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const materialId = parseInt(document.getElementById('purchase-material-select').value);
-        const quantity = parseFloat(document.getElementById('purchase-quantity').value);
-        const totalPrice = parseFloat(document.getElementById('purchase-total-price').value);
+    const addPurchaseForm = document.getElementById('add-purchase-form');
+    if (addPurchaseForm) {
+        addPurchaseForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const materialId = parseInt(document.getElementById('purchase-material-select').value);
+            const quantity = parseFloat(document.getElementById('purchase-quantity').value);
+            const totalPrice = parseFloat(document.getElementById('purchase-total-price').value);
 
-        const newPurchase = {
-            id: Date.now(),
-            date: document.getElementById('purchase-date').value,
-            materialId: materialId,
-            quantity: quantity,
-            totalPrice: totalPrice,
-            unitPrice: (quantity > 0) ? totalPrice / quantity : 0,
-            supplierId: parseInt(document.getElementById('purchase-supplier-select').value)
-        };
+            const newPurchase = {
+                id: Date.now(),
+                date: document.getElementById('purchase-date').value,
+                materialId: materialId,
+                quantity: quantity,
+                totalPrice: totalPrice,
+                unitPrice: (quantity > 0) ? totalPrice / quantity : 0,
+                supplierId: parseInt(document.getElementById('purchase-supplier-select').value)
+            };
 
-        if(!newPurchase.date || isNaN(newPurchase.materialId) || isNaN(newPurchase.quantity) || isNaN(newPurchase.totalPrice) || isNaN(newPurchase.supplierId)) {
-            alert('Vui lòng điền đầy đủ thông tin nhập kho.');
-            return;
-        }
+            if(!newPurchase.date || isNaN(newPurchase.materialId) || isNaN(newPurchase.quantity) || isNaN(newPurchase.totalPrice) || isNaN(newPurchase.supplierId)) {
+                alert('Vui lòng điền đầy đủ thông tin nhập kho.');
+                return;
+            }
 
-        purchases.push(newPurchase);
-        localStorage.setItem('purchases', JSON.stringify(purchases));
-        
-        renderApp();
-        
-        e.target.reset();
-        document.getElementById('new-unit-price').textContent = formatCurrency(0);
-        document.getElementById('purchase-unit').value = '';
-    });
+            purchases.push(newPurchase);
+            localStorage.setItem('purchases', JSON.stringify(purchases));
+            
+            renderApp();
+            
+            e.target.reset();
+            document.getElementById('new-unit-price').textContent = formatCurrency(0);
+            document.getElementById('purchase-unit').value = '';
+        });
+    }
 
-    document.getElementById('purchase-material-select').addEventListener('change', (e) => {
-        const material = findById(rawMaterials, e.target.value);
-        document.getElementById('purchase-unit').value = material ? material.unit : '';
-    });
+    const purchaseMaterialSelect = document.getElementById('purchase-material-select');
+    if (purchaseMaterialSelect) {
+        purchaseMaterialSelect.addEventListener('change', (e) => {
+            const material = findById(rawMaterials, e.target.value);
+            document.getElementById('purchase-unit').value = material ? material.unit : '';
+        });
+    }
     
     const purchaseQuantityInput = document.getElementById('purchase-quantity');
     const purchaseTotalPriceInput = document.getElementById('purchase-total-price');
     const newUnitPriceEl = document.getElementById('new-unit-price');
 
     function updateNewUnitPrice() {
+        if (!purchaseQuantityInput || !purchaseTotalPriceInput || !newUnitPriceEl) return;
         const quantity = parseFloat(purchaseQuantityInput.value);
         const totalPrice = parseFloat(purchaseTotalPriceInput.value);
-        if (quantity > 0 && totalPrice > 0) {
+        if (quantity > 0 && totalPrice >= 0) {
             const unitPrice = totalPrice / quantity;
             newUnitPriceEl.textContent = formatCurrency(unitPrice);
         } else {
             newUnitPriceEl.textContent = formatCurrency(0);
         }
     }
-    purchaseQuantityInput.addEventListener('input', updateNewUnitPrice);
-    purchaseTotalPriceInput.addEventListener('input', updateNewUnitPrice);
+    if (purchaseQuantityInput) purchaseQuantityInput.addEventListener('input', updateNewUnitPrice);
+    if (purchaseTotalPriceInput) purchaseTotalPriceInput.addEventListener('input', updateNewUnitPrice);
     
-
     // --- Spoilage Logic ---
     function renderSpoilageList() {
         const listEl = document.getElementById('spoilage-list');
+        if (!listEl) return;
         const sortedRecords = [...spoilageRecords].sort((a,b) => new Date(b.date) - new Date(a.date));
         listEl.innerHTML = sortedRecords.length ? sortedRecords.map(r => {
             const material = findById(rawMaterials, r.materialId);
@@ -1136,49 +1528,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
     }
 
-    document.getElementById('spoilage-list').addEventListener('click', e => {
-        if(e.target.matches('.delete-spoilage-btn')) {
-            const recordId = parseInt(e.target.dataset.id);
-            showConfirmation('Xóa hư hao?', 'Bạn có chắc muốn xóa ghi nhận hư hao này?', () => {
-                 spoilageRecords = spoilageRecords.filter(r => r.id !== recordId);
-                 localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
-                 renderSpoilageList();
-            });
-        }
-    });
+    const spoilageListEl = document.getElementById('spoilage-list');
+    if (spoilageListEl) {
+        spoilageListEl.addEventListener('click', e => {
+            if(e.target.matches('.delete-spoilage-btn')) {
+                const recordId = parseInt(e.target.dataset.id);
+                showConfirmation('Xóa hư hao?', 'Bạn có chắc muốn xóa ghi nhận hư hao này?', () => {
+                     spoilageRecords = spoilageRecords.filter(r => r.id !== recordId);
+                     localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
+                     renderSpoilageList();
+                });
+            }
+        });
+    }
 
-    document.getElementById('spoilage-material-select').addEventListener('change', (e) => {
-        const material = findById(rawMaterials, e.target.value);
-        document.getElementById('spoilage-unit').value = material ? material.unit : '';
-    });
+    const spoilageMaterialSelect = document.getElementById('spoilage-material-select');
+    if (spoilageMaterialSelect) {
+        spoilageMaterialSelect.addEventListener('change', (e) => {
+            const material = findById(rawMaterials, e.target.value);
+            document.getElementById('spoilage-unit').value = material ? material.unit : '';
+        });
+    }
     
-    document.getElementById('add-spoilage-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const newSpoilage = {
-            id: Date.now(),
-            date: document.getElementById('spoilage-date').value,
-            materialId: parseInt(document.getElementById('spoilage-material-select').value),
-            quantity: parseFloat(document.getElementById('spoilage-quantity').value),
-            reason: document.getElementById('spoilage-reason').value
-        };
-        if (!newSpoilage.date || isNaN(newSpoilage.materialId) || isNaN(newSpoilage.quantity) || !newSpoilage.reason) {
-            alert('Vui lòng điền đầy đủ thông tin.');
-            return;
-        }
-        spoilageRecords.push(newSpoilage);
-        localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
-        renderSpoilageList();
-        e.target.reset();
-        document.getElementById('spoilage-unit').value = '';
-    });
+    const addSpoilageForm = document.getElementById('add-spoilage-form');
+    if (addSpoilageForm) {
+        addSpoilageForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newSpoilage = {
+                id: Date.now(),
+                date: document.getElementById('spoilage-date').value,
+                materialId: parseInt(document.getElementById('spoilage-material-select').value),
+                quantity: parseFloat(document.getElementById('spoilage-quantity').value),
+                reason: document.getElementById('spoilage-reason').value
+            };
+            if (!newSpoilage.date || isNaN(newSpoilage.materialId) || isNaN(newSpoilage.quantity) || !newSpoilage.reason) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return;
+            }
+            spoilageRecords.push(newSpoilage);
+            localStorage.setItem('spoilageRecords', JSON.stringify(spoilageRecords));
+            renderSpoilageList();
+            e.target.reset();
+            document.getElementById('spoilage-unit').value = '';
+        });
+    }
 
     // --- Other Costs Logic ---
     function renderOtherCostsLists() {
         const monthlyList = document.getElementById('monthly-costs-list');
         const yearlyList = document.getElementById('yearly-costs-list');
         const onetimeList = document.getElementById('onetime-costs-list');
-        let totalMonthly = 0, totalYearly = 0, totalOnetime = 0;
+        if (!monthlyList || !yearlyList || !onetimeList) return;
 
+        let totalMonthly = 0, totalYearly = 0, totalOnetime = 0;
         const renderList = (items) => items.map(c => `
             <div class="flex justify-between items-center text-sm p-2 bg-gray-50 rounded">
                 <span>${c.name}</span>
@@ -1215,28 +1617,34 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    document.getElementById('monthly-costs-list').addEventListener('click', handleDeleteCost);
-    document.getElementById('yearly-costs-list').addEventListener('click', handleDeleteCost);
-    document.getElementById('onetime-costs-list').addEventListener('click', handleDeleteCost);
+    const monthlyCostsList = document.getElementById('monthly-costs-list');
+    const yearlyCostsList = document.getElementById('yearly-costs-list');
+    const onetimeCostsList = document.getElementById('onetime-costs-list');
 
-    document.getElementById('add-other-cost-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const newCost = {
-            id: Date.now(),
-            name: document.getElementById('other-cost-name').value,
-            amount: parseFloat(document.getElementById('other-cost-amount').value),
-            frequency: document.getElementById('other-cost-frequency').value
-        };
-         if (!newCost.name || isNaN(newCost.amount)) {
-            alert('Vui lòng điền đầy đủ thông tin chi phí.');
-            return;
-        }
-        otherCosts.push(newCost);
-        localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
-        renderOtherCostsLists();
-        e.target.reset();
-    });
-
+    if(monthlyCostsList) monthlyCostsList.addEventListener('click', handleDeleteCost);
+    if(yearlyCostsList) yearlyCostsList.addEventListener('click', handleDeleteCost);
+    if(onetimeCostsList) onetimeCostsList.addEventListener('click', handleDeleteCost);
+    
+    const addOtherCostForm = document.getElementById('add-other-cost-form');
+    if (addOtherCostForm) {
+        addOtherCostForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const newCost = {
+                id: Date.now(),
+                name: document.getElementById('other-cost-name').value,
+                amount: parseFloat(document.getElementById('other-cost-amount').value),
+                frequency: document.getElementById('other-cost-frequency').value
+            };
+             if (!newCost.name || isNaN(newCost.amount)) {
+                alert('Vui lòng điền đầy đủ thông tin chi phí.');
+                return;
+            }
+            otherCosts.push(newCost);
+            localStorage.setItem('otherCosts', JSON.stringify(otherCosts));
+            renderOtherCostsLists();
+            e.target.reset();
+        });
+    }
 
     // --- Dashboard Logic ---
     function renderDashboard() {
@@ -1275,7 +1683,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Charting Function ---
     function renderPieChart(canvasId, { labels, data, colors }) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
         if (chartInstances[canvasId]) {
             chartInstances[canvasId].destroy();
         }
@@ -1314,155 +1724,158 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
 
     // --- Report Logic ---
-    document.getElementById('view-inventory-report-btn').addEventListener('click', () => {
-        const startDateStr = document.getElementById('report-start-date').value;
-        const endDateStr = document.getElementById('report-end-date').value;
+    const viewInventoryReportBtn = document.getElementById('view-inventory-report-btn');
+    if (viewInventoryReportBtn) {
+        viewInventoryReportBtn.addEventListener('click', () => {
+            const startDateStr = document.getElementById('report-start-date').value;
+            const endDateStr = document.getElementById('report-end-date').value;
 
-        if (!startDateStr || !endDateStr) {
-            alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
-            return;
-        }
+            if (!startDateStr || !endDateStr) {
+                alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
+                return;
+            }
 
-        const startDate = new Date(startDateStr);
-        startDate.setHours(0, 0, 0, 0);
+            const startDate = new Date(startDateStr);
+            startDate.setHours(0, 0, 0, 0);
 
-        const endDate = new Date(endDateStr);
-        endDate.setHours(23, 59, 59, 999);
-        
-        const completedOrders = loadFromStorage('completedOrders');
-
-        // Filter data for calculations
-        const purchasesBefore = purchases.filter(p => new Date(p.date) < startDate);
-        const spoilageBefore = spoilageRecords.filter(s => new Date(s.date) < startDate);
-        const ordersBefore = completedOrders.filter(o => new Date(o.timestamps.completed) < startDate);
-        const usageBefore = getMaterialUsage(ordersBefore);
-
-        const purchasesInPeriod = purchases.filter(p => new Date(p.date) >= startDate && new Date(p.date) <= endDate);
-        const spoilageInPeriod = spoilageRecords.filter(s => new Date(s.date) >= startDate && new Date(s.date) <= endDate);
-        const ordersInPeriod = completedOrders.filter(o => new Date(o.timestamps.completed) >= startDate && new Date(o.timestamps.completed) <= endDate);
-        const usageInPeriod = getMaterialUsage(ordersInPeriod);
-        
-        const reportData = rawMaterials.map(material => {
-            const materialId = material.id;
+            const endDate = new Date(endDateStr);
+            endDate.setHours(23, 59, 59, 999);
             
-            const openingPurchases = purchasesBefore.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
-            const openingSpoilage = spoilageBefore.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
-            const openingUsage = usageBefore[materialId] || 0;
-            const openingStock = openingPurchases - openingUsage - openingSpoilage;
+            const completedOrders = loadFromStorage('completedOrders');
 
-            const periodPurchases = purchasesInPeriod.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
-            const periodSpoilage = spoilageInPeriod.filter(s => s.materialId === materialId).reduce((sum, p) => sum + s.quantity, 0);
-            const periodUsage = usageInPeriod[materialId] || 0;
+            const purchasesBefore = purchases.filter(p => new Date(p.date) < startDate);
+            const spoilageBefore = spoilageRecords.filter(s => new Date(s.date) < startDate);
+            const ordersBefore = completedOrders.filter(o => new Date(o.timestamps.completed) < startDate);
+            const usageBefore = getMaterialUsage(ordersBefore);
 
-            const closingStock = openingStock + periodPurchases - periodUsage - periodSpoilage;
+            const purchasesInPeriod = purchases.filter(p => new Date(p.date) >= startDate && new Date(p.date) <= endDate);
+            const spoilageInPeriod = spoilageRecords.filter(s => new Date(s.date) >= startDate && new Date(s.date) <= endDate);
+            const ordersInPeriod = completedOrders.filter(o => new Date(o.timestamps.completed) >= startDate && new Date(o.timestamps.completed) <= endDate);
+            const usageInPeriod = getMaterialUsage(ordersInPeriod);
+            
+            const reportData = rawMaterials.map(material => {
+                const materialId = material.id;
+                
+                const openingPurchases = purchasesBefore.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
+                const openingSpoilage = spoilageBefore.filter(s => s.materialId === materialId).reduce((sum, s) => sum + s.quantity, 0);
+                const openingUsage = usageBefore[materialId] || 0;
+                const openingStock = openingPurchases - openingUsage - openingSpoilage;
 
-            return {
-                name: material.name,
-                unit: material.unit,
-                openingStock: openingStock,
-                purchasedInPeriod: periodPurchases,
-                usedInPeriod: periodUsage,
-                spoiledInPeriod: periodSpoilage,
-                closingStock: closingStock
-            };
+                const periodPurchases = purchasesInPeriod.filter(p => p.materialId === materialId).reduce((sum, p) => sum + p.quantity, 0);
+                const periodSpoilage = spoilageInPeriod.filter(s => s.materialId === materialId).reduce((sum, p) => sum + s.quantity, 0);
+                const periodUsage = usageInPeriod[materialId] || 0;
+
+                const closingStock = openingStock + periodPurchases - periodUsage - periodSpoilage;
+
+                return {
+                    name: material.name,
+                    unit: material.unit,
+                    openingStock: openingStock,
+                    purchasedInPeriod: periodPurchases,
+                    usedInPeriod: periodUsage,
+                    spoiledInPeriod: periodSpoilage,
+                    closingStock: closingStock
+                };
+            });
+
+            const reportBody = document.getElementById('inventory-report-body');
+            reportBody.innerHTML = reportData.map(row => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${row.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.unit}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.openingStock.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.purchasedInPeriod.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.usedInPeriod.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.spoiledInPeriod.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">${row.closingStock.toFixed(2)}</td>
+                </tr>
+            `).join('');
         });
+    }
 
-        // Render the table
-        const reportBody = document.getElementById('inventory-report-body');
-        reportBody.innerHTML = reportData.map(row => `
-            <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${row.name}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.unit}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.openingStock.toFixed(2)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.purchasedInPeriod.toFixed(2)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.usedInPeriod.toFixed(2)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.spoiledInPeriod.toFixed(2)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">${row.closingStock.toFixed(2)}</td>
-            </tr>
-        `).join('');
-    });
+    const calculateProfitBtn = document.getElementById('calculate-profit-btn');
+    if (calculateProfitBtn) {
+        const COMMISSION_RATE = 0.20; // 20% commission fee assumption
+        calculateProfitBtn.addEventListener('click', () => {
+            const startDateStr = document.getElementById('profit-report-start-date').value;
+            const endDateStr = document.getElementById('profit-report-end-date').value;
 
-    const COMMISSION_RATE = 0.20; // 20% commission fee assumption
-    document.getElementById('calculate-profit-btn').addEventListener('click', () => {
-        const startDateStr = document.getElementById('profit-report-start-date').value;
-        const endDateStr = document.getElementById('profit-report-end-date').value;
+            if (!startDateStr || !endDateStr) {
+                alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
+                return;
+            }
+            
+            const startDate = new Date(startDateStr);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(endDateStr);
+            endDate.setHours(23, 59, 59, 999);
+            
+            const completedOrdersInPeriod = loadFromStorage('completedOrders').filter(o => {
+                const completedDate = new Date(o.timestamps.completed);
+                return completedDate >= startDate && completedDate <= endDate;
+            });
 
-        if (!startDateStr || !endDateStr) {
-            alert('Vui lòng chọn ngày bắt đầu và kết thúc.');
-            return;
-        }
-        
-        const startDate = new Date(startDateStr);
-        startDate.setHours(0, 0, 0, 0);
-        const endDate = new Date(endDateStr);
-        endDate.setHours(23, 59, 59, 999);
-        
-        const completedOrdersInPeriod = loadFromStorage('completedOrders').filter(o => {
-            const completedDate = new Date(o.timestamps.completed);
-            return completedDate >= startDate && completedDate <= endDate;
-        });
+            const totalRevenue = completedOrdersInPeriod.reduce((sum, order) => sum + order.totalPrice, 0);
 
-        const totalRevenue = completedOrdersInPeriod.reduce((sum, order) => sum + order.totalPrice, 0);
-
-        const totalCOGS = completedOrdersInPeriod.reduce((sum, order) => {
-            const orderCost = order.items.reduce((itemSum, item) => {
-                const dish = findById(dishes, item.dishId);
-                const dishCost = dish ? (dish.cost || calculateBomCost(dish.bom)) : 0;
-                return itemSum + (dishCost * item.quantity);
+            const totalCOGS = completedOrdersInPeriod.reduce((sum, order) => {
+                const orderCost = order.items.reduce((itemSum, item) => {
+                    const dish = findById(dishes, item.dishId);
+                    const dishCost = dish ? (dish.cost || calculateBomCost(dish.bom)) : 0;
+                    return itemSum + (dishCost * item.quantity);
+                }, 0);
+                return sum + orderCost;
             }, 0);
-            return sum + orderCost;
-        }, 0);
 
-        const totalCommission = totalRevenue * COMMISSION_RATE;
+            const totalCommission = totalRevenue * COMMISSION_RATE;
 
-        const spoilageInPeriod = spoilageRecords.filter(s => {
-            const spoilageDate = new Date(s.date);
-            return spoilageDate >= startDate && spoilageDate <= endDate;
-        });
-        const totalSpoilageCost = spoilageInPeriod.reduce((sum, record) => {
-            const material = findById(rawMaterials, record.materialId);
-            const cost = material ? material.price * record.quantity : 0;
-            return sum + cost;
-        }, 0);
-        
-        const daysInPeriod = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
-        const totalMonthlyRaw = otherCosts.filter(c => c.frequency === 'monthly').reduce((sum, c) => sum + c.amount, 0);
-        const totalYearlyRaw = otherCosts.filter(c => c.frequency === 'yearly').reduce((sum, c) => sum + c.amount, 0);
-        const monthlyExpenseInPeriod = (totalMonthlyRaw / 30.44) * daysInPeriod;
-        const yearlyExpenseInPeriod = (totalYearlyRaw / 365.25) * daysInPeriod;
-        const totalOperatingExpense = monthlyExpenseInPeriod + yearlyExpenseInPeriod;
-
-        const netProfit = totalRevenue - totalCOGS - totalCommission - totalSpoilageCost - totalOperatingExpense;
-        
-        document.getElementById('result-revenue').textContent = formatCurrency(totalRevenue);
-        document.getElementById('result-cogs').textContent = formatCurrency(totalCOGS);
-        document.getElementById('result-commission-fees').textContent = formatCurrency(totalCommission);
-        document.getElementById('result-monthly-expense').textContent = formatCurrency(totalOperatingExpense);
-        document.getElementById('result-spoilage-cost').textContent = formatCurrency(totalSpoilageCost);
-        document.getElementById('result-net-profit').textContent = formatCurrency(netProfit);
-
-        const revenueByDish = completedOrdersInPeriod
-            .flatMap(o => o.items)
-            .reduce((acc, item) => {
-                const dish = findById(dishes, item.dishId);
-                const dishName = dish ? dish.name : 'Unknown';
-                const itemRevenue = (findById(dishes, item.dishId)?.price || 0) * item.quantity;
-                acc[dishName] = (acc[dishName] || 0) + itemRevenue;
-                return acc;
-            }, {});
+            const spoilageInPeriod = spoilageRecords.filter(s => {
+                const spoilageDate = new Date(s.date);
+                return spoilageDate >= startDate && spoilageDate <= endDate;
+            });
+            const totalSpoilageCost = spoilageInPeriod.reduce((sum, record) => {
+                const material = findById(rawMaterials, record.materialId);
+                const cost = material ? material.price * record.quantity : 0;
+                return sum + cost;
+            }, 0);
             
-        renderPieChart('revenueStructureChart', {
-            labels: Object.keys(revenueByDish),
-            data: Object.values(revenueByDish),
-            colors: ['#3B82F6', '#10B981', '#F97316', '#8B5CF6', '#EF4444', '#F59E0B', '#6366F1', '#EC4899', '#22D3EE']
-        });
+            const daysInPeriod = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+            const totalMonthlyRaw = otherCosts.filter(c => c.frequency === 'monthly').reduce((sum, c) => sum + c.amount, 0);
+            const totalYearlyRaw = otherCosts.filter(c => c.frequency === 'yearly').reduce((sum, c) => sum + c.amount, 0);
+            const monthlyExpenseInPeriod = (totalMonthlyRaw / 30.44) * daysInPeriod;
+            const yearlyExpenseInPeriod = (totalYearlyRaw / 365.25) * daysInPeriod;
+            const totalOperatingExpense = monthlyExpenseInPeriod + yearlyExpenseInPeriod;
 
-        document.getElementById('profit-results').classList.remove('hidden');
-    });
+            const netProfit = totalRevenue - totalCOGS - totalCommission - totalSpoilageCost - totalOperatingExpense;
+            
+            document.getElementById('result-revenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('result-cogs').textContent = formatCurrency(totalCOGS);
+            document.getElementById('result-commission-fees').textContent = formatCurrency(totalCommission);
+            document.getElementById('result-monthly-expense').textContent = formatCurrency(totalOperatingExpense);
+            document.getElementById('result-spoilage-cost').textContent = formatCurrency(totalSpoilageCost);
+            document.getElementById('result-net-profit').textContent = formatCurrency(netProfit);
+
+            const revenueByDish = completedOrdersInPeriod
+                .flatMap(o => o.items)
+                .reduce((acc, item) => {
+                    const dish = findById(dishes, item.dishId);
+                    const dishName = dish ? dish.name : 'Unknown';
+                    const itemRevenue = (getPriceForDate(dish, new Date()) || 0) * item.quantity;
+                    acc[dishName] = (acc[dishName] || 0) + itemRevenue;
+                    return acc;
+                }, {});
+                
+            renderPieChart('revenueStructureChart', {
+                labels: Object.keys(revenueByDish),
+                data: Object.values(revenueByDish),
+                colors: ['#3B82F6', '#10B981', '#F97316', '#8B5CF6', '#EF4444', '#F59E0B', '#6366F1', '#EC4899', '#22D3EE']
+            });
+
+            document.getElementById('profit-results').classList.remove('hidden');
+        });
+    }
 
     // --- PAYROLL MANAGEMENT ---
     
-    // Get week number for a date
     function getWeekNumber(d) {
         d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
         d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -1476,7 +1889,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
-        const [currentYear, currentWeek] = getWeekNumber(now);
 
         // Last 3 months for contract employees
         for (let i = 0; i < 3; i++) {
@@ -1497,8 +1909,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function populatePayrollPeriodSelect() {
+        if (!elements.payrollPeriodSelect) return;
         const periods = generatePayrollPeriods();
         elements.payrollPeriodSelect.innerHTML = Object.entries(periods)
+            .sort((a,b) => b[1].localeCompare(a[1])) // Sort to show most recent first
             .map(([key, text]) => `<option value="${key}">${text}</option>`).join('');
     }
 
@@ -1517,10 +1931,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderPayrollEmployeeList() {
+        if (!elements.payrollEmployeeList) return;
         const listEl = elements.payrollEmployeeList;
         const activeEmployees = employees.filter(e => e.status === 'active');
-        const periodKey = elements.payrollPeriodSelect.value;
-        const periodData = payrolls[periodKey] || {};
 
         if (!activeEmployees.length) {
             listEl.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-500">${translations[currentLang].empty_data}</td></tr>`;
@@ -1529,9 +1942,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         listEl.innerHTML = activeEmployees.map(emp => {
             const currentSalary = getSalaryForDate(emp, new Date());
-            const salaryText = currentSalary ? `${formatCurrency(currentSalary.amount)}/${emp.employmentType === 'contract' ? 'tháng' : 'ngày'}` : `<span class="text-red-500">${translations[currentLang].no_salary_setup}</span>`;
-
-            const timesheetStatus = periodData[emp.id] ? `<span class="text-green-600">Đã chấm công</span>` : `<span class="text-gray-500">${translations[currentLang].not_yet_entered}</span>`;
+            const salaryText = currentSalary ? `${formatCurrency(currentSalary.amount)} / ${emp.employmentType === 'contract' ? 'tháng' : 'ngày'}` : `<span class="text-red-500">${translations[currentLang].no_salary_setup}</span>`;
             
             return `
                 <tr>
@@ -1550,66 +1961,70 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
 
-    elements.payrollEmployeeList.addEventListener('click', e => {
-        const employeeId = e.target.dataset.id;
-        if (!employeeId) return;
+    if (elements.payrollEmployeeList) {
+        elements.payrollEmployeeList.addEventListener('click', e => {
+            const employeeId = e.target.dataset.id;
+            if (!employeeId) return;
 
-        const employee = findById(employees, employeeId);
-        if (!employee) return;
+            const employee = findById(employees, employeeId);
+            if (!employee) return;
 
-        if (e.target.matches('.setup-salary-btn')) {
-            openSalarySetupModal(employee);
-        } else if (e.target.matches('.enter-timesheet-btn')) {
-            openTimesheetModal(employee);
-        }
-    });
+            if (e.target.matches('.setup-salary-btn')) {
+                openSalarySetupModal(employee);
+            } else if (e.target.matches('.enter-timesheet-btn')) {
+                openTimesheetModal(employee);
+            }
+        });
+    }
 
     function openSalarySetupModal(employee) {
         const modal = elements.salarySetupModal;
         modal.querySelector('#salary-employee-name').textContent = employee.name;
         modal.querySelector('#salary-employee-id').value = employee.id;
         
-        // Render salary history
         const historyList = modal.querySelector('#salary-history-list');
         const history = employee.salaryHistory || [];
         historyList.innerHTML = history.length ? [...history].sort((a,b) => new Date(b.effectiveDate) - new Date(a.effectiveDate)).map(h => `
             <div class="p-2 bg-gray-100 rounded-md text-sm">
-                <p><strong>${formatCurrency(h.amount)}</strong> - Hiệu lực từ: <strong>${h.effectiveDate}</strong></p>
-                <p class="text-gray-600">Lý do: ${h.reason}</p>
+                <p><strong>${formatCurrency(h.amount)}</strong> - ${translations[currentLang].effective_date}: <strong>${h.effectiveDate}</strong></p>
+                <p class="text-gray-600">${translations[currentLang].reason}: ${h.reason}</p>
             </div>
         `).join('') : `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
         
         modal.classList.add('active');
     }
 
-    document.getElementById('salary-setup-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const employeeId = parseInt(document.getElementById('salary-employee-id').value);
-        const newSalary = {
-            amount: parseFloat(document.getElementById('salary-amount').value),
-            effectiveDate: document.getElementById('salary-effective-date').value,
-            reason: document.getElementById('salary-reason').value
-        };
+    const salarySetupForm = document.getElementById('salary-setup-form');
+    if (salarySetupForm) {
+        salarySetupForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const employeeId = parseInt(document.getElementById('salary-employee-id').value);
+            const newSalary = {
+                amount: parseFloat(document.getElementById('salary-amount').value),
+                effectiveDate: document.getElementById('salary-effective-date').value,
+                reason: document.getElementById('salary-reason').value
+            };
 
-        if (isNaN(newSalary.amount) || !newSalary.effectiveDate || !newSalary.reason) {
-            alert("Vui lòng nhập đầy đủ thông tin lương.");
-            return;
-        }
-
-        employees = employees.map(emp => {
-            if (emp.id === employeeId) {
-                const updatedHistory = emp.salaryHistory ? [...emp.salaryHistory] : [];
-                updatedHistory.push(newSalary);
-                return { ...emp, salaryHistory: updatedHistory };
+            if (isNaN(newSalary.amount) || !newSalary.effectiveDate || !newSalary.reason) {
+                alert("Vui lòng nhập đầy đủ thông tin lương.");
+                return;
             }
-            return emp;
-        });
 
-        localStorage.setItem('employees', JSON.stringify(employees));
-        openSalarySetupModal(findById(employees, employeeId)); // Re-open to show updated history
-        e.target.reset();
-        renderPayrollEmployeeList();
-    });
+            employees = employees.map(emp => {
+                if (emp.id === employeeId) {
+                    const updatedHistory = emp.salaryHistory ? [...emp.salaryHistory] : [];
+                    updatedHistory.push(newSalary);
+                    return { ...emp, salaryHistory: updatedHistory };
+                }
+                return emp;
+            });
+
+            localStorage.setItem('employees', JSON.stringify(employees));
+            openSalarySetupModal(findById(employees, employeeId)); // Re-open to show updated history
+            e.target.reset();
+            renderPayrollEmployeeList();
+        });
+    }
 
     document.getElementById('close-salary-modal-btn').addEventListener('click', () => elements.salarySetupModal.classList.remove('active'));
 
@@ -1623,7 +2038,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.querySelector('#timesheet-employee-id').value = employee.id;
         modal.querySelector('#timesheet-period-key').value = periodKey;
 
-        // Load existing data if any
         const existingData = (payrolls[periodKey] && payrolls[periodKey][employee.id]) ? payrolls[periodKey][employee.id] : {};
         
         if (employee.employmentType === 'contract') {
@@ -1640,109 +2054,112 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('active');
     }
     
-    document.getElementById('timesheet-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const employeeId = parseInt(document.getElementById('timesheet-employee-id').value);
-        const periodKey = document.getElementById('timesheet-period-key').value;
-        const employee = findById(employees, employeeId);
+    const timesheetForm = document.getElementById('timesheet-form');
+    if (timesheetForm) {
+        timesheetForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const employeeId = parseInt(document.getElementById('timesheet-employee-id').value);
+            const periodKey = document.getElementById('timesheet-period-key').value;
+            const employee = findById(employees, employeeId);
+            let timesheetData = {};
 
-        let timesheetData = {};
-        if (employee.employmentType === 'contract') {
-            timesheetData = {
-                workDays: parseFloat(document.getElementById('timesheet-work-days').value),
-                paidLeave: parseFloat(document.getElementById('timesheet-paid-leave').value || 0),
-                dependents: parseInt(document.getElementById('timesheet-dependents').value || 0)
-            };
-        } else {
-            timesheetData = {
-                workHours: parseFloat(document.getElementById('timesheet-work-hours').value)
-            };
-        }
-        
-        if (!payrolls[periodKey]) {
-            payrolls[periodKey] = {};
-        }
-        payrolls[periodKey][employeeId] = timesheetData;
-        localStorage.setItem('payrolls', JSON.stringify(payrolls));
+            if (employee.employmentType === 'contract') {
+                timesheetData = {
+                    workDays: parseFloat(document.getElementById('timesheet-work-days').value),
+                    paidLeave: parseFloat(document.getElementById('timesheet-paid-leave').value || 0),
+                    dependents: parseInt(document.getElementById('timesheet-dependents').value || 0)
+                };
+            } else {
+                timesheetData = {
+                    workHours: parseFloat(document.getElementById('timesheet-work-hours').value)
+                };
+            }
+            
+            if (!payrolls[periodKey]) {
+                payrolls[periodKey] = {};
+            }
+            payrolls[periodKey][employeeId] = timesheetData;
+            localStorage.setItem('payrolls', JSON.stringify(payrolls));
 
-        elements.timesheetModal.classList.remove('active');
-        renderPayrollEmployeeList(); // Re-render to show "Đã chấm công"
-    });
+            elements.timesheetModal.classList.remove('active');
+            renderPayrollEmployeeList();
+        });
+    }
 
     document.getElementById('cancel-timesheet-btn').addEventListener('click', () => elements.timesheetModal.classList.remove('active'));
 
-    document.getElementById('calculate-payroll-btn').addEventListener('click', () => {
-        const periodKey = elements.payrollPeriodSelect.value;
-        const periodData = payrolls[periodKey];
+    const calculatePayrollBtn = document.getElementById('calculate-payroll-btn');
+    if (calculatePayrollBtn) {
+        calculatePayrollBtn.addEventListener('click', () => {
+            const periodKey = elements.payrollPeriodSelect.value;
+            const periodData = payrolls[periodKey];
 
-        if (!periodData) {
-            alert('Chưa có dữ liệu chấm công cho kỳ này.');
-            return;
-        }
-
-        const activeEmployees = employees.filter(e => e.status === 'active');
-        const payslips = [];
-
-        for (const emp of activeEmployees) {
-            const timesheet = periodData[emp.id];
-            if (!timesheet) continue; // Skip if no timesheet
-
-            const salaryRecord = getSalaryForDate(emp, new Date());
-            if (!salaryRecord) continue; // Skip if no salary record
-
-            let payslip = { employeeName: emp.name };
-
-            if (emp.employmentType === 'contract') {
-                const workDays = timesheet.workDays || 0;
-                const paidLeave = timesheet.paidLeave || 0;
-                const totalWorkDays = workDays + paidLeave;
-
-                const grossSalary = (salaryRecord.amount / 26) * totalWorkDays; // Assuming 26 work days/month
-                const salaryForInsurance = Math.min(grossSalary, INSURANCE_BASE_SALARY_CAP);
-                
-                const bhxh = salaryForInsurance * BHXH_RATE;
-                const bhyt = salaryForInsurance * BHYT_RATE;
-                const bhtn = salaryForInsurance * BHTN_RATE;
-                const totalInsurance = bhxh + bhyt + bhtn;
-
-                const dependentAllowance = (timesheet.dependents || 0) * PIT_DEPENDENT_ALLOWANCE;
-                const taxableIncome = Math.max(0, grossSalary - totalInsurance - PIT_PERSONAL_ALLOWANCE - dependentAllowance);
-                const pit = calculatePIT(taxableIncome);
-
-                const netSalary = grossSalary - totalInsurance - pit;
-
-                payslip = {
-                    ...payslip,
-                    grossSalary, bhxh, bhyt, bhtn, totalInsurance, 
-                    personalAllowance: PIT_PERSONAL_ALLOWANCE,
-                    dependentAllowance, taxableIncome, pit, netSalary
-                };
-
-            } else { // part-time
-                const workHours = timesheet.workHours || 0;
-                const hourlyRate = salaryRecord.amount / 8; // Assuming 8 hours/day
-                const netSalary = workHours * hourlyRate;
-                payslip.netSalary = netSalary;
+            if (!periodData) {
+                alert('Chưa có dữ liệu chấm công cho kỳ này.');
+                return;
             }
-            payslips.push(payslip);
-        }
-        
-        // Display payslips (for now, using alert, can be improved to a modal)
-        let resultText = `Bảng lương cho kỳ ${elements.payrollPeriodSelect.options[elements.payrollPeriodSelect.selectedIndex].text}:\n\n`;
-        payslips.forEach(p => {
-             resultText += `--- ${p.employeeName} ---\n`;
-             if(p.grossSalary !== undefined) {
-                 resultText += `Lương Gross: ${formatCurrency(p.grossSalary)}\n`;
-                 resultText += `Trừ BHXH, BHYT, BHTN: ${formatCurrency(p.totalInsurance)}\n`;
-                 resultText += `Thuế TNCN: ${formatCurrency(p.pit)}\n`;
-                 resultText += `Thực nhận: ${formatCurrency(p.netSalary)}\n\n`;
-             } else {
-                 resultText += `Lương thực nhận: ${formatCurrency(p.netSalary)}\n\n`;
-             }
-        });
 
-        alert(resultText);
-    });
+            const activeEmployees = employees.filter(e => e.status === 'active');
+            let resultText = `BẢNG LƯƠNG CHI TIẾT\nKỳ: ${elements.payrollPeriodSelect.options[elements.payrollPeriodSelect.selectedIndex].text}\n====================\n\n`;
+            let foundData = false;
+
+            for (const emp of activeEmployees) {
+                const timesheet = periodData[emp.id];
+                if (!timesheet) continue;
+
+                const salaryRecord = getSalaryForDate(emp, new Date());
+                if (!salaryRecord) continue;
+                
+                foundData = true;
+                resultText += `--- NHÂN VIÊN: ${emp.name} ---\n`;
+
+                if (emp.employmentType === 'contract') {
+                    const workDays = timesheet.workDays || 0;
+                    const paidLeave = timesheet.paidLeave || 0;
+                    const totalWorkDays = workDays + paidLeave;
+
+                    const grossSalary = (salaryRecord.amount / 26) * totalWorkDays; // Giả định 26 ngày công/tháng
+                    const salaryForInsurance = Math.min(grossSalary, INSURANCE_BASE_SALARY_CAP);
+                    
+                    const bhxh = salaryForInsurance * BHXH_RATE;
+                    const bhyt = salaryForInsurance * BHYT_RATE;
+                    const bhtn = salaryForInsurance * BHTN_RATE;
+                    const totalInsurance = bhxh + bhyt + bhtn;
+
+                    const dependentAllowance = (timesheet.dependents || 0) * PIT_DEPENDENT_ALLOWANCE;
+                    const taxableIncome = Math.max(0, grossSalary - totalInsurance - PIT_PERSONAL_ALLOWANCE - dependentAllowance);
+                    const pit = calculatePIT(taxableIncome);
+
+                    const netSalary = grossSalary - totalInsurance - pit;
+
+                    resultText += `Lương Gross (tạm tính): ${formatCurrency(grossSalary)}\n`;
+                    resultText += `(-) Trừ BHXH (8%): ${formatCurrency(bhxh)}\n`;
+                    resultText += `(-) Trừ BHYT (1.5%): ${formatCurrency(bhyt)}\n`;
+                    resultText += `(-) Trừ BHTN (1%): ${formatCurrency(bhtn)}\n`;
+                    resultText += `(-) Thuế TNCN: ${formatCurrency(pit)}\n`;
+                    resultText += `=> THỰC NHẬN (NET): ${formatCurrency(netSalary)}\n\n`;
+
+                } else { // part-time
+                    const workHours = timesheet.workHours || 0;
+                    const dailyRate = salaryRecord.amount;
+                    const netSalary = workHours * (dailyRate/8); // Giả định lương ngày 8 tiếng
+                    resultText += `Tổng giờ làm: ${workHours} giờ\n`;
+                    resultText += `Đơn giá: ${formatCurrency(dailyRate)}/ngày\n`;
+                    resultText += `=> THỰC NHẬN: ${formatCurrency(netSalary)}\n\n`;
+                }
+            }
+
+            if (!foundData) {
+                resultText = "Không có nhân viên nào được chấm công trong kỳ này để tính lương.";
+            }
+
+            alert(resultText);
+        });
+    }
+
+    if (elements.payrollPeriodSelect) {
+        elements.payrollPeriodSelect.addEventListener('change', renderPayrollEmployeeList);
+    }
     
     // --- App Initialization & Rendering ---
     
@@ -1750,7 +2167,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAllMaterialPrices();
         recalculateAllDishCosts();
         
-        // Employee role checkboxes
         const rolesContainer = document.getElementById('employee-roles-checkboxes');
         if(rolesContainer) {
             rolesContainer.innerHTML = Object.keys(employeeRoles).map(key => `
@@ -1761,7 +2177,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
         
-        // Populate all material dropdowns
         populateMaterialSelects(document.getElementById('bom-material-select'));
         populateMaterialSelects(document.getElementById('purchase-material-select'));
         populateMaterialSelects(document.getElementById('spoilage-material-select'));
@@ -1769,7 +2184,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // Render lists
-        elements.dishesList.innerHTML = dishes.map(renderDish).join('');
+        const dishesListEl = document.getElementById('dishes-list');
+        if (dishesListEl) dishesListEl.innerHTML = dishes.map(renderDish).join('') || `<p class="text-gray-500 text-center">${translations[currentLang].empty_data}</p>`;
+        
         renderMaterialCategories();
         renderMaterialsList();
         renderDashboard();
@@ -1786,5 +2203,5 @@ document.addEventListener('DOMContentLoaded', () => {
     handleDatePresetChange('this_month', elements.orderLookupStartDate, elements.orderLookupEndDate);
     handleDatePresetChange('this_month', elements.inventoryReportStartDate, elements.inventoryReportEndDate);
     handleDatePresetChange('this_month', elements.profitReportStartDate, elements.profitReportEndDate);
-    setLanguage(currentLang); // Set language before initial renderApp
+    setLanguage(currentLang);
 });
